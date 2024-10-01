@@ -1,13 +1,20 @@
-import ComponentsDashboardSales from '@/components/dashboard/components-dashboard-sales';
-import { Metadata } from 'next';
-import React from 'react';
+import { getUser } from '@/api/api-config';
+import Loading from '@/components/layouts/loading';
+import { redirect } from 'next/navigation';
+import { cookies } from 'next/headers';
+import { setProfile } from '@/store/authSlice';
+import store from '@/store';
+import UserComponent from '@/components/home/userComponent';
 
-export const metadata: Metadata = {
-    title: 'Sales Admin',
+const Home = async () => {
+    const cookieStore = cookies();
+    const authCookie = cookieStore.get('token');
+
+    return (
+        <div>
+            <UserComponent cookie={authCookie?.value} />
+        </div>
+    );
 };
 
-const Sales = () => {
-    return <ComponentsDashboardSales />;
-};
-
-export default Sales;
+export default Home;

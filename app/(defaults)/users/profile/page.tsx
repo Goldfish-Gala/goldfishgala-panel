@@ -25,9 +25,7 @@ const Profile = () => {
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
-                    <Link href="#" className="text-primary hover:underline">
-                        Users
-                    </Link>
+                    <span className="text-primary">User</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <span>Profile</span>
@@ -38,13 +36,20 @@ const Profile = () => {
                     <div className="panel">
                         <div className="mb-5 flex items-center justify-between">
                             <h5 className="text-lg font-semibold dark:text-white-light">Profile</h5>
-                            <Link href="/users/user-account-settings" className="btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto">
+                            <Link
+                                href="/users/user-account-settings"
+                                className="btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto"
+                            >
                                 <IconPencilPaper />
                             </Link>
                         </div>
                         <div className="mb-5">
                             <div className="flex flex-col items-center justify-center">
-                                <img src="/assets/images/profile-34.jpeg" alt="img" className="mb-5 h-24 w-24 rounded-full  object-cover" />
+                                <img
+                                    src="/assets/images/profile-34.jpeg"
+                                    alt="img"
+                                    className="mb-5 h-24 w-24 rounded-full  object-cover"
+                                />
                                 <p className="text-xl font-semibold text-primary">Jimmy Turner</p>
                             </div>
                             <ul className="m-auto mt-5 flex max-w-[160px] flex-col space-y-4 font-semibold text-white-dark">
@@ -198,7 +203,9 @@ const Profile = () => {
                                     <div className="flex flex-auto items-start justify-between font-semibold ltr:ml-4 rtl:mr-4">
                                         <h6 className="text-[13px] text-white-dark dark:text-white-dark">
                                             Income
-                                            <span className="block text-base text-[#515365] dark:text-white-light">$92,600</span>
+                                            <span className="block text-base text-[#515365] dark:text-white-light">
+                                                $92,600
+                                            </span>
                                         </h6>
                                         <p className="text-secondary ltr:ml-auto rtl:mr-auto">90%</p>
                                     </div>
@@ -212,7 +219,9 @@ const Profile = () => {
                                     <div className="flex flex-auto items-start justify-between font-semibold ltr:ml-4 rtl:mr-4">
                                         <h6 className="text-[13px] text-white-dark dark:text-white-dark">
                                             Profit
-                                            <span className="block text-base text-[#515365] dark:text-white-light">$37,515</span>
+                                            <span className="block text-base text-[#515365] dark:text-white-light">
+                                                $37,515
+                                            </span>
                                         </h6>
                                         <p className="text-info ltr:ml-auto rtl:mr-auto">65%</p>
                                     </div>
@@ -226,7 +235,9 @@ const Profile = () => {
                                     <div className="flex flex-auto items-start justify-between font-semibold ltr:ml-4 rtl:mr-4">
                                         <h6 className="text-[13px] text-white-dark dark:text-white-dark">
                                             Expenses
-                                            <span className="block text-base text-[#515365] dark:text-white-light">$55,085</span>
+                                            <span className="block text-base text-[#515365] dark:text-white-light">
+                                                $55,085
+                                            </span>
                                         </h6>
                                         <p className="text-warning ltr:ml-auto rtl:mr-auto">80%</p>
                                     </div>
@@ -252,7 +263,10 @@ const Profile = () => {
                                 <p className="text-info">$25 / month</p>
                             </div>
                             <div className="mb-5 h-2.5 overflow-hidden rounded-full bg-dark-light p-0.5 dark:bg-dark-light/10">
-                                <div className="relative h-full w-full rounded-full bg-gradient-to-r from-[#f67062] to-[#fc5296]" style={{ width: '65%' }}></div>
+                                <div
+                                    className="relative h-full w-full rounded-full bg-gradient-to-r from-[#f67062] to-[#fc5296]"
+                                    style={{ width: '65%' }}
+                                ></div>
                             </div>
                         </div>
                     </div>
@@ -270,7 +284,9 @@ const Profile = () => {
                                     <div className="flex flex-auto items-center justify-between ltr:ml-4 rtl:mr-4">
                                         <h6 className="font-semibold text-[#515365] dark:text-white-dark">
                                             American Express
-                                            <span className="block text-white-dark dark:text-white-light">Expires on 12/2025</span>
+                                            <span className="block text-white-dark dark:text-white-light">
+                                                Expires on 12/2025
+                                            </span>
                                         </h6>
                                         <span className="badge bg-success ltr:ml-auto rtl:mr-auto">Primary</span>
                                     </div>
@@ -284,7 +300,9 @@ const Profile = () => {
                                     <div className="flex flex-auto items-center justify-between ltr:ml-4 rtl:mr-4">
                                         <h6 className="font-semibold text-[#515365] dark:text-white-dark">
                                             Mastercard
-                                            <span className="block text-white-dark dark:text-white-light">Expires on 03/2025</span>
+                                            <span className="block text-white-dark dark:text-white-light">
+                                                Expires on 03/2025
+                                            </span>
                                         </h6>
                                     </div>
                                 </div>
@@ -297,7 +315,9 @@ const Profile = () => {
                                     <div className="flex flex-auto items-center justify-between ltr:ml-4 rtl:mr-4">
                                         <h6 className="font-semibold text-[#515365] dark:text-white-dark">
                                             Visa
-                                            <span className="block text-white-dark dark:text-white-light">Expires on 10/2025</span>
+                                            <span className="block text-white-dark dark:text-white-light">
+                                                Expires on 10/2025
+                                            </span>
                                         </h6>
                                     </div>
                                 </div>

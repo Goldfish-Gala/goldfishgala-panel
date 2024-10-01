@@ -3,6 +3,7 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import '../styles/tailwind.css';
 import { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
+import { CookiesProvider } from 'next-client-cookies/server';
 
 export const metadata: Metadata = {
     title: {
