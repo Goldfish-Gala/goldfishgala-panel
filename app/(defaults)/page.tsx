@@ -5,14 +5,16 @@ import { cookies } from 'next/headers';
 import { setProfile } from '@/store/authSlice';
 import store from '@/store';
 import UserComponent from '@/components/home/userComponent';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: 'Home',
+};
 
 const Home = async () => {
-    const cookieStore = cookies();
-    const authCookie = cookieStore.get('token');
-
     return (
         <div>
-            <UserComponent cookie={authCookie?.value} />
+            <UserComponent />
         </div>
     );
 };

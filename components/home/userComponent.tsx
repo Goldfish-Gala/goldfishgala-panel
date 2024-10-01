@@ -5,42 +5,34 @@ import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { setProfile } from '@/store/authSlice';
+import { useCookies } from 'next-client-cookies';
+import { storeUser } from '@/utils/storeUser';
 
-interface UserComponentProps {
-    cookie?: string;
-}
-
-const UserComponent: React.FC<UserComponentProps> = ({ cookie }) => {
+const UserComponent = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const [loading, setLoading] = useState(true);
+    const cookies = useCookies();
+    const authCookie = cookies.get('authCookies');
 
     useEffect(() => {
         const fetchUserProfile = async () => {
-            if (cookie) {
-                try {
-                    const userProfile = await getUser(`token=${cookie}`);
+            if (authCookie) {
+                const userProfile = await storeUser(authCookie, dispatch);
 
-                    if (userProfile.success) {
-                        dispatch(setProfile({ user: userProfile.data[0] }));
-                        router.replace('/dashboard');
-                    } else {
-                        router.replace('/auth');
-                    }
-                } catch (error) {
-                    console.error('Error fetching user profile:', error);
+                if (userProfile) {
+                    router.replace('/dashboard');
+                } else {
                     router.replace('/auth');
-                } finally {
-                    setLoading(false);
                 }
             } else {
                 router.replace('/auth');
-                setLoading(false);
             }
+            setLoading(false);
         };
 
         fetchUserProfile();
-    }, [cookie, dispatch, router]);
+    }, [authCookie, dispatch, router]);
 
     if (loading) {
         return <Loading />;

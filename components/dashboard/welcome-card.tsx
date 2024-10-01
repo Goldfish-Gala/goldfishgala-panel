@@ -1,25 +1,38 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
 import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
+import { storeUser } from '@/utils/storeUser'; // Ensure you have imported this
 
 const Dashboard = () => {
     const user = useSelector((state: IRootState) => state.auth.user);
+    const dispatch = useDispatch();
     const router = useRouter();
-
     const cookies = useCookies();
     const authCookie = cookies.get('authCookies');
-    console.log('cookie client', authCookie);
 
     useEffect(() => {
+        const fetchUserProfile = async () => {
+            if (authCookie) {
+                const userProfile = await storeUser(authCookie, dispatch);
+                if (userProfile) {
+                    router.replace('/dashboard');
+                } else {
+                    router.replace('/auth');
+                }
+            } else {
+                router.replace('/auth');
+            }
+        };
+
         if (!user) {
-            router.push('/');
+            fetchUserProfile();
         }
-    }, [user, router]);
+    }, [authCookie, dispatch, router, user]);
 
     if (!user) {
         return (
