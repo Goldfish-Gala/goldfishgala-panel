@@ -6,7 +6,7 @@ import { IRootState } from '@/store';
 import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { storeUser } from '@/utils/storeUser'; // Ensure you have imported this
+import { storeUser } from '@/utils/storeUser';
 
 const Dashboard = () => {
     const user = useSelector((state: IRootState) => state.auth.user);

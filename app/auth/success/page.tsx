@@ -44,10 +44,7 @@ const AuthSuccess = () => {
                 <div className="relative w-full max-w-[500px] rounded-md dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
                     <div className="relative flex min-h-[400px] flex-col justify-center rounded-md bg-white/60 px-6 py-4 backdrop-blur-lg dark:bg-black/50">
                         <div className="mx-auto flex h-[180px] w-full flex-col items-center justify-around">
-                            <h1
-                                className="text-xl font-extrabold uppercase !leading-snug text-primary md:text-2xl"
-                                style={{ textShadow: '4px 4px 10px rgba(0, 0, 0, 0.8)' }}
-                            >
+                            <h1 className="dark:text-shadow-dark-mode text-xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">
                                 Otentikasi Berhasil!
                             </h1>
                             <div className="flex flex-col items-center gap-4">

@@ -1,11 +1,6 @@
-import ComponentsAuthRegisterForm from '@/components/auth/components-auth-register-form';
-import IconFacebookCircle from '@/components/icon/icon-facebook-circle';
-import IconGoogle from '@/components/icon/icon-google';
-import IconInstagram from '@/components/icon/icon-instagram';
-import IconTwitter from '@/components/icon/icon-twitter';
-import LanguageDropdown from '@/components/language-dropdown';
+/* eslint-disable @next/next/no-img-element */
+import FirstLoginForm from '@/components/auth/components-first-login-form';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import React from 'react';
 
 export const metadata: Metadata = {
@@ -37,20 +32,17 @@ const BoxedSignUp = () => {
                 />
                 <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
                 <div className="relative w-full max-w-[870px] rounded-md">
-                    <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px]">
+                    <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-xl dark:bg-black/70 lg:min-h-[758px]">
                         <div className="mx-auto w-full max-w-[440px]">
                             <div className="mb-10">
-                                <h1
-                                    className="text-2xl font-extrabold uppercase !leading-snug text-primary md:text-3xl"
-                                    style={{ textShadow: '2px 2px 8px rgba(0, 0, 0, 0.8)' }}
-                                >
+                                <h1 className="dark:text-shadow-dark-mode text-2xl font-extrabold uppercase !leading-snug text-primary md:text-3xl">
                                     Pembaruan Data
                                 </h1>
-                                <p className="text-base font-bold leading-normal text-white-dark">
+                                <p className="text-base font-bold leading-normal text-dark dark:text-white-dark ">
                                     Lengkapi data diri untuk melanjutkan ke dashboard
                                 </p>
                             </div>
-                            <ComponentsAuthRegisterForm />
+                            <FirstLoginForm />
                         </div>
                     </div>
                 </div>

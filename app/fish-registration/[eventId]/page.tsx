@@ -1,12 +1,12 @@
-import GoogleButton from '@/components/components/google-button';
+import FishRegistrationForm from '@/components/fish-registration/fish-form';
 import { Metadata } from 'next';
 import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'Authentication',
+    title: 'Fish Registration',
 };
 
-const BoxedSignIn = () => {
+const FishRegistration = ({ params }: { params: { eventId: string } }) => {
     return (
         <div>
             <div className="absolute inset-0">
@@ -30,21 +30,18 @@ const BoxedSignIn = () => {
                     className="absolute right-0 top-0 h-[300px]"
                 />
                 <img src="/assets/images/auth/polygon-object.svg" alt="image" className="absolute bottom-0 end-[28%]" />
-                <div className="relative w-full max-w-[500px] rounded-md dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
-                    <div className="relative flex min-h-[400px] flex-col justify-center rounded-md bg-white/60 px-6 py-4 backdrop-blur-lg dark:bg-black/50">
-                        <div className="mx-auto flex h-[180px] w-full flex-col items-center justify-between">
-                            <div className="flex w-full justify-center">
+                <div className="relative w-full max-w-[870px] rounded-md">
+                    <div className="relative flex flex-col justify-center rounded-md bg-white/60 px-6 py-20 backdrop-blur-lg dark:bg-black/50 lg:min-h-[758px]">
+                        <div className="mx-auto w-full max-w-[440px]">
+                            <div className="mb-10">
                                 <h1 className="dark:text-shadow-dark-mode text-2xl font-extrabold uppercase !leading-snug text-primary md:text-3xl">
-                                    Otentikasi
+                                    Pendaftaran Ikan
                                 </h1>
+                                <p className="text-base font-bold leading-normal text-dark dark:text-white-dark ">
+                                    Lengkapi data ikan untuk pendaftaran
+                                </p>
                             </div>
-                            <div>
-                                <ul className="flex justify-center gap-3.5 text-white">
-                                    <li>
-                                        <GoogleButton />
-                                    </li>
-                                </ul>
-                            </div>
+                            <FishRegistrationForm params={params} />
                         </div>
                     </div>
                 </div>
@@ -53,4 +50,4 @@ const BoxedSignIn = () => {
     );
 };
 
-export default BoxedSignIn;
+export default FishRegistration;
