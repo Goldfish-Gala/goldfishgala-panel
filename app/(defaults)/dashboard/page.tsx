@@ -1,4 +1,5 @@
 import OngoingEvent from '@/components/dashboard/ongoing-event';
+import PendingPayment from '@/components/dashboard/pending-payment';
 import WelcomeCard from '@/components/dashboard/welcome-card';
 import IconCalendar from '@/components/icon/icon-calendar';
 import IconClock from '@/components/icon/icon-clock';
@@ -45,6 +46,7 @@ const Dashboard = () => {
                         </div>
                     </div>
                     <OngoingEvent />
+                    <PendingPayment />
                 </div>
                 {/* <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
                     <div className="panel">
