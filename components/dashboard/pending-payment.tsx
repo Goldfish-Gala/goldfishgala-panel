@@ -57,7 +57,7 @@ const PendingPayment = () => {
     });
 
     return (
-        <div className={`panel lg:col-span-2 ${data?.length === 0 ? 'hidden' : ''}`}>
+        <div className={`panel lg:col-span-1 ${data?.length === 0 ? 'hidden' : ''}`}>
             <div className="mb-5">
                 <h5 className="text-lg font-semibold dark:text-white-light">Tagihan pembayaran</h5>
             </div>
@@ -68,7 +68,7 @@ const PendingPayment = () => {
             ) : (
                 <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
                     <div className="flex w-full flex-col items-center gap-8 font-semibold text-white-dark xl:mt-8">
-                        <p className="text-sm font-bold text-dark dark:text-white-dark md:text-base lg:text-lg xl:text-xl">
+                        <p className="text-xs font-bold text-info dark:text-white-dark md:text-sm lg:text-base xl:text-lg">
                             Anda memiliki {data?.length} tagihan belum terbayar
                         </p>
                     </div>
