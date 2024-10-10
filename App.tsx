@@ -2,7 +2,15 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
-import { toggleRTL, toggleTheme, toggleMenu, toggleLayout, toggleAnimation, toggleNavbar, toggleSemidark } from '@/store/themeConfigSlice';
+import {
+    toggleRTL,
+    toggleTheme,
+    toggleMenu,
+    toggleLayout,
+    toggleAnimation,
+    toggleNavbar,
+    toggleSemidark,
+} from '@/store/themeConfigSlice';
 import Loading from '@/components/layouts/loading';
 import { getTranslation } from '@/i18n';
 
@@ -24,8 +32,18 @@ function App({ children }: PropsWithChildren) {
         initLocale(themeConfig.locale);
 
         setIsLoading(false);
-    }, [dispatch, initLocale, themeConfig.theme, themeConfig.menu, themeConfig.layout, themeConfig.rtlClass, themeConfig.animation, themeConfig.navbar, themeConfig.locale, themeConfig.semidark]);
-
+    }, [
+        dispatch,
+        initLocale,
+        themeConfig.theme,
+        themeConfig.menu,
+        themeConfig.layout,
+        themeConfig.rtlClass,
+        themeConfig.animation,
+        themeConfig.navbar,
+        themeConfig.locale,
+        themeConfig.semidark,
+    ]);
     return (
         <div
             className={`${(themeConfig.sidebar && 'toggle-sidebar') || ''} ${themeConfig.menu} ${themeConfig.layout} ${

@@ -3,11 +3,14 @@ import 'react-perfect-scrollbar/dist/css/styles.css';
 import '../styles/tailwind.css';
 import { Metadata } from 'next';
 import { Nunito } from 'next/font/google';
+import { CookiesProvider } from 'next-client-cookies/server';
+import { Toaster } from '@/components/UI/Toast/toaster';
+import QueryCacheProvider from '@/components/layouts/query-cache-provider';
 
 export const metadata: Metadata = {
     title: {
-        template: '%s | VRISTO - Multipurpose Tailwind Dashboard Template',
-        default: 'VRISTO - Multipurpose Tailwind Dashboard Template',
+        template: '%s | GOLDFISH GALA - The Premier Stage of Goldfish',
+        default: 'GOLDFISH GALA - The Premier Stage of Goldfish',
     },
 };
 const nunito = Nunito({
@@ -21,7 +24,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return (
         <html lang="en">
             <body className={nunito.variable}>
-                <ProviderComponent>{children}</ProviderComponent>
+                <Toaster />
+                <ProviderComponent>
+                    <QueryCacheProvider>{children}</QueryCacheProvider>
+                </ProviderComponent>
             </body>
         </html>
     );

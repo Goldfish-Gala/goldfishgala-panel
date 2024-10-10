@@ -1,13 +1,16 @@
-import ComponentsDashboardSales from '@/components/dashboard/components-dashboard-sales';
+import UserComponent from '@/components/home/userComponent';
 import { Metadata } from 'next';
-import React from 'react';
 
 export const metadata: Metadata = {
-    title: 'Sales Admin',
+    title: 'Home',
 };
 
-const Sales = () => {
-    return <ComponentsDashboardSales />;
+const Home = async () => {
+    return (
+        <div>
+            <UserComponent />
+        </div>
+    );
 };
 
-export default Sales;
+export default Home;

@@ -15,6 +15,9 @@ module.exports = {
             center: true,
         },
         extend: {
+            textShadow: {
+                'dark-mode': '2px 2px 8px rgba(0, 0, 0, 0.8)',
+            },
             colors: {
                 primary: {
                     DEFAULT: '#4361ee',

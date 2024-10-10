@@ -265,6 +265,17 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     /* Buttons */
     .btn {
         @apply relative flex items-center justify-center rounded-md border px-5 py-2 text-sm font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:shadow-none;
+    &:disabled {
+            @apply cursor-not-allowed opacity-50;
+            /* Make it look disabled */
+        }
+    }
+    .btn2 {
+        @apply relative flex items-center justify-center rounded-md border px-2 py-1 pb-0.5 text-xs font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:shadow-none;
+        &:disabled {
+                @apply cursor-not-allowed opacity-50;
+                /* Make it look disabled */
+            }
     }
     .btn-lg {
         @apply px-7 py-2.5 text-base;
@@ -277,7 +288,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     }
 
     .btn-primary {
-        @apply border-primary bg-primary text-white shadow-primary/60;
+        @apply border-primary bg-primary text-white shadow-primary/60 transition-transform duration-150 ease-in-out active:scale-95;
     }
     .btn-outline-primary {
         @apply border-primary text-primary shadow-none hover:bg-primary hover:text-white;
@@ -327,7 +338,24 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     }
 
     .btn-gradient {
-        @apply bg-gradient-to-r from-[#EF1262] to-[#4361EE] text-white hover:from-[#4361EE] hover:to-[#EF1262];
+        @apply bg-gradient-to-r from-[#EF1262] to-[#4361EE] text-white hover:from-[#4361EE] hover:to-[#EF1262] transition-transform duration-150 ease-in-out active:scale-95;
+        &:disabled {
+            @apply bg-white-dark hover:bg-white-dark active:scale-100;
+        }
+    }
+
+    .btn-gradient2 {
+        @apply bg-primary text-white hover:bg-info transition-transform duration-150 ease-in-out active:scale-95;
+        &:disabled {
+            @apply bg-white-dark hover:bg-white-dark active:scale-100;
+        }
+    }
+
+    .btn-gradient3 {
+        @apply bg-danger text-white hover:bg-secondary transition-transform duration-150 ease-in-out active:scale-95;
+        &:disabled {
+            @apply bg-white-dark hover:bg-white-dark active:scale-100;
+        }
     }
 
     /* Badge */
@@ -371,6 +399,27 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
         @apply py-2.5 text-base;
     }
     .form-input-sm,
+    .form-textarea-sm,
+    .form-select-sm,
+    .form-multiselect-sm {
+        @apply py-1.5 text-xs;
+    }
+
+    .form-input2,
+    .form-textarea,
+    .form-select,
+    .form-multiselect {
+        @apply w-full rounded-md border border-white-light bg-white px-4 py-2 text-sm font-semibold text-black !outline-none focus:border-primary focus:ring-transparent;
+    }
+
+    .form-input2-lg,
+    .form-textarea-lg,
+    .form-select-lg,
+    .form-multiselect-lg {
+        @apply py-2.5 text-base;
+    }
+
+    .form-input2-sm,
     .form-textarea-sm,
     .form-select-sm,
     .form-multiselect-sm {
