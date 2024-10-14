@@ -9,11 +9,11 @@ import { useCookies } from 'next-client-cookies';
 import { storeUser } from '@/utils/storeUser';
 
 const Dashboard = () => {
-    const user = useSelector((state: IRootState) => state.auth.user);
     const dispatch = useDispatch();
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies.get('authCookies');
+    const user = useSelector((state: IRootState) => state.auth.user);
 
     useEffect(() => {
         const fetchUserProfile = async () => {

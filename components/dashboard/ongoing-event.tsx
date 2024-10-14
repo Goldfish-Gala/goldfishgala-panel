@@ -11,8 +11,7 @@ import { useQuery } from '@tanstack/react-query';
 const OngoingEvent = () => {
     const router = useRouter();
     const cookies = useCookies();
-    const authCookie = cookies?.get('authCookies') ?? '';
-    console.log('tesssss', authCookie);
+    const authCookie = cookies?.get('authCookies');
 
     const fetchOngoingEvent = async (): Promise<OngoingEvent> => {
         const getAllEvent = await getAllevent(authCookie);

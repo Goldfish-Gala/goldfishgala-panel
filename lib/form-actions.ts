@@ -47,6 +47,8 @@ export async function fishRegisterSubmit(
         fish_video_url: formData.get('fish_video_url') as string,
     };
 
+    console.log('validatedFields', validatedFields);
+
     try {
         const createFish = await fishRegisterApi(validatedFields, authCookie?.value);
         if (createFish.success) {

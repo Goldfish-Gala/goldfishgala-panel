@@ -95,3 +95,35 @@ interface EventRegisterType {
     user_id: string | undefined;
     fish_id: string;
 }
+
+interface UserRegDetailType {
+    user_reg_id: string;
+    event_id: string;
+    user_id: string;
+    fish_id: string;
+    user_reg_status_id: string;
+    user_reg_created_date: string;
+    event_name: string;
+    event_desc: string;
+    event_is_active: boolean;
+    event_start_date: string;
+    event_end_date: string;
+    event_created_date: string;
+    user_email: string;
+    user_fname: string;
+    user_lname: string;
+    user_is_active: boolean;
+    user_last_active: string;
+    fish_type_id: string;
+    fish_name: string;
+    fish_gender: string;
+    fish_size: string;
+    fish_image1: string;
+    fish_image2: string;
+    fish_image3: string;
+    fish_desc: string;
+    fish_updated_date: string;
+    user_reg_status_code: string;
+    user_reg_status_name: string;
+    user_reg_status_desc: string;
+}

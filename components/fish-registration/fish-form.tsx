@@ -120,6 +120,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
 
         try {
             const response = await fishImageApi(file, authCookie);
+            console.log('fish image', response.data);
             if (response.success) {
                 setFishImageUrls((prev) => ({
                     ...prev,
@@ -160,6 +161,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
             fish_image3: fishImageUrls['fish_image3'] || '',
             fish_video_url: formData.get('fish_video_url'),
         };
+        console.log('formValues', formValues);
 
         const validationResult = formFishRegistrationSchema.safeParse(formValues);
 
@@ -175,7 +177,13 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
 
         setErrors({});
         setLoading(true);
-        formAction(formData);
+
+        const validFormData = new FormData();
+        Object.entries(formValues).forEach(([key, value]) => {
+            validFormData.append(key, value as string);
+        });
+
+        formAction(validFormData);
     };
 
     useEffect(() => {

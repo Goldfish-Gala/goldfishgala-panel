@@ -1,7 +1,6 @@
 import { api } from './api-config';
 
 export const getAllevent = async (cookie: string | undefined) => {
-    console.log('cookie ', cookie);
     try {
         const response = await api.get(`/events`, {
             headers: {

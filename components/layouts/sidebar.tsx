@@ -92,10 +92,19 @@ const Sidebar = () => {
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <img className="ml-[5px] w-8 flex-none" src="/assets/images/logo.svg" alt="logo" />
-                            <span className="align-middle text-2xl font-semibold dark:text-white-light lg:inline ltr:ml-1.5 rtl:mr-1.5">
-                                VRISTO
-                            </span>
+                            <img
+                                className="ml-[5px] w-40 flex-none dark:hidden"
+                                src="/assets/images/desktop-logo.png"
+                                alt="logo"
+                            />
+                            <img
+                                className="ml-[5px] hidden w-40 flex-none dark:block"
+                                src="/assets/images/logo.png"
+                                alt="logo"
+                            />
+                            {/* <span className="align-middle text-2xl font-semibold dark:text-white-light lg:inline ltr:ml-1.5 rtl:mr-1.5">
+                                Goldfish Gala
+                            </span> */}
                         </Link>
 
                         <button
@@ -132,14 +141,8 @@ const Sidebar = () => {
                                             <Link href="/dashboard">{t('home')}</Link>
                                         </li>
                                         <li>
-                                            <Link href="/analytics">{t('Event yang di ikuti')}</Link>
+                                            <Link href="/registered-event">{t('Event yang di ikuti')}</Link>
                                         </li>
-                                        {/* <li>
-                                            <Link href="/finance">{t('finance')}</Link>
-                                        </li>
-                                        <li>
-                                            <Link href="/crypto">{t('crypto')}</Link>
-                                        </li> */}
                                     </ul>
                                 </AnimateHeight>
                             </li>
@@ -156,7 +159,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuInvoice className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('invoice')}
+                                                    {t('Tagihan')}
                                                 </span>
                                             </div>
 
@@ -170,16 +173,10 @@ const Sidebar = () => {
                                         <AnimateHeight duration={300} height={currentMenu === 'invoice' ? 'auto' : 0}>
                                             <ul className="sub-menu text-gray-500">
                                                 <li>
-                                                    <Link href="/apps/invoice/list">{t('Riwayat')}</Link>
+                                                    <Link href="/apps/invoice/list">{t('Belum dibayar')}</Link>
                                                 </li>
                                                 <li>
-                                                    <Link href="/apps/invoice/preview">{t('preview')}</Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/apps/invoice/add">{t('add')}</Link>
-                                                </li>
-                                                <li>
-                                                    <Link href="/apps/invoice/edit">{t('edit')}</Link>
+                                                    <Link href="/apps/invoice/preview">{t('Sudah dibayar')}</Link>
                                                 </li>
                                             </ul>
                                         </AnimateHeight>
