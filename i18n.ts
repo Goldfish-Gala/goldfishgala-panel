@@ -33,7 +33,7 @@ const getLang = () => {
 
 export const getTranslation = () => {
     const lang = getLang();
-    const data: any = langObj['ina' || lang];
+    const data: any = langObj[lang || 'ina'];
 
     const t = (key: string) => {
         return data[key] ? data[key] : key;

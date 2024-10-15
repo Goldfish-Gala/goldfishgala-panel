@@ -1,8 +1,8 @@
 import { api } from './api-config';
 
-export const getAllevent = async (cookie: string | undefined) => {
+export const getAllOngoingEvents = async (cookie: string | undefined) => {
     try {
-        const response = await api.get(`/events`, {
+        const response = await api.get(`/events/detailed`, {
             headers: {
                 Cookie: `token=${cookie}`,
             },

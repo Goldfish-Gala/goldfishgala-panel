@@ -40,10 +40,8 @@ const Dashboard = () => {
             </ul>
             <div className="pt-5">
                 <div className="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-3">
-                    <div className="panel pt-8">
-                        <div className="mb-5">
-                            <WelcomeCard />
-                        </div>
+                    <div className="panel h-full pt-8">
+                        <WelcomeCard />
                     </div>
                     <OngoingEvent />
                     <PendingPayment />

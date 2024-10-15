@@ -1,13 +1,10 @@
 'use client';
 
 import { useCookies } from 'next-client-cookies';
-import IconClock from '../icon/icon-clock';
-import IconCircle from '../icon/menu/icon-circle';
-import { getAllevent, getOneEvent } from '@/api/api-event';
 import SpinnerWithText from '../UI/Spinner';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
 import { storeUser } from '@/utils/storeUser';
@@ -20,8 +17,8 @@ const PendingPayment = () => {
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
+    const fetchUserProfile = useCallback(async () => {
+        try {
             if (authCookie) {
                 const userProfile = await storeUser(authCookie, dispatch);
                 if (userProfile) {
@@ -32,20 +29,21 @@ const PendingPayment = () => {
             } else {
                 router.push('/auth');
             }
-        };
+        } catch (error) {
+            throw error;
+        }
+    }, [authCookie, dispatch, router]);
 
+    useEffect(() => {
         if (!user) {
             fetchUserProfile();
         }
-    }, [authCookie, dispatch, router, user]);
+    }, [fetchUserProfile, user]);
 
     const fetchPendingPayment = async (): Promise<UserRegDetailType[]> => {
         const getAllUserEvent = await getAllEventRegistered(authCookie, user?.user_id);
         if (getAllUserEvent.success) {
-            const pendingRegPayment = getAllUserEvent.data.filter(
-                (event: UserRegDetailType) => event.user_reg_status_code === 'pending_payment_reg'
-            );
-            return pendingRegPayment;
+            return getAllUserEvent.data.Pending;
         }
         throw new Error('No ongoing event');
     };
@@ -53,7 +51,7 @@ const PendingPayment = () => {
     const { isPending, error, data } = useQuery({
         queryKey: ['pendingPayment'],
         queryFn: () => fetchPendingPayment(),
-        enabled: !!authCookie,
+        enabled: !!authCookie && !!user?.user_id,
     });
 
     return (

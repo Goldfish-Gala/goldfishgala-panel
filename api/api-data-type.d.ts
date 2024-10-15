@@ -20,7 +20,30 @@ interface UpdateUserType {
     user_phone: string;
 }
 
-interface OngoingEvent {
+interface OneOngoingEvent {
+    event_id: string;
+    event_reg_id: string;
+    event_name: string;
+    event_desc: string;
+    event_is_active: boolean;
+    event_start_date: string;
+    event_end_date: string;
+    event_created_date: string;
+    event_reg_phase_id: string;
+    event_reg_status_id: string;
+    event_reg_period_id: string;
+    event_reg_phase_code: string;
+    event_reg_phase_name: string;
+    event_reg_phase_desc: string;
+    event_reg_status_code: string;
+    event_reg_status_name: string;
+    event_reg_status_desc: string;
+    event_reg_start_date: string;
+    event_reg_end_date: string;
+    event_reg_created_date: string;
+}
+
+interface OngoingEvents {
     event_id: string;
     event_reg_id: string;
     event_name: string;

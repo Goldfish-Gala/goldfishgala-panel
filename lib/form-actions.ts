@@ -5,6 +5,7 @@ import { revalidatePath } from 'next/cache';
 import { fishRegisterApi } from '@/api/api-fish';
 import { eventRegisterApi } from '@/api/api-event';
 import { cookies } from 'next/headers';
+import { createInvoceApi } from '@/api/api-invoice';
 
 const cookieStore = cookies();
 const authCookie = cookieStore?.get('token');
@@ -34,8 +35,12 @@ export async function fishRegisterSubmit(
     prevState: any,
     formData: FormData
 ) {
+    if (!params.user || !params.eventId) {
+        return { message: 'User or event ID is missing.' };
+    }
+
     const validatedFields = {
-        user_id: params.user?.user_id,
+        user_id: params.user.user_id,
         fish_type_id: formData.get('fish_type_id') as string,
         fish_size: formData.get('fish_size') as string,
         fish_name: formData.get('fish_name') as string,
@@ -47,24 +52,35 @@ export async function fishRegisterSubmit(
         fish_video_url: formData.get('fish_video_url') as string,
     };
 
-    console.log('validatedFields', validatedFields);
+    const authToken = authCookie?.value;
 
     try {
-        const createFish = await fishRegisterApi(validatedFields, authCookie?.value);
-        if (createFish.success) {
-            const body = {
-                event_id: params.eventId,
-                user_id: params.user?.user_id,
-                fish_id: createFish.data[0].fish_id,
-            };
-            const eventReg = await eventRegisterApi(body, authCookie?.value);
-            if (eventReg.success) {
-                return { message: 'Ikan berhasil didaftarkan' };
-            }
+        const createFish = await fishRegisterApi(validatedFields, authToken);
+        console.log('createFish', createFish);
+        if (!createFish.success) {
+            return { message: 'Gagal mendaftarkan ikan' };
         }
 
-        return { message: 'Gagal mendaftarkan ikan' };
+        const body = {
+            event_id: params.eventId,
+            user_id: params.user.user_id,
+            fish_id: createFish.data[0].fish_id,
+        };
+
+        const eventReg = await eventRegisterApi(body, authToken);
+        console.log('eventReg', eventReg);
+        if (!eventReg.success) {
+            return { message: 'Gagal mendaftarkan ikan' };
+        }
+
+        const createInvoice = await createInvoceApi(eventReg.data[0].user_reg_id, authToken);
+        console.log('createInvoice', createInvoice);
+        if (!createInvoice.success) {
+            return { message: 'Gagal mendaftarkan ikan' };
+        }
+
+        return { message: 'Ikan berhasil didaftarkan', data: createInvoice.data.invoiceUrl };
     } catch (error: any) {
-        return { message: 'Gagal mendaftarkan ikan' };
+        return { message: `Gagal mendaftarkan ikan` };
     }
 }

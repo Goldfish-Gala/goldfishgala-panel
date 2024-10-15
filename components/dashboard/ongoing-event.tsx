@@ -3,7 +3,7 @@
 import { useCookies } from 'next-client-cookies';
 import IconClock from '../icon/icon-clock';
 import IconCircle from '../icon/menu/icon-circle';
-import { getAllevent, getOneEvent } from '@/api/api-event';
+import { getOneEvent, getAllOngoingEvents } from '@/api/api-event';
 import SpinnerWithText from '../UI/Spinner';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
@@ -13,12 +13,10 @@ const OngoingEvent = () => {
     const cookies = useCookies();
     const authCookie = cookies?.get('authCookies');
 
-    const fetchOngoingEvent = async (): Promise<OngoingEvent> => {
-        const getAllEvent = await getAllevent(authCookie);
-        if (getAllEvent.data && getAllEvent.data.OnGoing.length > 0) {
-            const getOngoingEvent = await getOneEvent(authCookie, getAllEvent.data.OnGoing[0].event_id);
-            console.log('Fetched Ongoing Event:', getOngoingEvent.data[0]);
-            return getOngoingEvent.data[0];
+    const fetchOngoingEvent = async (): Promise<OneOngoingEvent> => {
+        const onGoingEvent = await getAllOngoingEvents(authCookie);
+        if (onGoingEvent.success) {
+            return onGoingEvent.data.OnGoing[0];
         }
         throw new Error('No ongoing event');
     };
@@ -28,6 +26,37 @@ const OngoingEvent = () => {
         queryFn: () => fetchOngoingEvent(),
         enabled: !!authCookie,
     });
+
+    const statusCode = data?.event_reg_status_code;
+    const statusColor =
+        statusCode === 'green_status'
+            ? '#00ab55'
+            : statusCode === 'yellow_status'
+            ? '#e2a03f'
+            : statusCode === 'red_status'
+            ? '#e7515a'
+            : '#888ea8';
+    const phaseCode = data?.event_reg_phase_code;
+    const eventPhase =
+        phaseCode === 'open_phase'
+            ? 'Pendaftaran dibuka'
+            : phaseCode === 'closed_phase'
+            ? 'Pendaftaran ditutup'
+            : phaseCode === 'on_review_phase'
+            ? 'Sedang dalam penilaian'
+            : 'Pengumuman juara';
+
+    const dayLeft = () => {
+        const endDate = data?.event_reg_end_date ? new Date(data.event_reg_end_date) : null;
+        if (endDate) {
+            const currentDate = new Date();
+            const timeDiff = endDate.getTime() - currentDate.getTime();
+            const daysRemaining = Math.ceil(timeDiff / (1000 * 3600 * 24));
+            return daysRemaining;
+        } else {
+            console.log('End date is not available.');
+        }
+    };
 
     return (
         <div className="panel lg:col-span-2">
@@ -40,7 +69,7 @@ const OngoingEvent = () => {
                 </div>
             ) : (
                 <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
-                    <div className="flex w-full flex-col items-center gap-8 font-semibold text-white-dark xl:mt-8">
+                    <div className="flex w-full flex-col items-center gap-8 font-semibold text-white-dark xl:mt-2">
                         <p className="text-xl font-extrabold text-dark dark:text-white-dark md:text-2xl lg:text-3xl xl:text-4xl">
                             {data?.event_name}
                         </p>
@@ -59,26 +88,23 @@ const OngoingEvent = () => {
                                         <p>:</p>
                                         <div className="item-center flex gap-2">
                                             <div className="pt-0.5 md:pt-1">
-                                                <IconCircle fill={'#f67062'} />
+                                                <IconCircle fill={statusColor} />
                                             </div>
-                                            <p className="text-xs font-semibold md:text-sm">Pendaftaran dibuka</p>
+                                            <p className="text-xs font-semibold md:text-sm">{eventPhase}</p>
                                         </div>
                                     </div>
                                 </div>
+                                <div className="flex w-full items-center justify-between">
+                                    <p className="w-1/2 text-base font-bold md:text-lg">Durasi pendaftaran</p>
+                                    <div className="flex w-1/2 items-center justify-between">
+                                        <p>:</p>
+                                        <p className="flex items-center rounded-full bg-white-light px-3 py-1 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
+                                            <IconClock className="h-3 w-3 ltr:mr-1 rtl:ml-1" />
+                                            {dayLeft()} Hari lagi
+                                        </p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div className="flex w-full flex-col gap-2">
-                        <div className="flex w-full items-center justify-between font-semibold">
-                            <p className="flex items-center rounded-full bg-dark px-2 py-1 text-xs font-semibold text-white-light">
-                                <IconClock className="h-3 w-3 ltr:mr-1 rtl:ml-1" />5 Days Left
-                            </p>
-                        </div>
-                        <div className="h-2.5 w-full overflow-hidden rounded-full bg-dark-light p-0.5 dark:bg-dark-light/10">
-                            <div
-                                className="relative h-full w-full rounded-full bg-gradient-to-r from-[#f67062] to-[#fc5296]"
-                                style={{ width: '65%' }}
-                            ></div>
                         </div>
                     </div>
                     <button
