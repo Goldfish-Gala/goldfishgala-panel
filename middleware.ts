@@ -14,11 +14,6 @@ export async function middleware(req: NextRequest) {
 
             if (userProfile.success) {
                 store.dispatch(login());
-                response.cookies.set('authCookies', authCookie.value, {
-                    httpOnly: false,
-                    path: '/',
-                    maxAge: 60 * 60,
-                });
             } else {
                 store.dispatch(logout());
                 return NextResponse.redirect(new URL('/auth/failed', req.url));

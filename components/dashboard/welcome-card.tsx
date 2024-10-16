@@ -12,7 +12,7 @@ const Dashboard = () => {
     const dispatch = useDispatch();
     const router = useRouter();
     const cookies = useCookies();
-    const authCookie = cookies.get('authCookies');
+    const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
 
     useEffect(() => {
