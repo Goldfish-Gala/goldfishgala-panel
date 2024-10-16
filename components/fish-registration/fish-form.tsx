@@ -22,7 +22,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const { toast } = useToast();
     const dispatch = useDispatch();
     const cookies = useCookies();
-    const authCookie = cookies.get('authCookies');
+    const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
     const [fishTypes, setFishTypes] = useState<FishType[] | null>(null);
     const [fishTypeId, setFishTypeId] = useState('');

@@ -13,7 +13,7 @@ import { getAllEventRegistered } from '@/api/api-registered-event';
 const PendingPayment = () => {
     const router = useRouter();
     const cookies = useCookies();
-    const authCookie = cookies?.get('authCookies');
+    const authCookie = cookies?.get('token');
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
 

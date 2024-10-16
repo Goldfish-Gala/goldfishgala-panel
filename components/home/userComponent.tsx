@@ -14,7 +14,7 @@ const UserComponent = () => {
     const user = useSelector((state: IRootState) => state.auth.user);
     const [loading, setLoading] = useState(true);
     const cookies = useCookies();
-    const authCookie = cookies?.get('authCookies');
+    const authCookie = cookies?.get('token');
 
     useEffect(() => {
         const fetchUserProfile = async () => {

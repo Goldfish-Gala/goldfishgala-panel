@@ -25,7 +25,7 @@ const FirstLoginForm = () => {
     const { toast } = useToast();
     const dispatch = useDispatch();
     const cookies = useCookies();
-    const authCookie = cookies.get('authCookies');
+    const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
     const [state, formAction] = useFormState(updateUserSubmit.bind(null, user), null);
     const [isLoading, setLoading] = useState(false);
