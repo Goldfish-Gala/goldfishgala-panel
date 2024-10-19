@@ -14,8 +14,8 @@ export async function updateUserSubmit(user: User | null, prevState: any, formDa
     const validatedFields = {
         user_fname: formData.get('user_fname') as string,
         user_lname: formData.get('user_lname') as string,
-        user_address: formData.get('user_address') as string,
         user_phone: formData.get('user_phone') as string,
+        user_address: formData.get('user_address') as string,
     };
 
     try {

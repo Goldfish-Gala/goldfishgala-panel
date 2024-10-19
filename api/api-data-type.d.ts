@@ -94,6 +94,13 @@ interface EventRegPeriod {
     event_reg_created_date: string;
 }
 
+interface EventPrice {
+    event_price_id: string;
+    event_price_code: string;
+    event_price_name: string;
+    event_price_amount: number;
+}
+
 interface FishRegisterType {
     fish_type_id: string;
     fish_size: string;

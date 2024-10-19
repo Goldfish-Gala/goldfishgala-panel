@@ -76,13 +76,6 @@ const OngoingEvent = () => {
                         <div className="w-[350px] rounded border border-[#ebedf2] p-6 dark:border-0 dark:bg-[#1b2e4b] md:w-[400px]">
                             <div className="flex flex-col items-center justify-between">
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="w-1/2 text-base font-bold md:text-lg">Total Hadiah</p>
-                                    <div className="flex w-1/2 justify-between">
-                                        <p>:</p>
-                                        <p>Rp 10.000.000</p>
-                                    </div>
-                                </div>
-                                <div className="flex w-full items-center justify-between">
                                     <p className="w-1/2 text-base font-bold md:text-lg">Status</p>
                                     <div className="flex w-1/2 items-center justify-between">
                                         <p>:</p>

@@ -39,3 +39,17 @@ export const eventRegisterApi = async (data: EventRegisterType, cookie: string |
         return error;
     }
 };
+
+export const getEventPricesApi = async (eventId: string, cookie: string | undefined) => {
+    try {
+        const response = await api.get(`/event-prices/event/${eventId}`, {
+            headers: {
+                Cookie: `token=${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};

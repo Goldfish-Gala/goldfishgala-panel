@@ -352,7 +352,7 @@ hover:text-primary hover:before:!bg-primary ltr:before:mr-2 rtl:before:ml-2 dark
     }
 
     .btn-gradient3 {
-        @apply bg-danger text-white hover:bg-secondary transition-transform duration-150 ease-in-out active:scale-95;
+        @apply bg-danger text-white hover:bg-danger-light transition-transform duration-150 ease-in-out active:scale-95;
         &:disabled {
             @apply bg-white-dark hover:bg-white-dark active:scale-100;
         }

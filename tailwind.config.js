@@ -36,7 +36,7 @@ module.exports = {
                 },
                 danger: {
                     DEFAULT: '#e7515a',
-                    light: '#fff5f5',
+                    light: '#FF0004',
                     'dark-light': 'rgba(231,81,90,.15)',
                 },
                 warning: {

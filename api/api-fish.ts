@@ -14,9 +14,9 @@ export const fishRegisterApi = async (data: FishRegisterType, cookie: string | u
     }
 };
 
-export const getFishTypeApi = async (cookie: string | undefined) => {
+export const getFishTypeApi = async (code: string, cookie: string | undefined) => {
     try {
-        const response = await api.get(`/fish-types`, {
+        const response = await api.get(`/fish-types/code/${code}`, {
             headers: {
                 Cookie: `token=${cookie}`,
             },

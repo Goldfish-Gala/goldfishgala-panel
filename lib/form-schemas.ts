@@ -8,7 +8,6 @@ export const formUserCompletingDataSchema = z.object({
 });
 
 export const formFishRegistrationSchema = z.object({
-    fish_type_id: z.string().min(1, { message: 'Kategori ikan wajib di isi' }),
     fish_size: z.string().min(1, { message: 'Ukuran ikan wajib di isi' }),
     fish_name: z.string().min(1, { message: 'Nama ikan wajib di isi' }),
     fish_gender: z.string().min(1, { message: 'Jenis kelamin ikan wajib di isi' }),
