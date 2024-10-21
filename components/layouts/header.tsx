@@ -34,6 +34,7 @@ import IconMenuMore from '@/components/icon/menu/icon-menu-more';
 import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
 import { useCookies } from 'next-client-cookies';
+import Image from 'next/image';
 
 const Header = () => {
     const pathname = usePathname();
@@ -160,12 +161,16 @@ const Header = () => {
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <img
+                            <Image
+                                width={800}
+                                height={800}
                                 className="ml-[5px] w-40 flex-none dark:hidden"
                                 src="/assets/images/desktop-logo.png"
                                 alt="logo"
                             />
-                            <img
+                            <Image
+                                width={800}
+                                height={800}
                                 className="ml-[5px] hidden w-40 flex-none dark:block"
                                 src="/assets/images/logo.png"
                                 alt="logo"
@@ -213,7 +218,9 @@ const Header = () => {
                                 placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
                                 btnClassName="relative group block"
                                 button={
-                                    <img
+                                    <Image
+                                        width={800}
+                                        height={800}
                                         className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
                                         src={user?.user_avatar || '/assets/images/user-profile.jpeg'}
                                         alt="user avatar"
@@ -226,6 +233,13 @@ const Header = () => {
                                             <div className="truncate ltr:pl-4 rtl:pr-4">
                                                 <h4 className="text-base">
                                                     {user?.user_fname}&nbsp;{user?.user_lname}
+                                                    <span className="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">
+                                                        {user?.role_id === 1
+                                                            ? 'Guest'
+                                                            : user?.role_id === 2
+                                                            ? 'Member'
+                                                            : 'Admin'}
+                                                    </span>
                                                 </h4>
                                                 <button
                                                     type="button"
@@ -242,18 +256,6 @@ const Header = () => {
                                             Profile
                                         </Link>
                                     </li>
-                                    {/* <li>
-                                        <Link href="/apps/mailbox" className="dark:hover:text-white">
-                                            <IconMail className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                            Inbox
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/auth/boxed-lockscreen" className="dark:hover:text-white">
-                                            <IconLockDots className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                            Lock Screen
-                                        </Link>
-                                    </li> */}
                                     <li
                                         className="border-t border-white-light dark:border-white-light/10"
                                         onClick={handleLogout}

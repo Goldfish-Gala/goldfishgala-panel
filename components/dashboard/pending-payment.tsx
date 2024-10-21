@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
 import { storeUser } from '@/utils/storeUser';
 import { getAllEventRegistered } from '@/api/api-registered-event';
+import Link from 'next/link';
+import IconMultipleForwardRight from '../icon/icon-multiple-forward-right';
 
 const PendingPayment = () => {
     const router = useRouter();
@@ -55,26 +57,137 @@ const PendingPayment = () => {
     });
 
     return (
-        <div className={`panel lg:col-span-1 ${data?.length === 0 ? 'hidden' : ''}`}>
-            <div className="mb-5">
-                <h5 className="text-lg font-semibold dark:text-white-light">Tagihan pembayaran</h5>
+        <div className={`grid grid-cols-1 gap-6 lg:col-span-3 lg:grid-cols-2 ${data?.length === 0 ? 'hidden' : ''}`}>
+            <div className="panel h-full w-full">
+                <div className="mb-5 flex items-center justify-between">
+                    <h5 className="text-lg font-semibold dark:text-white-light">Recent Orders</h5>
+                </div>
+                <div className="table-responsive">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th className="ltr:rounded-l-md rtl:rounded-r-md">Customer</th>
+                                <th>Product</th>
+                                <th>Invoice</th>
+                                <th>Price</th>
+                                <th className="ltr:rounded-r-md rtl:rounded-l-md">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                <td className="min-w-[150px] text-black dark:text-white">
+                                    <div className="flex items-center">
+                                        <img
+                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
+                                            src="/assets/images/profile-6.jpeg"
+                                            alt="avatar"
+                                        />
+                                        <span className="whitespace-nowrap">Luke Ivory</span>
+                                    </div>
+                                </td>
+                                <td className="text-primary">Headphone</td>
+                                <td>
+                                    <Link href="/apps/invoice/preview">#46894</Link>
+                                </td>
+                                <td>$56.07</td>
+                                <td>
+                                    <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
+                                        Paid
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                <td className="text-black dark:text-white">
+                                    <div className="flex items-center">
+                                        <img
+                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
+                                            src="/assets/images/profile-7.jpeg"
+                                            alt="avatar"
+                                        />
+                                        <span className="whitespace-nowrap">Andy King</span>
+                                    </div>
+                                </td>
+                                <td className="text-info">Nike Sport</td>
+                                <td>
+                                    <Link href="/apps/invoice/preview">#76894</Link>
+                                </td>
+                                <td>$126.04</td>
+                                <td>
+                                    <span className="badge bg-secondary shadow-md dark:group-hover:bg-transparent">
+                                        Shipped
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                <td className="text-black dark:text-white">
+                                    <div className="flex items-center">
+                                        <img
+                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
+                                            src="/assets/images/profile-8.jpeg"
+                                            alt="avatar"
+                                        />
+                                        <span className="whitespace-nowrap">Laurie Fox</span>
+                                    </div>
+                                </td>
+                                <td className="text-warning">Sunglasses</td>
+                                <td>
+                                    <Link href="/apps/invoice/preview">#66894</Link>
+                                </td>
+                                <td>$56.07</td>
+                                <td>
+                                    <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
+                                        Paid
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                <td className="text-black dark:text-white">
+                                    <div className="flex items-center">
+                                        <img
+                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
+                                            src="/assets/images/profile-9.jpeg"
+                                            alt="avatar"
+                                        />
+                                        <span className="whitespace-nowrap">Ryan Collins</span>
+                                    </div>
+                                </td>
+                                <td className="text-danger">Sport</td>
+                                <td>
+                                    <button type="button">#75844</button>
+                                </td>
+                                <td>$110.00</td>
+                                <td>
+                                    <span className="badge bg-secondary shadow-md dark:group-hover:bg-transparent">
+                                        Shipped
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
+                                <td className="text-black dark:text-white">
+                                    <div className="flex items-center">
+                                        <img
+                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
+                                            src="/assets/images/profile-10.jpeg"
+                                            alt="avatar"
+                                        />
+                                        <span className="whitespace-nowrap">Irene Collins</span>
+                                    </div>
+                                </td>
+                                <td className="text-secondary">Speakers</td>
+                                <td>
+                                    <Link href="/apps/invoice/preview">#46894</Link>
+                                </td>
+                                <td>$56.07</td>
+                                <td>
+                                    <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
+                                        Paid
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
             </div>
-            {isPending ? (
-                <div className="flex min-h-[336px] w-full flex-col items-center justify-center md:min-h-[348px]">
-                    <SpinnerWithText text="Memuat..." />
-                </div>
-            ) : (
-                <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
-                    <div className="flex w-full flex-col items-center gap-8 font-semibold text-white-dark xl:mt-8">
-                        <p className="text-xs font-bold text-info dark:text-white-dark md:text-sm lg:text-base xl:text-lg">
-                            Anda memiliki {data?.length} tagihan belum terbayar
-                        </p>
-                    </div>
-                    <button className="btn btn-primary mb-5" onClick={() => router.push(`/invoice`)}>
-                        Lihat Detail
-                    </button>
-                </div>
-            )}
         </div>
     );
 };

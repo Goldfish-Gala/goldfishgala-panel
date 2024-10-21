@@ -13,6 +13,7 @@ import IconTag from '@/components/icon/icon-tag';
 import IconTwitter from '@/components/icon/icon-twitter';
 import ComponentsUsersProfilePaymentHistory from '@/components/users/profile/components-users-profile-payment-history';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
 
@@ -45,7 +46,9 @@ const Profile = () => {
                         </div>
                         <div className="mb-5">
                             <div className="flex flex-col items-center justify-center">
-                                <img
+                                <Image
+                                    width={800}
+                                    height={800}
                                     src="/assets/images/profile-34.jpeg"
                                     alt="img"
                                     className="mb-5 h-24 w-24 rounded-full  object-cover"

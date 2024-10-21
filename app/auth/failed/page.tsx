@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
-const AuthSuccess = () => {
+const AuthFailed = () => {
     const [countdown, setCountdown] = useState(5);
     const router = useRouter();
 
@@ -14,7 +14,7 @@ const AuthSuccess = () => {
         }, 1000);
 
         if (countdown === 0) {
-            router.push('/');
+            router.push('/auth');
         }
         return () => clearInterval(timer);
     }, [countdown, router]);
@@ -64,7 +64,7 @@ const AuthSuccess = () => {
                     <div className="relative flex min-h-[300px] flex-col justify-center rounded-md bg-white/60 px-6 py-4 backdrop-blur-lg dark:bg-black/50">
                         <div className="mx-auto flex h-[180px] w-full flex-col items-center justify-around">
                             <h1 className="dark:text-shadow-dark-mode text-xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">
-                                Otentikasi Berhasil!
+                                Otentikasi Gagal! Silahkan coba lagi.
                             </h1>
                             <div className="flex flex-col items-center gap-2">
                                 <p className="font-bold dark:text-white md:text-lg">Mengalihkan setelah:</p>
@@ -78,4 +78,4 @@ const AuthSuccess = () => {
     );
 };
 
-export default AuthSuccess;
+export default AuthFailed;

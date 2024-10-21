@@ -7,6 +7,7 @@ import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
 import { storeUser } from '@/utils/storeUser';
+import IconInstagram from '../icon/icon-instagram';
 
 const Dashboard = () => {
     const dispatch = useDispatch();
@@ -51,17 +52,36 @@ const Dashboard = () => {
     }
 
     return (
-        <div className="flex h-full flex-col items-start justify-between">
-            <div className="self-end">{formattedDate}</div>
-            <div className="-mt-6 flex h-full flex-col justify-center gap-8 px-2">
-                <div>
-                    <p className="font-bold sm:text-base">Halo {user.user_fname}</p>
-                    <p className="text-lg font-bold md:text-xl">Selamat datang di Goldfish Gala</p>
+        <div
+            className="panel grid h-full grid-cols-1 content-between overflow-hidden before:absolute before:-right-44 before:bottom-0 before:top-0 before:m-auto before:h-[110%] before:w-[80%] before:rounded-full before:bg-[#1937cc]"
+            style={{
+                background: 'linear-gradient(0deg,#00c6fb -227%,#005bea)',
+            }}
+        >
+            <div className="z-[7] mb-16 flex h-full w-full flex-col items-start justify-between text-white-light">
+                <div className="self-end">{formattedDate}</div>
+                <div className="flex h-full flex-col justify-between px-2 md:justify-center md:gap-8">
+                    <div>
+                        <p className="font-bold sm:text-base">Halo {user.user_fname}</p>
+                        <p className="text-lg font-bold md:text-xl">Selamat datang di Goldfish Gala</p>
+                    </div>
+                    <p className="font-bold">
+                        Kami ada untuk menciptakan ruang di mana para penggemar ikan koki dapat mengekspresikan diri
+                        mereka dalam hobby
+                    </p>
+                    <div className="bottom-8 flex items-center justify-center gap-2 md:absolute">
+                        <p>Follow Kami di {''}</p>
+                        <a
+                            href="https://www.instagram.com/goldfishgala/profilecard/?igsh=MTB4c253MnhtYndxMA=="
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-center gap-0.5 font-bold"
+                        >
+                            <IconInstagram />
+                            <p>goldfishgala</p>
+                        </a>
+                    </div>
                 </div>
-                <p className="font-bold">
-                    Kami ada untuk menciptakan ruang di mana para penggemar ikan koki dapat mengekspresikan diri mereka
-                    dalam hobby
-                </p>
             </div>
         </div>
     );
