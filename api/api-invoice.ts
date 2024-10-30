@@ -14,3 +14,17 @@ export const createInvoceApi = async (userRegId: string, cookie: string | undefi
         return error;
     }
 };
+
+export const getInvoiceByCode = async (cookie: string | undefined, invoiceCode?: string) => {
+    const query = `/invoices/member?invoice_code=${invoiceCode}`;
+    try {
+        const response = await api.get(query, {
+            headers: {
+                Cookie: `token=${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};

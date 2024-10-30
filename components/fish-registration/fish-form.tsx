@@ -1,30 +1,32 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import ReactSelect from 'react-select';
 import { fishRegisterSubmit } from '@/lib/form-actions';
 import { useFormState } from 'react-dom';
 import { formFishRegistrationSchema } from '@/lib/form-schemas';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/storeUser';
+import { storeUser } from '@/utils/store-user';
 import Image from 'next/image';
 import { useCookies } from 'next-client-cookies';
 import { Controller, useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 import { fishImageApi, getFishTypeApi } from '@/api/api-fish';
-import { useToast } from '../UI/Toast/use-toast';
 import SpinnerWithText from '../UI/Spinner';
 import { ArrowLeft } from 'lucide-react';
+import ConfirmationModal from '../components/confirmation-modal';
+import { getEventPricesApi } from '@/api/api-event';
+import { formatToRupiah } from '@/utils/curency-format';
 
 const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const router = useRouter();
-    const { toast } = useToast();
     const dispatch = useDispatch();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
-    const [fishTypes, setFishTypes] = useState<FishType[] | null>(null);
+    const [eventPrices, setEventPrices] = useState<EventPrice[] | null>(null);
     const [fishTypeId, setFishTypeId] = useState('');
     const [fishImageUrls, setFishImageUrls] = useState<{ [key: string]: string }>({});
     const [imgObjectURLs, setImgObjectURLs] = useState<{ [key: string]: string | null }>({});
@@ -33,19 +35,37 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
     const [step, setStep] = useState(1);
+    const [open, setOpen] = useState(false);
+    const formRef = useRef<HTMLFormElement>(null);
 
-    const fetchAllTypes = useCallback(async () => {
+    const fetchAllEventPrices = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getFishTypeApi(authCookie);
+            const response = await getEventPricesApi(params.eventId, authCookie);
             if (response.success) {
-                setFishTypes(response.data);
+                setEventPrices(response.data);
                 setFetching(false);
             }
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie]);
+    }, [authCookie, params.eventId]);
+
+    const fetchFishType = useCallback(
+        async (code: string) => {
+            setFetching(true);
+            try {
+                const response = await getFishTypeApi(code, authCookie);
+                if (response.success) {
+                    setFishTypeId(response.data[0].fish_type_id);
+                    setFetching(false);
+                }
+            } catch (error) {
+                setFetching(false);
+            }
+        },
+        [authCookie]
+    );
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -55,11 +75,29 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                 router.replace('/auth');
             }
         };
-        fetchAllTypes();
         if (!user) {
             fetchUserProfile();
         }
-    }, [authCookie, dispatch, fetchAllTypes, router, user]);
+    }, [authCookie, dispatch, router, user]);
+
+    useEffect(() => {
+        fetchAllEventPrices();
+    }, [fetchAllEventPrices]);
+
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
 
     const { control } = useForm();
     const [state, formAction] = useFormState(
@@ -67,8 +105,8 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         null
     );
 
-    const handleNext = (id: string) => {
-        setFishTypeId(id);
+    const handleNext = async (id: string) => {
+        await fetchFishType(id);
         setStep(step + 1);
     };
 
@@ -161,7 +199,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         }
     };
 
-    const handleSubmit = async (formData: FormData) => {
+    const handleValidation = (formData: FormData): boolean => {
         const formValues = {
             fish_type_id: fishTypeId,
             fish_size: formData.get('fish_size'),
@@ -183,41 +221,63 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
             });
 
             setErrors(newErrors);
-            return;
+            return false;
         }
 
         setErrors({});
+        return true;
+    };
+
+    const handleOpenModal = () => {
+        const formElement = formRef.current;
+        if (formElement) {
+            const formData = new FormData(formElement);
+            const isValid = handleValidation(formData);
+            if (isValid) {
+                setOpen(true);
+            }
+        }
+    };
+
+    const handleConfirm = () => {
         setLoading(true);
+        formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }));
+    };
+
+    const handleSubmit = async (formData: FormData) => {
+        setLoading(true);
+        const formValues = {
+            fish_type_id: fishTypeId,
+            fish_size: formData.get('fish_size'),
+            fish_name: formData.get('fish_name'),
+            fish_gender: formData.get('fish_gender'),
+            fish_desc: formData.get('fish_desc'),
+            fish_image1: fishImageUrls['fish_image1'] || '',
+            fish_image2: fishImageUrls['fish_image2'] || '',
+            fish_image3: fishImageUrls['fish_image3'] || '',
+            fish_video_url: formData.get('fish_video_url'),
+        };
 
         const validFormData = new FormData();
         Object.entries(formValues).forEach(([key, value]) => {
             validFormData.append(key, value as string);
         });
 
-        console.log('validFormData', validFormData);
-
         formAction(validFormData);
     };
 
     useEffect(() => {
         if (state?.message === 'Ikan berhasil didaftarkan') {
-            toast({
-                description: state?.message + '. Silahkan menyelesaikan pembayaran',
-                className: 'bg-success text-white border-none',
-                duration: 2000,
-            });
+            setLoading(false);
+            showMessage(state.message + '. Silahkan menyelesaikan pembayaran');
             setTimeout(() => {
                 window.location.href = state.data;
-            }, 2000);
+            }, 3000);
         } else if (state?.message === 'Gagal mendaftarkan ikan') {
             setLoading(false);
-            toast({
-                description: state?.message,
-                className: 'bg-danger text-white border-none',
-                duration: 2000,
-            });
+            showMessage(state.message, 'error');
         }
-    }, [state, router, toast]);
+    }, [state?.data, state?.message]);
 
     return (
         <div>
@@ -226,26 +286,20 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                     <SpinnerWithText text="Memuat..." />
                 </div>
             ) : (
-                <form className="dark:text-white" action={handleSubmit}>
+                <form className="dark:text-white" action={handleSubmit} ref={formRef}>
                     {step === 1 && (
                         <div className="flex min-h-[300px] w-full flex-col justify-center gap-4">
                             <p className="text-base font-bold leading-normal text-dark dark:text-white ">
                                 Pilih kategori ukuran ikan, biaya pendaftaran tertera
                             </p>
-                            {fishTypes?.map((fish, index) => (
+                            {eventPrices?.map((event) => (
                                 <button
                                     className="btn-gradient2 rounded-md py-4"
                                     type="button"
-                                    key={fish.fish_type_id}
-                                    onClick={() => handleNext(fish.fish_type_id)}
+                                    key={event.event_price_id}
+                                    onClick={() => handleNext(event.event_price_code)}
                                 >
-                                    {
-                                        [
-                                            'Kecil (4 - 6 cm) Biaya: Rp 50.000',
-                                            'Sedang (7 - 10 cm) Biaya: Rp 100.000',
-                                            'Jumbo (11 cm ke atas) Biaya: Rp 150.000',
-                                        ][index]
-                                    }
+                                    {event.event_price_name}&nbsp;(Biaya : {formatToRupiah(event.event_price_amount)})
                                 </button>
                             ))}
                         </div>
@@ -536,12 +590,26 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                 </button>
                                 <button
                                     disabled={isLoading}
-                                    type="submit"
+                                    type="button"
                                     className="btn btn-gradient !mt-16 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
+                                    onClick={handleOpenModal}
+                                    // onClick={() => setOpen(true)}
                                 >
                                     {isLoading ? 'Sedang diproses...' : 'Daftarkan ikan'}
                                 </button>
                             </div>
+                            <ConfirmationModal
+                                open={open}
+                                setOpen={setOpen}
+                                title="Konfirmasi Data"
+                                mainText="Apakah sudah yakin semua data ikan sudah benar ?"
+                                subText="(Akan dilanjutkan ke proses pembayaran setelah tombol 'YA' dipilih)"
+                                isLoading={isLoading}
+                                state={state?.message}
+                                cancelButton="Cek Lagi"
+                                confirmButton={isLoading ? 'Sedang diproses' : 'Ya'}
+                                handleConfirm={handleConfirm}
+                            />
                         </div>
                     )}
                 </form>

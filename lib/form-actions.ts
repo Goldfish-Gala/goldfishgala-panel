@@ -14,8 +14,8 @@ export async function updateUserSubmit(user: User | null, prevState: any, formDa
     const validatedFields = {
         user_fname: formData.get('user_fname') as string,
         user_lname: formData.get('user_lname') as string,
-        user_address: formData.get('user_address') as string,
         user_phone: formData.get('user_phone') as string,
+        user_address: formData.get('user_address') as string,
     };
 
     try {
@@ -68,13 +68,11 @@ export async function fishRegisterSubmit(
         };
 
         const eventReg = await eventRegisterApi(body, authToken);
-        console.log('eventReg', eventReg);
         if (!eventReg.success) {
             return { message: 'Gagal mendaftarkan ikan' };
         }
 
         const createInvoice = await createInvoceApi(eventReg.data[0].user_reg_id, authToken);
-        console.log('createInvoice', createInvoice);
         if (!createInvoice.success) {
             return { message: 'Gagal mendaftarkan ikan' };
         }

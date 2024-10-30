@@ -33,12 +33,16 @@ import IconMenuPages from '@/components/icon/menu/icon-menu-pages';
 import IconMenuMore from '@/components/icon/menu/icon-menu-more';
 import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
+import { useCookies } from 'next-client-cookies';
+import Image from 'next/image';
 
 const Header = () => {
     const pathname = usePathname();
     const dispatch = useDispatch();
     const router = useRouter();
     const { t, i18n } = getTranslation();
+    const cookies = useCookies();
+    const user = useSelector((state: IRootState) => state.auth.user);
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
@@ -78,6 +82,10 @@ const Header = () => {
             dispatch(toggleRTL('ltr'));
         }
         router.refresh();
+    };
+
+    const handleLogout = () => {
+        cookies.remove('token', { path: '/' });
     };
 
     function createMarkup(messages: any) {
@@ -145,18 +153,24 @@ const Header = () => {
 
     const [search, setSearch] = useState(false);
 
+    console.log('avatar', user?.user_avatar);
+
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
             <div className="shadow-sm">
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
                         <Link href="/" className="main-logo flex shrink-0 items-center">
-                            <img
+                            <Image
+                                width={800}
+                                height={800}
                                 className="ml-[5px] w-40 flex-none dark:hidden"
                                 src="/assets/images/desktop-logo.png"
                                 alt="logo"
                             />
-                            <img
+                            <Image
+                                width={800}
+                                height={800}
                                 className="ml-[5px] hidden w-40 flex-none dark:block"
                                 src="/assets/images/logo.png"
                                 alt="logo"
@@ -204,33 +218,34 @@ const Header = () => {
                                 placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
                                 btnClassName="relative group block"
                                 button={
-                                    <img
+                                    <Image
+                                        width={800}
+                                        height={800}
                                         className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-                                        src="/assets/images/user-profile.jpeg"
-                                        alt="userProfile"
+                                        src={user?.user_avatar || '/assets/images/user-profile.jpeg'}
+                                        alt="user avatar"
                                     />
                                 }
                             >
                                 <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
                                     <li>
                                         <div className="flex items-center px-4 py-4">
-                                            <img
-                                                className="h-10 w-10 rounded-md object-cover"
-                                                src="/assets/images/user-profile.jpeg"
-                                                alt="userProfile"
-                                            />
                                             <div className="truncate ltr:pl-4 rtl:pr-4">
                                                 <h4 className="text-base">
-                                                    John Doe
+                                                    {user?.user_fname}&nbsp;{user?.user_lname}
                                                     <span className="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">
-                                                        Pro
+                                                        {user?.role_id === 1
+                                                            ? 'Guest'
+                                                            : user?.role_id === 2
+                                                            ? 'Member'
+                                                            : 'Admin'}
                                                     </span>
                                                 </h4>
                                                 <button
                                                     type="button"
                                                     className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
                                                 >
-                                                    johndoe@gmail.com
+                                                    {user?.user_email}
                                                 </button>
                                             </div>
                                         </div>
@@ -241,22 +256,13 @@ const Header = () => {
                                             Profile
                                         </Link>
                                     </li>
-                                    <li>
-                                        <Link href="/apps/mailbox" className="dark:hover:text-white">
-                                            <IconMail className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                            Inbox
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link href="/auth/boxed-lockscreen" className="dark:hover:text-white">
-                                            <IconLockDots className="h-4.5 w-4.5 shrink-0 ltr:mr-2 rtl:ml-2" />
-                                            Lock Screen
-                                        </Link>
-                                    </li>
-                                    <li className="border-t border-white-light dark:border-white-light/10">
-                                        <Link href="/auth/boxed-signin" className="!py-3 text-danger">
+                                    <li
+                                        className="border-t border-white-light dark:border-white-light/10"
+                                        onClick={handleLogout}
+                                    >
+                                        <Link href="/auth" className="!py-3 text-danger">
                                             <IconLogout className="h-4.5 w-4.5 shrink-0 rotate-90 ltr:mr-2 rtl:ml-2" />
-                                            Sign Out
+                                            Keluar
                                         </Link>
                                     </li>
                                 </ul>

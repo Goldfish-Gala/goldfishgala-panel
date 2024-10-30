@@ -1,5 +1,7 @@
+/* eslint-disable @next/next/no-img-element */
 import GoogleButton from '@/components/components/google-button';
 import { Metadata } from 'next';
+import Image from 'next/image';
 import React from 'react';
 
 export const metadata: Metadata = {
@@ -10,10 +12,16 @@ const BoxedSignIn = () => {
     return (
         <div>
             <div className="absolute inset-0">
-                <img src="/assets/images/auth/bg-gradient.png" alt="image" className="h-full w-full object-cover" />
+                <Image
+                    width={1500}
+                    height={1500}
+                    src="/assets/images/auth/bg-gradient.png"
+                    alt="image"
+                    className="h-full w-full object-cover"
+                />
             </div>
 
-            <div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/hero.png)] bg-cover bg-left bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
+            <div className="relative flex min-h-screen items-center justify-center bg-[url(/assets/images/auth/hero.png)] bg-cover bg-center bg-no-repeat px-6 py-10 dark:bg-[#060818] sm:px-16">
                 <img
                     src="/assets/images/auth/coming-soon-object1.png"
                     alt="image"

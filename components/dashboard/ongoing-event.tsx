@@ -73,17 +73,10 @@ const OngoingEvent = () => {
                         <p className="text-xl font-extrabold text-dark dark:text-white-dark md:text-2xl lg:text-3xl xl:text-4xl">
                             {data?.event_name}
                         </p>
-                        <div className="w-[350px] rounded border border-[#ebedf2] p-6 dark:border-0 dark:bg-[#1b2e4b] md:w-[400px]">
+                        <div className="w-[320px] rounded border border-[#ebedf2] p-6 dark:border-0 dark:bg-[#1b2e4b] md:w-[400px]">
                             <div className="flex flex-col items-center justify-between">
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="w-1/2 text-base font-bold md:text-lg">Total Hadiah</p>
-                                    <div className="flex w-1/2 justify-between">
-                                        <p>:</p>
-                                        <p>Rp 10.000.000</p>
-                                    </div>
-                                </div>
-                                <div className="flex w-full items-center justify-between">
-                                    <p className="w-1/2 text-base font-bold md:text-lg">Status</p>
+                                    <p className="w-1/2 text-sm font-bold md:text-lg">Status</p>
                                     <div className="flex w-1/2 items-center justify-between">
                                         <p>:</p>
                                         <div className="item-center flex gap-2">
@@ -95,7 +88,7 @@ const OngoingEvent = () => {
                                     </div>
                                 </div>
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="w-1/2 text-base font-bold md:text-lg">Durasi pendaftaran</p>
+                                    <p className="w-1/2 text-sm font-bold md:text-lg">Batas pendaftaran</p>
                                     <div className="flex w-1/2 items-center justify-between">
                                         <p>:</p>
                                         <p className="flex items-center rounded-full bg-white-light px-3 py-1 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
@@ -108,7 +101,7 @@ const OngoingEvent = () => {
                         </div>
                     </div>
                     <button
-                        className="btn btn-primary mb-5"
+                        className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
                         onClick={() => router.push(`/fish-registration/${data?.event_id}`)}
                     >
                         Daftarkan Ikanmu Sekarang

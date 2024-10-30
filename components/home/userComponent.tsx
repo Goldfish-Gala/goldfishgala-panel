@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { setProfile } from '@/store/authSlice';
 import { useCookies } from 'next-client-cookies';
-import { storeUser } from '@/utils/storeUser';
+import { storeUser } from '@/utils/store-user';
 import { IRootState } from '@/store';
 
 const UserComponent = () => {

@@ -9,9 +9,9 @@ import { useFormState } from 'react-dom';
 import { formUserCompletingDataSchema } from '@/lib/form-schemas';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/storeUser';
+import { storeUser } from '@/utils/store-user';
 import { useCookies } from 'next-client-cookies';
-import { useToast } from '../UI/Toast/use-toast';
+import Swal from 'sweetalert2';
 
 interface FormErrors {
     user_fname?: string;
@@ -22,7 +22,6 @@ interface FormErrors {
 
 const FirstLoginForm = () => {
     const router = useRouter();
-    const { toast } = useToast();
     const dispatch = useDispatch();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
@@ -44,6 +43,21 @@ const FirstLoginForm = () => {
             fetchUserProfile();
         }
     }, [authCookie, dispatch, router, user]);
+
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name } = event.target;
@@ -80,23 +94,15 @@ const FirstLoginForm = () => {
 
     useEffect(() => {
         if (state?.message === 'Data berhasil diperbarui') {
-            toast({
-                description: state?.message,
-                className: 'bg-success text-white border-none',
-                duration: 2000,
-            });
+            showMessage(state.message);
             setTimeout(() => {
                 router.push('/dashboard');
-            }, 2000);
+            }, 3000);
         } else if (state?.message === 'Gagal memperbarui data') {
             setLoading(false);
-            toast({
-                description: state?.message,
-                className: 'bg-danger text-white border-none',
-                duration: 2000,
-            });
+            showMessage(state.message, 'error');
         }
-    }, [state, router, toast]);
+    }, [router, state?.message]);
 
     return (
         <form className="space-y-5 dark:text-white" action={handleSubmit}>
