@@ -156,4 +156,19 @@ interface UserRegDetailType {
     user_reg_status_code: string;
     user_reg_status_name: string;
     user_reg_status_desc: string;
+    invoice_code: string;
+    invoice_status: string;
+    invoice_due_date: string;
+    invoice_checkout_url: string;
+}
+
+interface InvoiceDetail {
+    invoice_id: string;
+    user_reg_id: string;
+    user_id: string;
+    invoice_code: string;
+    invoice_status: string;
+    invoice_amount: number;
+    invoice_due_date: string;
+    invoice_created_date: string;
 }

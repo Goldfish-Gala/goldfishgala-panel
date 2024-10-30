@@ -8,27 +8,25 @@ import { useFormState } from 'react-dom';
 import { formFishRegistrationSchema } from '@/lib/form-schemas';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/storeUser';
+import { storeUser } from '@/utils/store-user';
 import Image from 'next/image';
 import { useCookies } from 'next-client-cookies';
 import { Controller, useForm } from 'react-hook-form';
+import Swal from 'sweetalert2';
 import { fishImageApi, getFishTypeApi } from '@/api/api-fish';
-import { useToast } from '../UI/Toast/use-toast';
 import SpinnerWithText from '../UI/Spinner';
 import { ArrowLeft } from 'lucide-react';
 import ConfirmationModal from '../components/confirmation-modal';
 import { getEventPricesApi } from '@/api/api-event';
-import { formatToRupiah } from '@/utils/curencyFormat';
+import { formatToRupiah } from '@/utils/curency-format';
 
 const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const router = useRouter();
-    const { toast } = useToast();
     const dispatch = useDispatch();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
     const [eventPrices, setEventPrices] = useState<EventPrice[] | null>(null);
-    const [fishCode, setFishCode] = useState('');
     const [fishTypeId, setFishTypeId] = useState('');
     const [fishImageUrls, setFishImageUrls] = useState<{ [key: string]: string }>({});
     const [imgObjectURLs, setImgObjectURLs] = useState<{ [key: string]: string | null }>({});
@@ -51,20 +49,23 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie]);
+    }, [authCookie, params.eventId]);
 
-    const fetchFishType = useCallback(async () => {
-        setFetching(true);
-        try {
-            const response = await getFishTypeApi(fishCode, authCookie);
-            if (response.success) {
-                setFishTypeId(response.data[0].fish_type_id);
+    const fetchFishType = useCallback(
+        async (code: string) => {
+            setFetching(true);
+            try {
+                const response = await getFishTypeApi(code, authCookie);
+                if (response.success) {
+                    setFishTypeId(response.data[0].fish_type_id);
+                    setFetching(false);
+                }
+            } catch (error) {
                 setFetching(false);
             }
-        } catch (error) {
-            setFetching(false);
-        }
-    }, [authCookie, fishCode]);
+        },
+        [authCookie]
+    );
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -74,11 +75,29 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                 router.replace('/auth');
             }
         };
-        fetchAllEventPrices();
         if (!user) {
             fetchUserProfile();
         }
-    }, [authCookie, dispatch, fetchAllEventPrices, router, user]);
+    }, [authCookie, dispatch, router, user]);
+
+    useEffect(() => {
+        fetchAllEventPrices();
+    }, [fetchAllEventPrices]);
+
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
 
     const { control } = useForm();
     const [state, formAction] = useFormState(
@@ -87,8 +106,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     );
 
     const handleNext = async (id: string) => {
-        setFishCode(id);
-        fetchFishType();
+        await fetchFishType(id);
         setStep(step + 1);
     };
 
@@ -222,7 +240,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     };
 
     const handleConfirm = () => {
-        setOpen(false);
+        setLoading(true);
         formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }));
     };
 
@@ -251,23 +269,15 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     useEffect(() => {
         if (state?.message === 'Ikan berhasil didaftarkan') {
             setLoading(false);
-            toast({
-                description: state?.message + '. Silahkan menyelesaikan pembayaran',
-                className: 'bg-success text-white border-none',
-                duration: 2000,
-            });
+            showMessage(state.message + '. Silahkan menyelesaikan pembayaran');
             setTimeout(() => {
                 window.location.href = state.data;
-            }, 2000);
+            }, 3000);
         } else if (state?.message === 'Gagal mendaftarkan ikan') {
             setLoading(false);
-            toast({
-                description: state?.message,
-                className: 'bg-danger text-white border-none',
-                duration: 2000,
-            });
+            showMessage(state.message, 'error');
         }
-    }, [state, router, toast]);
+    }, [state?.data, state?.message]);
 
     return (
         <div>
@@ -595,8 +605,9 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                 mainText="Apakah sudah yakin semua data ikan sudah benar ?"
                                 subText="(Akan dilanjutkan ke proses pembayaran setelah tombol 'YA' dipilih)"
                                 isLoading={isLoading}
+                                state={state?.message}
                                 cancelButton="Cek Lagi"
-                                confirmButton="YA"
+                                confirmButton={isLoading ? 'Sedang diproses' : 'Ya'}
                                 handleConfirm={handleConfirm}
                             />
                         </div>

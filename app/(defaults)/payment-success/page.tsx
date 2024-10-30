@@ -13,14 +13,14 @@ const PaymentSuccess = () => {
         }, 1000);
 
         if (countdown === 0) {
-            router.push('/dashboard');
+            router.push('/registered-fishes');
         }
         return () => clearInterval(timer);
     }, [countdown, router]);
 
     return (
         <div className="flex min-h-[750px] w-full items-center justify-center">
-            <div className="mx-auto flex h-[250px] flex-col items-center justify-around rounded-md bg-white/60 px-8 py-10 backdrop-blur-lg dark:bg-black/50">
+            <div className="mx-auto flex h-[250px] w-[300px] flex-col items-center justify-around rounded-md bg-white/60 py-10 backdrop-blur-lg dark:bg-black/50">
                 <h1 className="dark:text-shadow-dark-mode text-lg font-extrabold uppercase !leading-snug text-primary md:text-xl">
                     Pembayaran Berhasil!
                 </h1>

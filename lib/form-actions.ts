@@ -68,13 +68,11 @@ export async function fishRegisterSubmit(
         };
 
         const eventReg = await eventRegisterApi(body, authToken);
-        console.log('eventReg', eventReg);
         if (!eventReg.success) {
             return { message: 'Gagal mendaftarkan ikan' };
         }
 
         const createInvoice = await createInvoceApi(eventReg.data[0].user_reg_id, authToken);
-        console.log('createInvoice', createInvoice);
         if (!createInvoice.success) {
             return { message: 'Gagal mendaftarkan ikan' };
         }

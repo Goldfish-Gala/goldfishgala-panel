@@ -6,7 +6,7 @@ import { IRootState } from '@/store';
 import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { storeUser } from '@/utils/storeUser';
+import { storeUser } from '@/utils/store-user';
 import IconInstagram from '../icon/icon-instagram';
 
 const Dashboard = () => {

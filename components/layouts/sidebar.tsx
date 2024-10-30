@@ -137,11 +137,11 @@ const Sidebar = () => {
                                 <span>{t('event')}</span>
                             </h2>
                             <li className="menu nav-item">
-                                <Link href={'/user-events'}>
+                                <Link href={'/registered-fishes'}>
                                     <div className="flex items-center">
                                         <IconMenuElements className="shrink-0 group-hover:!text-primary" />
                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                            {t('Event yang diikuti')}
+                                            {t('Ikan terdaftar')}
                                         </span>
                                     </div>
                                 </Link>

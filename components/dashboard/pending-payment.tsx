@@ -7,10 +7,11 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/storeUser';
-import { getAllEventRegistered } from '@/api/api-registered-event';
+import { storeUser } from '@/utils/store-user';
 import Link from 'next/link';
 import IconMultipleForwardRight from '../icon/icon-multiple-forward-right';
+import { expiringTime } from '@/utils/date-format';
+import { getAllUserRegByStatus } from '@/api/api-payment';
 
 const PendingPayment = () => {
     const router = useRouter();
@@ -22,12 +23,7 @@ const PendingPayment = () => {
     const fetchUserProfile = useCallback(async () => {
         try {
             if (authCookie) {
-                const userProfile = await storeUser(authCookie, dispatch);
-                if (userProfile) {
-                    router.push('/dashboard');
-                } else {
-                    router.push('/auth');
-                }
+                await storeUser(authCookie, dispatch);
             } else {
                 router.push('/auth');
             }
@@ -43,9 +39,14 @@ const PendingPayment = () => {
     }, [fetchUserProfile, user]);
 
     const fetchPendingPayment = async (): Promise<UserRegDetailType[]> => {
-        const getAllUserEvent = await getAllEventRegistered(authCookie, user?.user_id);
+        const getAllUserEvent = await getAllUserRegByStatus(
+            authCookie,
+            user?.user_id,
+            undefined,
+            'pending_payment_reg'
+        );
         if (getAllUserEvent.success) {
-            return getAllUserEvent.data.Pending;
+            return getAllUserEvent.data;
         }
         throw new Error('No ongoing event');
     };
@@ -56,134 +57,56 @@ const PendingPayment = () => {
         enabled: !!authCookie && !!user?.user_id,
     });
 
+    const handlePay = (url: string) => {
+        window.location.href = url;
+    };
+
     return (
-        <div className={`grid grid-cols-1 gap-6 lg:col-span-3 lg:grid-cols-2 ${data?.length === 0 ? 'hidden' : ''}`}>
-            <div className="panel h-full w-full">
+        <div
+            className={`grid grid-cols-1 gap-6 lg:col-span-2 lg:grid-cols-2 ${
+                isPending || data?.length === 0 ? 'hidden' : ''
+            }`}
+        >
+            <div className="panel h-full w-full lg:col-span-2">
                 <div className="mb-5 flex items-center justify-between">
-                    <h5 className="text-lg font-semibold dark:text-white-light">Recent Orders</h5>
+                    <h5 className="text-lg font-semibold dark:text-white-light">Tagihan belum dibayar</h5>
                 </div>
                 <div className="table-responsive">
                     <table>
                         <thead>
-                            <tr>
-                                <th className="ltr:rounded-l-md rtl:rounded-r-md">Customer</th>
-                                <th>Product</th>
-                                <th>Invoice</th>
-                                <th>Price</th>
-                                <th className="ltr:rounded-r-md rtl:rounded-l-md">Status</th>
+                            <tr className="dark:!bg-[#1a2941]">
+                                <th className="ltr:rounded-l-md rtl:rounded-r-md">Event</th>
+                                <th className="whitespace-nowrap">Nama ikan</th>
+                                <th>Nomor invoice</th>
+                                <th className="text-center">Status</th>
+                                <th className="whitespace-nowrap">Batas Pembayaran</th>
+                                <th className="ltr:rounded-r-md rtl:rounded-l-md"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
-                                <td className="min-w-[150px] text-black dark:text-white">
-                                    <div className="flex items-center">
-                                        <img
-                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
-                                            src="/assets/images/profile-6.jpeg"
-                                            alt="avatar"
-                                        />
-                                        <span className="whitespace-nowrap">Luke Ivory</span>
-                                    </div>
-                                </td>
-                                <td className="text-primary">Headphone</td>
-                                <td>
-                                    <Link href="/apps/invoice/preview">#46894</Link>
-                                </td>
-                                <td>$56.07</td>
-                                <td>
-                                    <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
-                                        Paid
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
-                                <td className="text-black dark:text-white">
-                                    <div className="flex items-center">
-                                        <img
-                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
-                                            src="/assets/images/profile-7.jpeg"
-                                            alt="avatar"
-                                        />
-                                        <span className="whitespace-nowrap">Andy King</span>
-                                    </div>
-                                </td>
-                                <td className="text-info">Nike Sport</td>
-                                <td>
-                                    <Link href="/apps/invoice/preview">#76894</Link>
-                                </td>
-                                <td>$126.04</td>
-                                <td>
-                                    <span className="badge bg-secondary shadow-md dark:group-hover:bg-transparent">
-                                        Shipped
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
-                                <td className="text-black dark:text-white">
-                                    <div className="flex items-center">
-                                        <img
-                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
-                                            src="/assets/images/profile-8.jpeg"
-                                            alt="avatar"
-                                        />
-                                        <span className="whitespace-nowrap">Laurie Fox</span>
-                                    </div>
-                                </td>
-                                <td className="text-warning">Sunglasses</td>
-                                <td>
-                                    <Link href="/apps/invoice/preview">#66894</Link>
-                                </td>
-                                <td>$56.07</td>
-                                <td>
-                                    <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
-                                        Paid
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
-                                <td className="text-black dark:text-white">
-                                    <div className="flex items-center">
-                                        <img
-                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
-                                            src="/assets/images/profile-9.jpeg"
-                                            alt="avatar"
-                                        />
-                                        <span className="whitespace-nowrap">Ryan Collins</span>
-                                    </div>
-                                </td>
-                                <td className="text-danger">Sport</td>
-                                <td>
-                                    <button type="button">#75844</button>
-                                </td>
-                                <td>$110.00</td>
-                                <td>
-                                    <span className="badge bg-secondary shadow-md dark:group-hover:bg-transparent">
-                                        Shipped
-                                    </span>
-                                </td>
-                            </tr>
-                            <tr className="group text-white-dark hover:text-black dark:hover:text-white-light/90">
-                                <td className="text-black dark:text-white">
-                                    <div className="flex items-center">
-                                        <img
-                                            className="h-8 w-8 rounded-md object-cover ltr:mr-3 rtl:ml-3"
-                                            src="/assets/images/profile-10.jpeg"
-                                            alt="avatar"
-                                        />
-                                        <span className="whitespace-nowrap">Irene Collins</span>
-                                    </div>
-                                </td>
-                                <td className="text-secondary">Speakers</td>
-                                <td>
-                                    <Link href="/apps/invoice/preview">#46894</Link>
-                                </td>
-                                <td>$56.07</td>
-                                <td>
-                                    <span className="badge bg-success shadow-md dark:group-hover:bg-transparent">
-                                        Paid
-                                    </span>
-                                </td>
-                            </tr>
+                            {data?.map((payment) => (
+                                <tr key={payment.user_reg_id} className="group text-white-dark">
+                                    <td>{payment.event_name}</td>
+                                    <td>{payment.fish_name}</td>
+                                    <td>{payment.invoice_code}</td>
+                                    <td className="text-center">
+                                        <span className="badge whitespace-nowrap bg-danger shadow-md">
+                                            Belum dibayar
+                                        </span>
+                                    </td>
+                                    <td className="whitespace-nowrap">{expiringTime(payment.invoice_due_date)}</td>
+                                    <td>
+                                        <Link href={'/ '}>
+                                            <button
+                                                className="btn2 btn-gradient2 item-center whitespace-nowrap !py-2 font-extrabold"
+                                                onClick={() => handlePay(payment.invoice_checkout_url)}
+                                            >
+                                                Bayar sekarang
+                                            </button>
+                                        </Link>
+                                    </td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
