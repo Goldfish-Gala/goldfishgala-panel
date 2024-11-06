@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
 import Loading from '@/components/layouts/loading';
@@ -16,24 +16,23 @@ const Dashboard = () => {
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
+    const fetchUserProfile = useCallback(async () => {
+        try {
             if (authCookie) {
-                const userProfile = await storeUser(authCookie, dispatch);
-                if (userProfile) {
-                    router.replace('/dashboard');
-                } else {
-                    router.replace('/auth');
-                }
+                await storeUser(dispatch);
             } else {
-                router.replace('/auth');
+                router.push('/auth');
             }
-        };
+        } catch (error) {
+            throw error;
+        }
+    }, [authCookie, dispatch, router]);
 
+    useEffect(() => {
         if (!user) {
             fetchUserProfile();
         }
-    }, [authCookie, dispatch, router, user]);
+    }, [fetchUserProfile, user]);
 
     const today = new Date();
     const formattedDate = today.toLocaleDateString('id-ID', {
