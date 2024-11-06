@@ -15,7 +15,7 @@ export async function updateUserSubmit(user: User | null, prevState: any, formDa
         user_fname: formData.get('user_fname') as string,
         user_lname: formData.get('user_lname') as string,
         user_phone: formData.get('user_phone') as string,
-        user_address: formData.get('user_address') as string,
+        user_ig: formData.get('user_ig') as string,
     };
 
     try {
@@ -39,32 +39,35 @@ export async function fishRegisterSubmit(
         return { message: 'User or event ID is missing.' };
     }
 
-    const validatedFields = {
-        user_id: params.user.user_id,
-        fish_type_id: formData.get('fish_type_id') as string,
-        fish_size: formData.get('fish_size') as string,
-        fish_name: formData.get('fish_name') as string,
-        fish_gender: formData.get('fish_gender') as string,
-        fish_desc: formData.get('fish_desc') as string,
-        fish_image1: formData.get('fish_image1') as string,
-        fish_image2: formData.get('fish_image2') as string,
-        fish_image3: formData.get('fish_image3') as string,
-        fish_video_url: formData.get('fish_video_url') as string,
-    };
+    const fishArray = [];
+    const fishIds = [];
+    let index = 0;
+
+    while (formData.get(`fish[${index}][event_price_id]`)) {
+        fishArray.push({
+            user_id: params.user.user_id,
+            event_price_id: formData.get(`fish[${index}][event_price_id]`) as string,
+            fish_size: formData.get(`fish[${index}][fish_size]`) as string,
+            fish_name: formData.get(`fish[${index}][fish_name]`) as string,
+        });
+        index++;
+    }
 
     const authToken = authCookie?.value;
 
     try {
-        const createFish = await fishRegisterApi(validatedFields, authToken);
-        console.log('createFish', createFish);
-        if (!createFish.success) {
-            return { message: 'Gagal mendaftarkan ikan' };
+        for (const fishData of fishArray) {
+            const createFish = await fishRegisterApi(fishData, authToken);
+            if (!createFish.success) {
+                return { message: 'Gagal mendaftarkan ikan' };
+            }
+            fishIds.push(createFish.data[0].fish_id);
         }
 
         const body = {
             event_id: params.eventId,
             user_id: params.user.user_id,
-            fish_id: createFish.data[0].fish_id,
+            fish_id: fishIds,
         };
 
         const eventReg = await eventRegisterApi(body, authToken);

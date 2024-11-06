@@ -10,17 +10,16 @@ import { IRootState } from '@/store';
 
 const UserComponent = () => {
     const dispatch = useDispatch();
+    const cookies = useCookies();
+    const authCookie = cookies?.get('token');
     const router = useRouter();
     const user = useSelector((state: IRootState) => state.auth.user);
     const [loading, setLoading] = useState(true);
-    const cookies = useCookies();
-    const authCookie = cookies?.get('token');
 
     useEffect(() => {
         const fetchUserProfile = async () => {
             if (authCookie) {
                 const userProfile = await storeUser(authCookie, dispatch);
-
                 if (userProfile) {
                     if (user?.user_is_first_login) {
                         router.replace('/pre-member');
