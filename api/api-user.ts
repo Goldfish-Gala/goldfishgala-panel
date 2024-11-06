@@ -1,12 +1,8 @@
 import { api } from './api-config';
 
-export const getUser = async (cookie: string) => {
+export const getUser = async () => {
     try {
-        const response = await api.get(`/users/profile`, {
-            headers: {
-                Cookie: cookie,
-            },
-        });
+        const response = await api.get(`/users/profile`, {});
         return response.data;
     } catch (error) {
         console.error(error);

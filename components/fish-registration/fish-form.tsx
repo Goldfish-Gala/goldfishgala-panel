@@ -56,18 +56,23 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         }
     }, [authCookie, params.eventId]);
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
+    const fetchUserProfile = useCallback(async () => {
+        try {
             if (authCookie) {
-                await storeUser(authCookie, dispatch);
+                await storeUser(dispatch);
             } else {
-                router.replace('/auth');
+                router.push('/auth');
             }
-        };
+        } catch (error) {
+            throw error;
+        }
+    }, [authCookie, dispatch, router]);
+
+    useEffect(() => {
         if (!user) {
             fetchUserProfile();
         }
-    }, [authCookie, dispatch, router, user]);
+    }, [fetchUserProfile, user]);
 
     useEffect(() => {
         fetchAllEventPrices();

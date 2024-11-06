@@ -19,7 +19,7 @@ const UserComponent = () => {
     useEffect(() => {
         const fetchUserProfile = async () => {
             if (authCookie) {
-                const userProfile = await storeUser(authCookie, dispatch);
+                const userProfile = await storeUser(dispatch);
                 if (userProfile) {
                     if (user?.user_is_first_login) {
                         router.replace('/pre-member');

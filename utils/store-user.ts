@@ -2,9 +2,9 @@ import { Dispatch } from 'redux';
 import { setProfile } from '@/store/authSlice';
 import { getUser } from '@/api/api-user';
 
-export const storeUser = async (cookie: string | any, dispatch: Dispatch): Promise<boolean> => {
+export const storeUser = async (dispatch: Dispatch): Promise<boolean> => {
     try {
-        const userProfile = await getUser(`token=${cookie}`);
+        const userProfile = await getUser();
 
         if (userProfile.success) {
             dispatch(setProfile({ user: userProfile.data[0] }));

@@ -23,7 +23,7 @@ const PendingPayment = () => {
     const fetchUserProfile = useCallback(async () => {
         try {
             if (authCookie) {
-                await storeUser(authCookie, dispatch);
+                await storeUser(dispatch);
             } else {
                 router.push('/auth');
             }

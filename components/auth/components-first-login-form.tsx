@@ -1,7 +1,7 @@
 'use client';
 import IconUser from '@/components/icon/icon-user';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useTransition } from 'react';
+import { useCallback, useEffect, useState, useTransition } from 'react';
 import IconPhone from '../icon/icon-phone';
 import IconHome from '../icon/icon-home';
 import { updateUserSubmit } from '@/lib/form-actions';
@@ -31,19 +31,23 @@ const FirstLoginForm = () => {
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-    useEffect(() => {
-        const fetchUserProfile = async () => {
+    const fetchUserProfile = useCallback(async () => {
+        try {
             if (authCookie) {
-                await storeUser(authCookie, dispatch);
+                await storeUser(dispatch);
             } else {
-                router.replace('/auth');
+                router.push('/auth');
             }
-        };
+        } catch (error) {
+            throw error;
+        }
+    }, [authCookie, dispatch, router]);
 
+    useEffect(() => {
         if (!user) {
             fetchUserProfile();
         }
-    }, [authCookie, dispatch, router, user]);
+    }, [fetchUserProfile, user]);
 
     const showMessage = (msg = '', type = 'success') => {
         const toast: any = Swal.mixin({
