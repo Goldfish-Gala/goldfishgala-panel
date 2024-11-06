@@ -5,6 +5,7 @@ interface User {
     user_lname: string;
     user_email: string;
     user_phone: string;
+    user_ig: string;
     user_address: string;
     user_avatar: string;
     user_is_first_login: boolean;
@@ -16,7 +17,8 @@ interface User {
 interface UpdateUserType {
     user_fname: string;
     user_lname?: string;
-    user_address: string;
+    user_ig: string;
+    user_address?: string;
     user_phone: string;
 }
 
@@ -102,15 +104,9 @@ interface EventPrice {
 }
 
 interface FishRegisterType {
-    fish_type_id: string;
+    event_price_id: string;
     fish_size: string;
     fish_name: string;
-    fish_gender: string;
-    fish_desc: string;
-    fish_image1: string;
-    fish_image2: string;
-    fish_image3: string;
-    fish_video_url: string;
 }
 
 interface FishType {
@@ -123,7 +119,7 @@ interface FishType {
 interface EventRegisterType {
     event_id: string;
     user_id: string | undefined;
-    fish_id: string;
+    fish_id: string[];
 }
 
 interface UserRegDetailType {

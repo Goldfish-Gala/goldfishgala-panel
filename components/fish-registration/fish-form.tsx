@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import ReactSelect from 'react-select';
+import Select from 'react-select';
 import { fishRegisterSubmit } from '@/lib/form-actions';
 import { useFormState } from 'react-dom';
 import { formFishRegistrationSchema } from '@/lib/form-schemas';
@@ -19,6 +19,13 @@ import { ArrowLeft } from 'lucide-react';
 import ConfirmationModal from '../components/confirmation-modal';
 import { getEventPricesApi } from '@/api/api-event';
 import { formatToRupiah } from '@/utils/curency-format';
+import IconX from '../icon/icon-x';
+import './style.css';
+
+interface Price {
+    value: string;
+    label: string;
+}
 
 const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const router = useRouter();
@@ -27,10 +34,8 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
     const [eventPrices, setEventPrices] = useState<EventPrice[] | null>(null);
-    const [fishTypeId, setFishTypeId] = useState('');
-    const [fishImageUrls, setFishImageUrls] = useState<{ [key: string]: string }>({});
-    const [imgObjectURLs, setImgObjectURLs] = useState<{ [key: string]: string | null }>({});
-    const [isUploading, setIsUploading] = useState<{ [key: string]: boolean }>({});
+    const [totalFish, setTotalFish] = useState(1);
+    const [fishForms, setFishForms] = useState([{}]);
     const [isFetching, setFetching] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
@@ -50,22 +55,6 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
             setFetching(false);
         }
     }, [authCookie, params.eventId]);
-
-    const fetchFishType = useCallback(
-        async (code: string) => {
-            setFetching(true);
-            try {
-                const response = await getFishTypeApi(code, authCookie);
-                if (response.success) {
-                    setFishTypeId(response.data[0].fish_type_id);
-                    setFetching(false);
-                }
-            } catch (error) {
-                setFetching(false);
-            }
-        },
-        [authCookie]
-    );
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -99,14 +88,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         });
     };
 
-    const { control } = useForm();
-    const [state, formAction] = useFormState(
-        fishRegisterSubmit.bind(null, { user: user, eventId: params.eventId }),
-        null
-    );
-
     const handleNext = async (id: string) => {
-        await fetchFishType(id);
         setStep(step + 1);
     };
 
@@ -114,118 +96,71 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         setStep(step - 1);
     };
 
-    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const { name } = event.target;
-        setErrors((prevErrors: any) => ({
-            ...prevErrors,
-            [name]: undefined,
-        }));
-    };
+    const handleInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+        const { name, type, value } = event.target;
+        const updatedFishForms = [...fishForms];
 
-    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>, key: string) => {
-        const file = event.target.files?.[0];
-        if (file) {
-            const objectUrl = URL.createObjectURL(file);
-            setImgObjectURLs((prev) => ({
-                ...prev,
-                [key]: objectUrl,
-            }));
-        }
-    };
-
-    const handleUpload = async (event: React.MouseEvent<HTMLButtonElement, MouseEvent>, key: string) => {
-        event.preventDefault();
-        setIsUploading((prev) => ({
-            ...prev,
-            [key]: true,
-        }));
-
-        const fileInput = document.getElementById(key) as HTMLInputElement;
-        const file = fileInput?.files?.[0];
-
-        if (!file) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                [key]: 'Pilih ulang image',
-            }));
-            setIsUploading((prev) => ({
-                ...prev,
-                [key]: false,
-            }));
-            return;
-        }
-
-        const maxFileSize = 2 * 1024 * 1024;
-        if (file.size > maxFileSize) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                [key]: 'File size exceeds 2MB',
-            }));
-            setIsUploading((prev) => ({
-                ...prev,
-                [key]: false,
-            }));
-            return;
-        }
-
-        try {
-            const response = await fishImageApi(file, authCookie);
-            console.log('fish image', response.data);
-            if (response.success) {
-                setFishImageUrls((prev) => ({
-                    ...prev,
-                    [key]: response.data,
-                }));
+        if (type === 'number') {
+            const numericValue = Number(value);
+            if (numericValue > 99) {
+                // If the numeric value exceeds 99, update it to 99 and set an error
+                event.target.value = '99';
                 setErrors((prevErrors) => ({
                     ...prevErrors,
-                    [key]: undefined,
+                    [`fish_size_${index}`]: 'Ukuran tidak boleh lebih dari 99 cm',
                 }));
-            } else {
-                setErrors((prevErrors) => ({
-                    ...prevErrors,
-                    [key]: 'Gagal mengunggah',
-                }));
+                return;
             }
-        } catch (error) {
-            setErrors((prevErrors) => ({
-                ...prevErrors,
-                [key]: 'An error occurred during upload',
-            }));
-        } finally {
-            setIsUploading((prev) => ({
-                ...prev,
-                [key]: false,
-            }));
         }
+
+        // Update the specific fish form in the array based on the index
+        updatedFishForms[index] = {
+            ...updatedFishForms[index],
+            [name]: value,
+        };
+
+        setErrors((prevErrors) => ({
+            ...prevErrors,
+            [`${name}_${index}`]: undefined,
+        }));
+
+        setFishForms(updatedFishForms);
+    };
+
+    const handleAddFish = () => {
+        setFishForms((prevFishForms) => [...prevFishForms, {}]);
+        setTotalFish((prevTotal) => prevTotal + 1);
+    };
+
+    const handleRemoveFish = (index: number) => {
+        const updatedFishForms = fishForms.filter((_, i) => i !== index);
+        setFishForms(updatedFishForms);
+        setTotalFish(updatedFishForms.length);
     };
 
     const handleValidation = (formData: FormData): boolean => {
-        const formValues = {
-            fish_type_id: fishTypeId,
-            fish_size: formData.get('fish_size'),
-            fish_name: formData.get('fish_name'),
-            fish_gender: formData.get('fish_gender'),
-            fish_desc: formData.get('fish_desc'),
-            fish_image1: fishImageUrls['fish_image1'] || '',
-            fish_image2: fishImageUrls['fish_image2'] || '',
-            fish_image3: fishImageUrls['fish_image3'] || '',
-            fish_video_url: formData.get('fish_video_url'),
-        };
+        const newErrors: { [key: string]: string } = {};
+        const formValuesArray = fishForms.map((_, index) => ({
+            event_price_id: formData.get(`fish[${index}][event_price_id]`),
+            fish_size: formData.get(`fish[${index}][fish_size]`),
+            fish_name: formData.get(`fish[${index}][fish_name]`),
+        }));
 
-        const validationResult = formFishRegistrationSchema.safeParse(formValues);
+        const isValid = formValuesArray.every((formValues, idx) => {
+            const validationResult = formFishRegistrationSchema.safeParse(formValues);
 
-        if (!validationResult.success) {
-            const newErrors: { [key: string]: string } = {};
-            validationResult.error.errors.forEach((error) => {
-                newErrors[error.path[0]] = error.message;
-            });
+            if (!validationResult.success) {
+                validationResult.error.errors.forEach((error) => {
+                    newErrors[`${error.path[0]}_${idx}`] = error.message;
+                });
+                return false;
+            }
 
-            setErrors(newErrors);
-            return false;
-        }
+            return true;
+        });
 
-        setErrors({});
-        return true;
+        setErrors(newErrors);
+        return isValid;
     };
 
     const handleOpenModal = () => {
@@ -239,6 +174,12 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         }
     };
 
+    const { control } = useForm();
+    const [state, formAction] = useFormState(
+        fishRegisterSubmit.bind(null, { user: user, eventId: params.eventId }),
+        null
+    );
+
     const handleConfirm = () => {
         setLoading(true);
         formRef.current?.dispatchEvent(new Event('submit', { bubbles: true }));
@@ -246,22 +187,13 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
 
     const handleSubmit = async (formData: FormData) => {
         setLoading(true);
-        const formValues = {
-            fish_type_id: fishTypeId,
-            fish_size: formData.get('fish_size'),
-            fish_name: formData.get('fish_name'),
-            fish_gender: formData.get('fish_gender'),
-            fish_desc: formData.get('fish_desc'),
-            fish_image1: fishImageUrls['fish_image1'] || '',
-            fish_image2: fishImageUrls['fish_image2'] || '',
-            fish_image3: fishImageUrls['fish_image3'] || '',
-            fish_video_url: formData.get('fish_video_url'),
-        };
 
         const validFormData = new FormData();
-        Object.entries(formValues).forEach(([key, value]) => {
-            validFormData.append(key, value as string);
-        });
+        for (let i = 0; i < totalFish; i++) {
+            validFormData.append(`fish[${i}][event_price_id]`, formData.get(`fish[${i}][event_price_id]`) as string);
+            validFormData.append(`fish[${i}][fish_size]`, formData.get(`fish[${i}][fish_size]`) as string);
+            validFormData.append(`fish[${i}][fish_name]`, formData.get(`fish[${i}][fish_name]`) as string);
+        }
 
         formAction(validFormData);
     };
@@ -286,298 +218,131 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                     <SpinnerWithText text="Memuat..." />
                 </div>
             ) : (
-                <form className="dark:text-white" action={handleSubmit} ref={formRef}>
+                <div>
                     {step === 1 && (
                         <div className="flex min-h-[300px] w-full flex-col justify-center gap-4">
-                            <p className="text-base font-bold leading-normal text-dark dark:text-white ">
-                                Pilih kategori ukuran ikan, biaya pendaftaran tertera
-                            </p>
-                            {eventPrices?.map((event) => (
-                                <button
-                                    className="btn-gradient2 rounded-md py-4"
-                                    type="button"
-                                    key={event.event_price_id}
-                                    onClick={() => handleNext(event.event_price_code)}
-                                >
-                                    {event.event_price_name}&nbsp;(Biaya : {formatToRupiah(event.event_price_amount)})
-                                </button>
-                            ))}
+                            <p className="text-base font-bold leading-normal text-dark dark:text-white ">Isi Alamat</p>
+                            <form action="">
+                                <div>
+                                    <label htmlFor="fish_name">Alamat</label>
+                                    <div className="relative text-white-dark">
+                                        <input
+                                            id="user_address"
+                                            name="user_address"
+                                            type="text"
+                                            defaultValue={user?.user_address}
+                                            onChange={handleInputChange}
+                                            className="form-input2 placeholder:text-white-dark"
+                                        />
+                                        {errors.user_address && <p className="text-red-400">{errors.user_address}</p>}
+                                    </div>
+                                </div>
+                            </form>
                         </div>
                     )}
-                    {step === 2 && (
-                        <div className="space-y-5">
-                            <div>
-                                <label htmlFor="fish_size">Ukuran panjang ikan</label>
-                                <div className="relative text-white-dark">
-                                    <input
-                                        id="fish_size"
-                                        name="fish_size"
-                                        type="text"
-                                        placeholder="Satuan centimeter"
-                                        onChange={handleInputChange}
-                                        className="form-input2 placeholder:text-white-dark"
-                                    />
-                                    {errors.fish_size && <p className="text-red-400">{errors.fish_size}</p>}
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="fish_name">Nama ikan</label>
-                                <div className="relative text-white-dark">
-                                    <input
-                                        id="fish_name"
-                                        name="fish_name"
-                                        type="text"
-                                        onChange={handleInputChange}
-                                        className="form-input2 placeholder:text-white-dark"
-                                    />
-                                    {errors.fish_name && <p className="text-red-400">{errors.fish_name}</p>}
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="fish_gender">Jenis kelamin</label>
-                                <div className="relative text-white-dark">
-                                    <Controller
-                                        name="fish_gender"
-                                        control={control}
-                                        render={({ field }) => (
-                                            <ReactSelect
-                                                isClearable
-                                                isSearchable={false}
-                                                {...field}
-                                                placeholder={'Pilih jenis kelamin ikan'}
-                                                options={[
-                                                    { value: 'male', label: 'Jantan' },
-                                                    { value: 'female', label: 'Betina' },
-                                                ]}
-                                                styles={{
-                                                    control: (provided) => ({
-                                                        ...provided,
-                                                        paddingLeft: 6,
-                                                    }),
-                                                }}
-                                            />
-                                        )}
-                                    />
-                                </div>
-                                {errors.fish_gender && <p className="text-red-400">{errors.fish_gender}</p>}
-                            </div>
-                            <div>
-                                <label htmlFor="fish_desc">Deskripsi ikan</label>
-                                <div className="relative text-white-dark">
-                                    <input
-                                        id="fish_desc"
-                                        name="fish_desc"
-                                        type="text"
-                                        placeholder="Deskripsikan ikan anda"
-                                        onChange={handleInputChange}
-                                        className="form-input2 placeholder:text-white-dark"
-                                    />
-                                    {errors.fish_desc && <p className="text-red-400">{errors.fish_desc}</p>}
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="fish_video_url">Link video ikan</label>
-                                <div className="relative text-white-dark">
-                                    <input
-                                        id="fish_video_url"
-                                        name="fish_video_url"
-                                        type="text"
-                                        placeholder="Masukkan URL video dari sosmed dan lainnya"
-                                        onChange={handleInputChange}
-                                        className="form-input2 placeholder:text-white-dark"
-                                    />
-                                    {errors.fish_video_url && <p className="text-red-500">{errors.fish_video_url}</p>}
-                                </div>
-                            </div>
-                            <div className="flex justify-start gap-2 md:gap-6">
+                    {/* {step === 2 && ()} */}
+                    <form className="dark:text-white" action={handleSubmit} ref={formRef}>
+                        {fishForms.map((form, index) => (
+                            <div key={index} className="mb-2 space-y-5 border-b-[1.2px] border-dark-light pb-6">
+                                {totalFish > 1 && (
+                                    <div className="flex w-full justify-between">
+                                        <h3>IKAN {index + 1}</h3>
+                                        <div className="cursor-pointer" onClick={() => handleRemoveFish(index)}>
+                                            <IconX />
+                                        </div>
+                                    </div>
+                                )}
+                                {/* Kategori Ikan */}
                                 <div>
-                                    <label>Foto foto ikan</label>
-                                    <Image
-                                        src={
-                                            imgObjectURLs['fish_image1']
-                                                ? imgObjectURLs['fish_image1']
-                                                : '/assets/images/no-image.png'
-                                        }
-                                        className="aspect-square h-32 w-32 rounded-lg bg-gray-300 object-cover"
-                                        alt="fish image preview"
-                                        width={400}
-                                        height={400}
-                                    />
+                                    <label htmlFor={`event_price_id_${index}`}>Kategori ikan</label>
+                                    <div className="relative text-white-dark">
+                                        <Controller
+                                            name={`fish[${index}][event_price_id]`}
+                                            control={control}
+                                            render={({ field }) => (
+                                                <Select
+                                                    id={`event_price_id_${index}`}
+                                                    isSearchable={false}
+                                                    {...field}
+                                                    placeholder="Pilih kategori ikan"
+                                                    options={
+                                                        eventPrices?.map((price) => ({
+                                                            value: price.event_price_id,
+                                                            label: `${price.event_price_name} (Biaya: ${formatToRupiah(
+                                                                price.event_price_amount
+                                                            )})`,
+                                                        })) || []
+                                                    }
+                                                    styles={{
+                                                        control: (provided) => ({ ...provided, paddingLeft: 6 }),
+                                                    }}
+                                                    onChange={(selectedOption) => {
+                                                        handleInputChange(index, {
+                                                            target: {
+                                                                name: `fish[${index}][event_price_id]`,
+                                                                value: selectedOption.value,
+                                                            },
+                                                        } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>);
+                                                    }}
+                                                />
+                                            )}
+                                        />
+                                    </div>
+                                    {errors[`event_price_id_${index}`] && (
+                                        <p className="text-red-400">{errors[`event_price_id_${index}`]}</p>
+                                    )}
                                 </div>
-                                <label htmlFor="fish_image1"></label>
-                                <div className="relative flex items-center text-white-dark">
-                                    <input
-                                        id="fish_image1"
-                                        name="fish_image1"
-                                        type="file"
-                                        accept="image/png, image/gif, image/jpeg, image/wepb"
-                                        onChange={(e) => handleFileChange(e, 'fish_image1')}
-                                        className="hidden"
-                                    />
-                                    <div>
-                                        {imgObjectURLs['fish_image1'] && !fishImageUrls['fish_image1'] && (
-                                            <div className=" mb-2 text-dark dark:text-white-light">
-                                                <p className="font-bold">Anda yakin memilih foto ini?</p>
-                                                <p className="text-sm">( Foto akan diunggah )</p>
-                                            </div>
+                                {/* Nama Ikan */}
+                                <div>
+                                    <label htmlFor={`fish_name_${index}`}>Nama ikan</label>
+                                    <div className="relative text-white-dark">
+                                        <input
+                                            id={`fish_name_${index}`}
+                                            name={`fish[${index}][fish_name]`}
+                                            type="text"
+                                            onChange={(e) => handleInputChange(index, e)}
+                                            className="form-input2 placeholder:text-white-dark"
+                                        />
+                                        {errors[`fish_name_${index}`] && (
+                                            <p className="text-red-400">{errors[`fish_name_${index}`]}</p>
                                         )}
-                                        {imgObjectURLs['fish_image1'] && fishImageUrls['fish_image1'] && (
-                                            <div className="rounded-full bg-success px-3 py-0.5">
-                                                <p className="text-white">Berhasil diunggah !</p>
-                                            </div>
-                                        )}
-                                        {!fishImageUrls['fish_image1'] && (
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    disabled={isUploading['fish_image1']}
-                                                    type="button"
-                                                    onClick={() => document.getElementById('fish_image1')?.click()}
-                                                    className="btn2 btn-gradient2"
-                                                >
-                                                    {imgObjectURLs['fish_image1'] ? 'Ubah Foto' : 'Pilih Foto'}
-                                                </button>
-                                                {imgObjectURLs['fish_image1'] && (
-                                                    <button
-                                                        disabled={isUploading['fish_image1']}
-                                                        type="button"
-                                                        onClick={(e) => handleUpload(e, 'fish_image1')}
-                                                        className="btn2 btn-gradient3 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
-                                                    >
-                                                        {isUploading['fish_image1'] ? 'Mengunggah...' : 'Yakin'}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        )}
-                                        {errors.fish_image1 && (
-                                            <p className="mt-1 text-red-500">{errors.fish_image1}</p>
+                                    </div>
+                                </div>
+                                {/* Ukuran Panjang Ikan */}
+                                <div>
+                                    <label htmlFor={`fish_size_${index}`}>Ukuran panjang ikan</label>
+                                    <div className="relative text-white-dark">
+                                        <input
+                                            id={`fish_size_${index}`}
+                                            name={`fish[${index}][fish_size]`}
+                                            type="number"
+                                            maxLength={100}
+                                            min={1}
+                                            placeholder="Satuan centimeter"
+                                            onChange={(e) => handleInputChange(index, e)}
+                                            className="form-input2 relative pr-10 placeholder:text-white-dark"
+                                        />
+                                        <span className="absolute right-3 top-1/2 -translate-y-1/2 transform text-black">
+                                            centimeter
+                                        </span>
+                                        {errors[`fish_size_${index}`] && (
+                                            <p className="absolute left-0 top-full mt-1 text-red-400">
+                                                {errors[`fish_size_${index}`]}
+                                            </p>
                                         )}
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex justify-start gap-2 md:gap-6">
-                                <Image
-                                    src={
-                                        imgObjectURLs['fish_image2']
-                                            ? imgObjectURLs['fish_image2']
-                                            : '/assets/images/no-image.png'
-                                    }
-                                    className="aspect-square h-32 w-32 rounded-lg bg-gray-300 object-cover"
-                                    alt="fish image preview"
-                                    width={400}
-                                    height={400}
-                                />
-                                <label htmlFor="fish_image2"></label>
-                                <div className="relative flex items-center text-white-dark">
-                                    <input
-                                        id="fish_image2"
-                                        name="fish_image2"
-                                        type="file"
-                                        accept="image/png, image/gif, image/jpeg, image/wepb"
-                                        onChange={(e) => handleFileChange(e, 'fish_image2')}
-                                        className="hidden"
-                                    />
-                                    <div>
-                                        {imgObjectURLs['fish_image2'] && !fishImageUrls['fish_image2'] && (
-                                            <div className=" mb-2 text-dark dark:text-white-light">
-                                                <p className="font-bold">Anda yakin memilih foto ini?</p>
-                                                <p className="text-sm">( Foto akan diunggah )</p>
-                                            </div>
-                                        )}
-                                        {imgObjectURLs['fish_image2'] && fishImageUrls['fish_image2'] && (
-                                            <div className="rounded-full bg-success px-3 py-0.5">
-                                                <p className="text-white">Berhasil diunggah !</p>
-                                            </div>
-                                        )}
-                                        {!fishImageUrls['fish_image2'] && (
-                                            <div className="flex items-center gap-2">
-                                                <button
-                                                    disabled={isUploading['fish_image2']}
-                                                    type="button"
-                                                    onClick={() => document.getElementById('fish_image2')?.click()}
-                                                    className="btn2 btn-gradient2"
-                                                >
-                                                    {imgObjectURLs['fish_image2'] ? 'Ubah Foto' : 'Pilih Foto'}
-                                                </button>
-                                                {imgObjectURLs['fish_image2'] && (
-                                                    <button
-                                                        disabled={isUploading['fish_image2']}
-                                                        type="button"
-                                                        onClick={(e) => handleUpload(e, 'fish_image2')}
-                                                        className="btn2 btn-gradient3 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
-                                                    >
-                                                        {isUploading['fish_image2'] ? 'Mengunggah...' : 'Yakin'}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        )}
-                                        {errors.fish_image2 && (
-                                            <p className="mt-1 text-red-500">{errors.fish_image2}</p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
-                            <div className="flex justify-start gap-2 md:gap-6">
-                                <Image
-                                    src={
-                                        imgObjectURLs['fish_image3']
-                                            ? imgObjectURLs['fish_image3']
-                                            : '/assets/images/no-image.png'
-                                    }
-                                    className="aspect-square h-32 w-32 rounded-lg bg-gray-300 object-cover"
-                                    alt="fish image preview"
-                                    width={400}
-                                    height={400}
-                                />
-                                <label htmlFor="fish_image3"></label>
-                                <div className="relative flex items-center text-white-dark">
-                                    <input
-                                        id="fish_image3"
-                                        name="fish_image3"
-                                        type="file"
-                                        accept="image/png, image/gif, image/jpeg, image/wepb"
-                                        onChange={(e) => handleFileChange(e, 'fish_image3')}
-                                        className="hidden"
-                                    />
-                                    <div>
-                                        {imgObjectURLs['fish_image3'] && !fishImageUrls['fish_image3'] && (
-                                            <div className=" mb-2 text-dark dark:text-white-light">
-                                                <p className="font-bold">Anda yakin memilih foto ini?</p>
-                                                <p className="text-sm">( Foto akan diunggah )</p>
-                                            </div>
-                                        )}
-                                        {imgObjectURLs['fish_image3'] && fishImageUrls['fish_image3'] && (
-                                            <div className="rounded-full bg-success px-3 py-0.5">
-                                                <p className="text-white">Berhasil diunggah !</p>
-                                            </div>
-                                        )}
-                                        {!fishImageUrls['fish_image3'] && (
-                                            <div className="flex w-full items-center gap-2">
-                                                <button
-                                                    disabled={isUploading['fish_image3']}
-                                                    type="button"
-                                                    onClick={() => document.getElementById('fish_image3')?.click()}
-                                                    className="btn2 btn-gradient2"
-                                                >
-                                                    {imgObjectURLs['fish_image3'] ? 'Ubah Foto' : 'Pilih Foto'}
-                                                </button>
-                                                {imgObjectURLs['fish_image3'] && (
-                                                    <button
-                                                        disabled={isUploading['fish_image3']}
-                                                        type="button"
-                                                        onClick={(e) => handleUpload(e, 'fish_image3')}
-                                                        className="btn2 btn-gradient3 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
-                                                    >
-                                                        {isUploading['fish_image3'] ? 'Mengunggah...' : 'Yakin'}
-                                                    </button>
-                                                )}
-                                            </div>
-                                        )}
-                                        {errors.fish_image3 && (
-                                            <p className="mt-1 text-red-500">{errors.fish_image3}</p>
-                                        )}
-                                    </div>
-                                </div>
-                            </div>
+                        ))}
+                        <div className="flex w-full flex-col">
+                            <button
+                                disabled={isLoading}
+                                type="button"
+                                className="btn2 btn-gradient3 !mt-2 w-fit self-center border-0 py-1.5 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[40%]"
+                                onClick={handleAddFish}
+                            >
+                                Tambahkan ikan lain
+                            </button>
                             <div className="flex w-full items-center justify-between">
                                 <button
                                     disabled={isLoading}
@@ -593,26 +358,25 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                     type="button"
                                     className="btn btn-gradient !mt-16 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
                                     onClick={handleOpenModal}
-                                    // onClick={() => setOpen(true)}
                                 >
                                     {isLoading ? 'Sedang diproses...' : 'Daftarkan ikan'}
                                 </button>
                             </div>
-                            <ConfirmationModal
-                                open={open}
-                                setOpen={setOpen}
-                                title="Konfirmasi Data"
-                                mainText="Apakah sudah yakin semua data ikan sudah benar ?"
-                                subText="(Akan dilanjutkan ke proses pembayaran setelah tombol 'YA' dipilih)"
-                                isLoading={isLoading}
-                                state={state?.message}
-                                cancelButton="Cek Lagi"
-                                confirmButton={isLoading ? 'Sedang diproses' : 'Ya'}
-                                handleConfirm={handleConfirm}
-                            />
                         </div>
-                    )}
-                </form>
+                        <ConfirmationModal
+                            open={open}
+                            setOpen={setOpen}
+                            title="Konfirmasi Data"
+                            mainText="Apakah sudah yakin semua data ikan sudah benar ?"
+                            subText="(Akan dilanjutkan ke proses pembayaran setelah tombol 'YA' dipilih)"
+                            isLoading={isLoading}
+                            state={state?.message}
+                            cancelButton="Cek Lagi"
+                            confirmButton={isLoading ? 'Sedang diproses' : 'Ya'}
+                            handleConfirm={handleConfirm}
+                        />
+                    </form>
+                </div>
             )}
         </div>
     );

@@ -12,6 +12,7 @@ import { IRootState } from '@/store';
 import { storeUser } from '@/utils/store-user';
 import { useCookies } from 'next-client-cookies';
 import Swal from 'sweetalert2';
+import IconInstagram from '../icon/icon-instagram';
 
 interface FormErrors {
     user_fname?: string;
@@ -72,7 +73,7 @@ const FirstLoginForm = () => {
             user_fname: formData.get('user_fname'),
             user_lname: formData.get('user_lname'),
             user_phone: formData.get('user_phone'),
-            user_address: formData.get('user_address'),
+            user_ig: formData.get('user_ig'),
         };
 
         const validationResult = formUserCompletingDataSchema.safeParse(formValues);
@@ -159,18 +160,18 @@ const FirstLoginForm = () => {
                 </div>
             </div>
             <div>
-                <label htmlFor="address">Alamat</label>
+                <label htmlFor="user_ig">Username Instagram</label>
                 <div className="relative text-white-dark">
                     <input
-                        id="address"
-                        name="user_address"
+                        id="user_ig"
+                        name="user_ig"
                         type="text"
-                        placeholder="Masukan alamat"
+                        placeholder="contoh : @goldfishgala"
                         onChange={handleInputChange}
                         className="form-input ps-10 placeholder:text-white-dark"
                     />
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                        <IconHome />
+                        <IconInstagram />
                     </span>
                 </div>
                 {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
