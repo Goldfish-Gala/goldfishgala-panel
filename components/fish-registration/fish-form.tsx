@@ -231,7 +231,6 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                             name="user_address"
                                             type="text"
                                             defaultValue={user?.user_address}
-                                            onChange={handleInputChange}
                                             className="form-input2 placeholder:text-white-dark"
                                         />
                                         {errors.user_address && <p className="text-red-400">{errors.user_address}</p>}
