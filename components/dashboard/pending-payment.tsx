@@ -7,7 +7,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/store-user';
+import { fetchUserProfile, storeUser } from '@/utils/store-user';
 import Link from 'next/link';
 import IconMultipleForwardRight from '../icon/icon-multiple-forward-right';
 import { expiringTime } from '@/utils/date-format';
@@ -20,23 +20,11 @@ const PendingPayment = () => {
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
 
-    const fetchUserProfile = useCallback(async () => {
-        try {
-            if (authCookie) {
-                await storeUser(dispatch);
-            } else {
-                router.push('/auth');
-            }
-        } catch (error) {
-            throw error;
-        }
-    }, [authCookie, dispatch, router]);
-
     useEffect(() => {
         if (!user) {
-            fetchUserProfile();
+            fetchUserProfile(authCookie, dispatch, router);
         }
-    }, [fetchUserProfile, user]);
+    }, [authCookie, dispatch, router, user]);
 
     const fetchPendingPayment = async (): Promise<UserRegDetailType[]> => {
         const getAllUserEvent = await getAllUserRegByStatus(

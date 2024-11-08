@@ -3,7 +3,7 @@
 
 import { getAllUserRegByStatus } from '@/api/api-payment';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/store-user';
+import { fetchUserProfile } from '@/utils/store-user';
 import { useQuery } from '@tanstack/react-query';
 import { useCookies } from 'next-client-cookies';
 import { useRouter } from 'next/navigation';
@@ -24,23 +24,11 @@ const FishList = () => {
     const [fishDetail, setFishDetail] = useState<UserRegDetailType | undefined>(undefined);
     const [open, setOpen] = useState(false);
 
-    const fetchUserProfile = useCallback(async () => {
-        try {
-            if (authCookie) {
-                await storeUser(dispatch);
-            } else {
-                router.push('/auth');
-            }
-        } catch (error) {
-            throw error;
-        }
-    }, [authCookie, dispatch, router]);
-
     useEffect(() => {
         if (!user) {
-            fetchUserProfile();
+            fetchUserProfile(authCookie, dispatch, router);
         }
-    }, [fetchUserProfile, user]);
+    }, [authCookie, dispatch, router, user]);
 
     const fetchRegisteredFishes = async (): Promise<UserRegDetailType[]> => {
         const getAllUserEvent = await getAllUserRegByStatus(authCookie, user?.user_id, undefined, 'paid_reg');

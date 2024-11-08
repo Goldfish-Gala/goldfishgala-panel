@@ -151,9 +151,7 @@ const Header = () => {
         setNotifications(notifications.filter((user) => user.id !== value));
     };
 
-    const [search, setSearch] = useState(false);
-
-    console.log('avatar', user?.user_avatar);
+    // const [search, setSearch] = useState(false);
 
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>

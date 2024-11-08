@@ -6,7 +6,7 @@ import { IRootState } from '@/store';
 import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { storeUser } from '@/utils/store-user';
+import { fetchUserProfile, storeUser } from '@/utils/store-user';
 import IconInstagram from '../icon/icon-instagram';
 
 const Dashboard = () => {
@@ -16,23 +16,11 @@ const Dashboard = () => {
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
 
-    const fetchUserProfile = useCallback(async () => {
-        try {
-            if (authCookie) {
-                await storeUser(dispatch);
-            } else {
-                router.push('/auth');
-            }
-        } catch (error) {
-            throw error;
-        }
-    }, [authCookie, dispatch, router]);
-
     useEffect(() => {
         if (!user) {
-            fetchUserProfile();
+            fetchUserProfile(authCookie, dispatch, router);
         }
-    }, [fetchUserProfile, user]);
+    }, [authCookie, dispatch, router, user]);
 
     const today = new Date();
     const formattedDate = today.toLocaleDateString('id-ID', {

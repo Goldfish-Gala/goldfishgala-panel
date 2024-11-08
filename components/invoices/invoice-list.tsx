@@ -1,19 +1,15 @@
 'use client';
 
 import { getAllPaymentRegisteredEvent } from '@/api/api-payment';
-import IconEdit from '@/components/icon/icon-edit';
-import IconEye from '@/components/icon/icon-eye';
-import IconPlus from '@/components/icon/icon-plus';
-import IconTrashLines from '@/components/icon/icon-trash-lines';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/store-user';
+import { fetchUserProfile, storeUser } from '@/utils/store-user';
 import { useQuery } from '@tanstack/react-query';
 import { sortBy } from 'lodash';
 import { DataTableSortStatus, DataTable } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
 import { expiringTime } from '@/utils/date-format';
@@ -25,23 +21,11 @@ const InvoiceList = () => {
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
 
-    const fetchUserProfile = useCallback(async () => {
-        try {
-            if (authCookie) {
-                await storeUser(dispatch);
-            } else {
-                router.push('/auth');
-            }
-        } catch (error) {
-            throw error;
-        }
-    }, [authCookie, dispatch, router]);
-
     useEffect(() => {
         if (!user) {
-            fetchUserProfile();
+            fetchUserProfile(authCookie, dispatch, router);
         }
-    }, [fetchUserProfile, user]);
+    }, [authCookie, dispatch, router, user]);
 
     const getAllInvoicePayment = async (): Promise<UserRegDetailType[]> => {
         const getAllUserEvent = await getAllPaymentRegisteredEvent(authCookie, user?.user_id);
@@ -88,8 +72,6 @@ const InvoiceList = () => {
             setPage(1);
         }
     }, [sortStatus, data]);
-
-    console.log('data', data);
 
     return (
         <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">

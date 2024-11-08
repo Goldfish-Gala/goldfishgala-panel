@@ -4,23 +4,30 @@ import { login, logout, setProfile } from './store/authSlice';
 import { getUser } from './api/api-user';
 
 export async function middleware(req: NextRequest) {
-    let response = NextResponse.next();
-    try {
-        const userProfile = await getUser();
+    const authCookie = req.cookies.get('token');
 
-        if (userProfile.success) {
-            store.dispatch(login());
-        } else {
+    let response = NextResponse.next();
+
+    if (authCookie) {
+        try {
+            const userProfile = await getUser(`token=${authCookie.value}`);
+
+            if (userProfile.success) {
+                store.dispatch(login());
+                return response;
+            } else {
+                store.dispatch(logout());
+                return NextResponse.redirect(new URL('/auth/failed', req.url));
+            }
+        } catch (error) {
+            console.error('Error fetching user profile:', error);
             store.dispatch(logout());
             return NextResponse.redirect(new URL('/auth', req.url));
         }
-    } catch (error) {
-        console.error('Error fetching user profile:', error);
+    } else {
         store.dispatch(logout());
         return NextResponse.redirect(new URL('/auth', req.url));
     }
-
-    return response;
 }
 
 export const config = {

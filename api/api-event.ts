@@ -1,4 +1,4 @@
-import { api } from './api-config';
+import api from './api-config';
 
 export const getAllOngoingEvents = async (cookie: string | undefined) => {
     try {
