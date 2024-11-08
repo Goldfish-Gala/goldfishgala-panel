@@ -1,4 +1,4 @@
-import { api } from './api-config';
+import api from './api-config';
 
 export const getAllPaymentRegisteredEvent = async (cookie: string | undefined, userId: string | undefined) => {
     try {

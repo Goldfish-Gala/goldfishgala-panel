@@ -1,18 +1,18 @@
 'use client';
-import IconUser from '@/components/icon/icon-user';
 import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useState, useTransition } from 'react';
+import { useEffect, useState } from 'react';
+import IconUser from '@/components/icon/icon-user';
 import IconPhone from '../icon/icon-phone';
 import IconHome from '../icon/icon-home';
+import IconInstagram from '../icon/icon-instagram';
 import { updateUserSubmit } from '@/lib/form-actions';
 import { useFormState } from 'react-dom';
 import { formUserCompletingDataSchema } from '@/lib/form-schemas';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/store-user';
+import { fetchUserProfile } from '@/utils/store-user';
 import { useCookies } from 'next-client-cookies';
 import Swal from 'sweetalert2';
-import IconInstagram from '../icon/icon-instagram';
 
 interface FormErrors {
     user_fname?: string;
@@ -31,23 +31,11 @@ const FirstLoginForm = () => {
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
-    const fetchUserProfile = useCallback(async () => {
-        try {
-            if (authCookie) {
-                await storeUser(dispatch);
-            } else {
-                router.push('/auth');
-            }
-        } catch (error) {
-            throw error;
-        }
-    }, [authCookie, dispatch, router]);
-
     useEffect(() => {
         if (!user) {
-            fetchUserProfile();
+            fetchUserProfile(authCookie, dispatch, router);
         }
-    }, [fetchUserProfile, user]);
+    }, [authCookie, dispatch, router, user]);
 
     const showMessage = (msg = '', type = 'success') => {
         const toast: any = Swal.mixin({
