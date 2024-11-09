@@ -5,7 +5,7 @@ export const createInvoceApi = async (userRegId: string, cookie: string | undefi
     try {
         const response = await api.post(`/invoices`, body, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -16,11 +16,11 @@ export const createInvoceApi = async (userRegId: string, cookie: string | undefi
 };
 
 export const getInvoiceByCode = async (cookie: string | undefined, invoiceCode?: string) => {
-    const query = `/invoices/member?invoice_code=${invoiceCode}`;
+    const query = `/invoices/guest?invoice_code=${invoiceCode}`;
     try {
         const response = await api.get(query, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;

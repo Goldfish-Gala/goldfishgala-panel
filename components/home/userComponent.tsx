@@ -4,7 +4,7 @@ import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCookies } from 'next-client-cookies';
-import { storeUser } from '@/utils/store-user';
+import { fetchUserComponent, fetchUserProfile, storeUser } from '@/utils/store-user';
 import { IRootState } from '@/store';
 
 const UserComponent = () => {
@@ -16,11 +16,11 @@ const UserComponent = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const fetchUserProfile = async () => {
+        const fetchUser = async () => {
             if (authCookie) {
-                const userProfile = await storeUser(authCookie, dispatch);
+                const userProfile = await fetchUserComponent(authCookie, dispatch, router);
                 if (userProfile) {
-                    if (user?.user_is_first_login) {
+                    if (userProfile.user_is_first_login) {
                         router.replace('/pre-member');
                     } else {
                         router.replace('/dashboard');
@@ -33,11 +33,8 @@ const UserComponent = () => {
             }
             setLoading(false);
         };
-
-        if (!user) {
-            fetchUserProfile();
-        }
-    }, [authCookie, dispatch, router, user, user?.user_is_first_login]);
+        fetchUser();
+    }, [authCookie, dispatch, router]);
 
     if (loading) {
         return <Loading />;

@@ -31,7 +31,7 @@ const FishList = () => {
     }, [authCookie, dispatch, router, user]);
 
     const fetchRegisteredFishes = async (): Promise<UserRegDetailType[]> => {
-        const getAllUserEvent = await getAllUserRegByStatus(authCookie, user?.user_id, undefined, 'paid_reg');
+        const getAllUserEvent = await getAllUserRegByStatus(authCookie, user?.user_id, undefined, 'paid');
         if (getAllUserEvent.success) {
             return getAllUserEvent.data;
         }

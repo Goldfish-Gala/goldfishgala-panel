@@ -158,7 +158,7 @@ const Header = () => {
             <div className="shadow-sm">
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
-                        <Link href="/" className="main-logo flex shrink-0 items-center">
+                        <Link href="/dashboard" className="main-logo flex shrink-0 items-center">
                             <Image
                                 width={800}
                                 height={800}
@@ -220,7 +220,7 @@ const Header = () => {
                                         width={800}
                                         height={800}
                                         className="h-9 w-9 rounded-full object-cover saturate-50 group-hover:saturate-100"
-                                        src={user?.user_avatar || '/assets/images/user-profile.jpeg'}
+                                        src={user?.user_avatar || '/assets/images/no-avatar.png'}
                                         alt="user avatar"
                                     />
                                 }

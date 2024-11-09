@@ -92,7 +92,7 @@ const Sidebar = () => {
             >
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
-                        <Link href="/" className="main-logo flex shrink-0 items-center">
+                        <Link href="/dashboard" className="main-logo flex shrink-0 items-center">
                             <Image
                                 width={400}
                                 height={400}

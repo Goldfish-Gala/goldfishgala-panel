@@ -4,7 +4,7 @@ export const fishRegisterApi = async (data: FishRegisterType, cookie: string | u
     try {
         const response = await api.post(`/fishes`, data, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -18,7 +18,7 @@ export const getFishTypeApi = async (code: string, cookie: string | undefined) =
     try {
         const response = await api.get(`/fish-types/code/${code}`, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -36,7 +36,7 @@ export const fishImageApi = async (fileImage: File, cookie: string | undefined) 
         const response = await api.post(`/fishes/upload-image`, formData, {
             headers: {
                 'Content-Type': 'multipart/form-data',
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
 
