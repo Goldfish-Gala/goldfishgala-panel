@@ -158,7 +158,7 @@ const FirstLoginForm = () => {
                         id="user_ig"
                         name="user_ig"
                         type="text"
-                        placeholder="contoh : @goldfishgala"
+                        placeholder="contoh : goldfishgala"
                         onChange={handleInputChange}
                         className="form-input ps-10 placeholder:text-white-dark"
                     />

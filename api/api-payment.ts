@@ -4,7 +4,7 @@ export const getAllPaymentRegisteredEvent = async (cookie: string | undefined, u
     try {
         const response = await api.get(`/user-regs/member?user_id=${userId}`, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -30,7 +30,7 @@ export const getAllUserRegByStatus = async (
     try {
         const response = await api.get(query, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;

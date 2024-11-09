@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 const PaymentSuccess = () => {
-    const [countdown, setCountdown] = useState(5);
+    const [countdown, setCountdown] = useState(3);
     const router = useRouter();
 
     useEffect(() => {

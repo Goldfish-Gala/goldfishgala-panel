@@ -278,6 +278,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     useEffect(() => {
         if (state1?.message === 'Data berhasil diperbarui') {
             showMessage(state1.message);
+            fetchUserProfile(authCookie, dispatch, router);
             setTimeout(() => {
                 setStep(2);
                 setLoading(false);
@@ -286,7 +287,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
             setLoading(false);
             showMessage(state1?.message, 'error');
         }
-    }, [state1?.message]);
+    }, [authCookie, dispatch, router, state1?.message]);
 
     useEffect(() => {
         if (state2?.message === 'Ikan berhasil didaftarkan') {

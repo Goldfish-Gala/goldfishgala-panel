@@ -10,7 +10,7 @@ export async function middleware(req: NextRequest) {
 
     if (authCookie) {
         try {
-            const userProfile = await getUser(`token=${authCookie.value}`);
+            const userProfile = await getUser(authCookie.value);
 
             if (userProfile.success) {
                 store.dispatch(login());

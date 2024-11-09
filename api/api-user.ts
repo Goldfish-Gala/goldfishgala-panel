@@ -4,7 +4,7 @@ export const getUser = async (token: string | undefined) => {
     try {
         const response = await api.get(`/users/profile`, {
             headers: {
-                Cookie: token,
+                Authorization: `Bearer ${token}`,
             },
         });
         return response.data;
@@ -19,7 +19,7 @@ export const updateUserApi = async (userId: string | undefined, data: UpdateUser
     try {
         const response = await api.put(`/users/${userId}`, body, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;

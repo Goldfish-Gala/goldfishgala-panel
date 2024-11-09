@@ -4,7 +4,7 @@ export const getAllOngoingEvents = async (cookie: string | undefined) => {
     try {
         const response = await api.get(`/events/detailed`, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -17,7 +17,7 @@ export const getOneEvent = async (cookie: string | undefined, eventId: string) =
     try {
         const response = await api.get(`/events/${eventId}`, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -30,7 +30,7 @@ export const eventRegisterApi = async (data: EventRegisterType, cookie: string |
     try {
         const response = await api.post(`/user-regs`, data, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
@@ -44,7 +44,7 @@ export const getEventPricesApi = async (eventId: string, cookie: string | undefi
     try {
         const response = await api.get(`/event-prices/event/${eventId}`, {
             headers: {
-                Cookie: `token=${cookie}`,
+                Authorization: `Bearer ${cookie}`,
             },
         });
         return response.data;
