@@ -46,3 +46,31 @@ export const fishImageApi = async (fileImage: File, cookie: string | undefined) 
         return error;
     }
 };
+
+export const getFishDetailApi = async (fishId: string, cookie: string | undefined) => {
+    try {
+        const response = await api.get(`/fishes?fish_id=${fishId}`, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};
+
+export const updateFishUrlApi = async (fishId: string, body: FishUrlType, cookie: string | undefined) => {
+    try {
+        const response = await api.put(`/fishes/url/${fishId}`, body, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};

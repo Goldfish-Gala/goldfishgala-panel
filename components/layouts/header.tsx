@@ -35,14 +35,22 @@ import { usePathname, useRouter } from 'next/navigation';
 import { getTranslation } from '@/i18n';
 import { useCookies } from 'next-client-cookies';
 import Image from 'next/image';
+import { fetchUserProfile } from '@/utils/store-user';
 
 const Header = () => {
     const pathname = usePathname();
+    const { t, i18n } = getTranslation();
     const dispatch = useDispatch();
     const router = useRouter();
-    const { t, i18n } = getTranslation();
     const cookies = useCookies();
+    const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
+
+    useEffect(() => {
+        if (!user) {
+            fetchUserProfile(authCookie, dispatch, router);
+        }
+    }, [authCookie, dispatch, router, user]);
 
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');

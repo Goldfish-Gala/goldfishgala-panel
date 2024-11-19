@@ -25,7 +25,10 @@ export const storeUser = async (authCookie: string | undefined, dispatch: Dispat
 export const fetchUserProfile = async (authCookie: string | undefined, dispatch: Dispatch, router: Router) => {
     try {
         if (authCookie) {
-            await storeUser(authCookie, dispatch);
+            const userFetch = await storeUser(authCookie, dispatch);
+            if (!userFetch) {
+                router.push('/auth');
+            }
             return true;
         } else {
             router.push('/auth');

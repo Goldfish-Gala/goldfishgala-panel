@@ -15,3 +15,16 @@ export const expiringTime = (isoDate: string): string => {
 
     return `${formattedDate}, ${formattedTime}`;
 };
+
+export const formatedDate = (isoDate: string | undefined): string => {
+    if (!isoDate) {
+        return '';
+    }
+    const date = new Date(isoDate);
+
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('default', { month: 'short' });
+    const year = date.getFullYear();
+
+    return `${day} ${month} ${year}`;
+};
