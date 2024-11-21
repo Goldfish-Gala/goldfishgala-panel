@@ -20,3 +20,10 @@ export const formFishRegistrationSchema = z.object({
     fish_name: z.string().min(1, { message: 'Nama ikan wajib di isi' }),
     fish_size: z.string().min(1, { message: 'Ukuran ikan wajib di isi' }),
 });
+
+export const formLinkSubmitSchema = z.object({
+    fish_submission_link: z
+        .string()
+        .min(1, { message: 'Kategori ikan wajib di isi' })
+        .url({ message: 'Link tidak valid' }),
+});

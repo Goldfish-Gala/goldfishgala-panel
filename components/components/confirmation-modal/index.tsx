@@ -65,7 +65,7 @@ const ConfirmationModal = ({
                                             </button>
                                         </div>
                                         <div className="p-5">
-                                            <p className="dark:text-shadow-dark-mode text-base font-extrabold !leading-snug text-dark dark:text-secondary-light md:text-lg">
+                                            <p className="dark:text-shadow-dark-mode font-bold !leading-snug text-dark dark:text-secondary-light">
                                                 {mainText}
                                             </p>
                                             {subText && (
@@ -85,7 +85,9 @@ const ConfirmationModal = ({
                                                     onClick={handleConfirm}
                                                     disabled={isLoading}
                                                     type="submit"
-                                                    className="btn2 btn-gradient3 !px-6 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
+                                                    className={`btn2 btn-gradient3 !px-6 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] ${
+                                                        isLoading ? 'hover:bg-gray-500' : ''
+                                                    }`}
                                                 >
                                                     {isLoading ? 'Memproses...' : confirmButton}
                                                 </button>

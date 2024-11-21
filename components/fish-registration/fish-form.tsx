@@ -14,17 +14,18 @@ import { formFishRegistrationSchema, formUserCompletingDataSchemaRegFish } from 
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
-import Image from 'next/image';
 import { useCookies } from 'next-client-cookies';
 import { Controller, useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-import { fishImageApi, getFishTypeApi } from '@/api/api-fish';
 import SpinnerWithText from '../UI/Spinner';
 import { ArrowLeft } from 'lucide-react';
 import ConfirmationModal from '../components/confirmation-modal';
 import { getEventPricesApi } from '@/api/api-event';
 import { formatToRupiah } from '@/utils/curency-format';
 import './style.css';
+import { Stepper } from '@mantine/core';
+import IconUserCheck from '../icon/icon-user-check';
+import IconFish from '../icon/icon-fish';
 
 interface Price {
     value: string;
@@ -113,10 +114,6 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
             title: msg,
             padding: '10px 20px',
         });
-    };
-
-    const handleNext = async (id: string) => {
-        setStep(step + 1);
     };
 
     const handleBack = () => {
@@ -293,6 +290,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         if (state2?.message === 'Ikan berhasil didaftarkan') {
             setLoading(false);
             showMessage(state2.message + '. Silahkan menyelesaikan pembayaran');
+            setStep((prev) => prev + 1);
             setTimeout(() => {
                 window.location.href = state2.data;
             }, 3000);
@@ -303,233 +301,274 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     }, [state2?.data, state2?.message]);
 
     return (
-        <div>
+        <div className="panel mx-auto w-[330px] px-6 pb-4 pt-10 sm:w-[450px] sm:px-8">
             {isFetching ? (
-                <div className="flex h-full w-full flex-col items-center justify-center ">
+                <div className="flex min-h-[600px] min-w-[320px] flex-col items-center justify-center ">
                     <SpinnerWithText text="Memuat..." />
                 </div>
             ) : (
                 <div>
-                    {step === 1 && (
-                        <div className="flex min-h-[300px] w-full flex-col justify-center gap-4">
-                            <p className="text-base font-bold leading-normal text-dark dark:text-white ">
-                                Lengkapi Data diri
+                    <Stepper active={step - 1} className="mb-10">
+                        <Stepper.Step
+                            icon={
+                                <div className="ml-0.5">
+                                    <IconUserCheck />
+                                </div>
+                            }
+                            description="Langkah I"
+                        ></Stepper.Step>
+                        <Stepper.Step
+                            icon={
+                                <div className="mr-0.5">
+                                    <IconFish />
+                                </div>
+                            }
+                            description="Langkah II"
+                        ></Stepper.Step>
+                    </Stepper>
+                    {step !== 3 && (
+                        <div className="mb-6">
+                            <h1 className="dark:text-shadow-dark-mode text-xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">
+                                Pendaftaran Ikan
+                            </h1>
+                            <p className="text-sm font-bold leading-normal text-dark dark:text-white-dark ">
+                                Cek data diri dan Lengkapi data ikan
                             </p>
-                            <form className="dark:text-white" action={handleSubmit1} ref={formRef1}>
-                                <div>
-                                    <label htmlFor="firstName">Nama Depan</label>
-                                    <div className="relative text-white-dark">
-                                        <input
-                                            id="firstName"
-                                            type="text"
-                                            {...register('user_fname', {
-                                                onChange: (event) => {
-                                                    handleInputChange1(event);
-                                                },
-                                            })}
-                                            className="form-input bg-white ps-10 placeholder:text-white-dark"
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconUser fill={true} />
-                                        </span>
-                                    </div>
-                                    {errors.user_fname && <p className="text-red-500">{errors.user_fname}</p>}
-                                </div>
-                                <div>
-                                    <label htmlFor="lastName">
-                                        Nama Belakang <span className="font-extralight italic">(opsional)</span>
-                                    </label>
-                                    <div className="relative text-white-dark">
-                                        <input
-                                            id="lastName"
-                                            type="text"
-                                            {...form1.register('user_lname', {
-                                                onChange: (event) => {
-                                                    handleInputChange1(event);
-                                                },
-                                            })}
-                                            placeholder="Masukan nama belakang"
-                                            className="form-input ps-10 placeholder:text-white-dark"
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconUser fill={true} />
-                                        </span>
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="phone">Nomor Telepon</label>
-                                    <div className="relative text-white-dark">
-                                        <input
-                                            id="phone"
-                                            type="text"
-                                            {...form1.register('user_phone', {
-                                                onChange: (event) => {
-                                                    handleInputChange1(event);
-                                                },
-                                            })}
-                                            placeholder="Contoh : 628523456789"
-                                            className="form-input ps-10 placeholder:text-white-dark"
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconPhone />
-                                        </span>
-                                        {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
-                                    </div>
-                                </div>
-                                <div>
-                                    <label htmlFor="user_ig">Username Instagram</label>
-                                    <div className="relative text-white-dark">
-                                        <input
-                                            id="user_ig"
-                                            type="text"
-                                            {...form1.register('user_ig', {
-                                                onChange: (event) => {
-                                                    handleInputChange1(event);
-                                                },
-                                            })}
-                                            placeholder="contoh : @goldfishgala"
-                                            className="form-input ps-10 placeholder:text-white-dark"
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconInstagram />
-                                        </span>
-                                    </div>
-                                    {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
-                                </div>
-                                <div>
-                                    <label htmlFor="address">Alamat</label>
-                                    <div className="relative text-white-dark">
-                                        <input
-                                            id="address"
-                                            type="text"
-                                            {...form1.register('user_address', {
-                                                onChange: (event) => {
-                                                    handleInputChange1(event);
-                                                },
-                                            })}
-                                            className="form-input ps-10 placeholder:text-white-dark"
-                                        />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconHome />
-                                        </span>
-                                    </div>
-                                    {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
-                                </div>
-                                <div className="flex w-full items-end">
-                                    <button
-                                        disabled={isLoading}
-                                        type="button"
-                                        className="btn btn-gradient !mt-16 w-fit self-end border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
-                                        onClick={handleOpenModal1}
-                                    >
-                                        {isLoading ? 'Sedang diproses...' : 'Selanjutnya'}
-                                    </button>
-                                </div>
-                                <ConfirmationModal
-                                    open={open1}
-                                    setOpen={setOpen1}
-                                    title="Konfirmasi Data"
-                                    mainText="Apakah sudah yakin semua data diri sudah benar ?"
-                                    subText="(Akan dilanjutkan ke proses selanjutnya setelah tombol 'YA' dipilih)"
-                                    isLoading={isLoading}
-                                    state={state1?.message}
-                                    cancelButton="Cek Lagi"
-                                    confirmButton={isLoading ? 'Sedang diproses' : 'Ya'}
-                                    handleConfirm={handleConfirm1}
-                                />
-                            </form>
                         </div>
                     )}
+                    {step === 1 && (
+                        <form
+                            className="flex w-full flex-col space-y-5 dark:text-white"
+                            action={handleSubmit1}
+                            ref={formRef1}
+                        >
+                            <div>
+                                <label htmlFor="firstName">Nama Depan</label>
+                                <div className="relative text-black">
+                                    <input
+                                        id="firstName"
+                                        type="text"
+                                        {...register('user_fname', {
+                                            onChange: (event) => {
+                                                handleInputChange1(event);
+                                            },
+                                        })}
+                                        className="form-input bg-white ps-10 placeholder:text-white-dark"
+                                    />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                        <IconUser fill={true} />
+                                    </span>
+                                </div>
+                                {errors.user_fname && <p className="text-red-500">{errors.user_fname}</p>}
+                            </div>
+                            <div>
+                                <label htmlFor="lastName">
+                                    Nama Belakang <span className="font-extralight italic">(opsional)</span>
+                                </label>
+                                <div className="relative text-black">
+                                    <input
+                                        id="lastName"
+                                        type="text"
+                                        {...form1.register('user_lname', {
+                                            onChange: (event) => {
+                                                handleInputChange1(event);
+                                            },
+                                        })}
+                                        placeholder="Masukan nama belakang"
+                                        className="form-input ps-10 placeholder:text-white-dark"
+                                    />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                        <IconUser fill={true} />
+                                    </span>
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="phone">Nomor Telepon</label>
+                                <div className="relative text-black">
+                                    <input
+                                        id="phone"
+                                        type="text"
+                                        {...form1.register('user_phone', {
+                                            onChange: (event) => {
+                                                handleInputChange1(event);
+                                            },
+                                        })}
+                                        placeholder="Contoh : 628523456789"
+                                        className="form-input ps-10 placeholder:text-white-dark"
+                                    />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                        <IconPhone />
+                                    </span>
+                                    {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="user_ig">Username Instagram</label>
+                                <div className="relative text-black">
+                                    <input
+                                        id="user_ig"
+                                        type="text"
+                                        {...form1.register('user_ig', {
+                                            onChange: (event) => {
+                                                handleInputChange1(event);
+                                            },
+                                        })}
+                                        placeholder="contoh : @goldfishgala"
+                                        className="form-input ps-10 placeholder:text-white-dark"
+                                    />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                        <IconInstagram />
+                                    </span>
+                                </div>
+                                <p className="ml-2 mt-1 text-xs text-white">contoh : goldfishgala</p>
+                                {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
+                            </div>
+                            <div>
+                                <label htmlFor="address">Alamat</label>
+                                <div className="relative text-black">
+                                    <input
+                                        id="address"
+                                        type="text"
+                                        {...form1.register('user_address', {
+                                            onChange: (event) => {
+                                                handleInputChange1(event);
+                                            },
+                                        })}
+                                        className="form-input ps-10 placeholder:text-white-dark"
+                                    />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
+                                        <IconHome />
+                                    </span>
+                                </div>
+                                <p className="ml-2 mt-1 text-xs text-white">
+                                    contoh : jl. sawo matang no.2 rt.01 rw.01, mampang, jakarta, 12720
+                                </p>
+                                {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
+                            </div>
+                            <div className="flex w-full justify-end">
+                                <button
+                                    disabled={isLoading}
+                                    type="button"
+                                    className="btn btn-gradient !mt-8 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
+                                    onClick={handleOpenModal1}
+                                >
+                                    {isLoading ? 'Sedang diproses...' : 'Selanjutnya'}
+                                </button>
+                            </div>
+                            <ConfirmationModal
+                                open={open1}
+                                setOpen={setOpen1}
+                                title="Konfirmasi Data"
+                                mainText="Apakah sudah yakin semua data diri sudah benar ?"
+                                subText="(Akan dilanjutkan ke proses selanjutnya setelah tombol 'YA' dipilih)"
+                                isLoading={isLoading}
+                                state={state1?.message}
+                                cancelButton="Cek Lagi"
+                                confirmButton={isLoading ? 'Sedang diproses' : 'Ya'}
+                                handleConfirm={handleConfirm1}
+                            />
+                        </form>
+                    )}
                     {step === 2 && (
-                        <form className="dark:text-white" action={handleSubmit2} ref={formRef2}>
+                        <form className="w-full dark:text-white" action={handleSubmit2} ref={formRef2}>
                             {fishForms.map((form, index) => (
-                                <div key={index} className="mb-2 space-y-5 border-b-[1.2px] border-dark-light pb-6">
-                                    {totalFish > 1 && (
-                                        <div className="flex w-full justify-between">
-                                            <h3>IKAN {index + 1}</h3>
-                                            <div className="cursor-pointer" onClick={() => handleRemoveFish(index)}>
-                                                <IconX />
+                                <div
+                                    key={index}
+                                    className="mb-2 flex w-full flex-col border-b-[1.2px] border-dark-light pb-6"
+                                >
+                                    <div className="flex w-full flex-col space-y-5">
+                                        {totalFish > 1 && (
+                                            <div className="flex w-full justify-between">
+                                                <h3>IKAN {index + 1}</h3>
+                                                <div className="cursor-pointer" onClick={() => handleRemoveFish(index)}>
+                                                    {index === totalFish - 1 && <IconX />}
+                                                </div>
+                                            </div>
+                                        )}
+                                        {/* Kategori Ikan */}
+                                        <div>
+                                            <label htmlFor={`event_price_id_${index}`}>Kategori ikan</label>
+                                            <div className="relative text-black">
+                                                <Controller
+                                                    name={`fish[${index}][event_price_id]`}
+                                                    control={control}
+                                                    render={({ field }) => (
+                                                        <Select
+                                                            id={`event_price_id_${index}`}
+                                                            isSearchable={false}
+                                                            {...field}
+                                                            placeholder="Pilih kategori ikan"
+                                                            options={
+                                                                eventPrices?.map((price) => ({
+                                                                    value: price.event_price_id,
+                                                                    label: `${
+                                                                        price.event_price_name
+                                                                    } (Biaya: ${formatToRupiah(
+                                                                        price.event_price_amount
+                                                                    )})`,
+                                                                })) || []
+                                                            }
+                                                            styles={{
+                                                                control: (provided) => ({
+                                                                    ...provided,
+                                                                    paddingLeft: 6,
+                                                                }),
+                                                            }}
+                                                            onChange={(selectedOption) => {
+                                                                handleInputChange2(index, {
+                                                                    target: {
+                                                                        name: `fish[${index}][event_price_id]`,
+                                                                        value: selectedOption.value,
+                                                                    },
+                                                                } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>);
+                                                            }}
+                                                        />
+                                                    )}
+                                                />
+                                            </div>
+                                            {errors[`event_price_id_${index}`] && (
+                                                <p className="text-red-400">{errors[`event_price_id_${index}`]}</p>
+                                            )}
+                                        </div>
+                                        {/* Nama Ikan */}
+                                        <div>
+                                            <label htmlFor={`fish_name_${index}`}>Nama ikan</label>
+                                            <div className="relative text-white-dark">
+                                                <input
+                                                    id={`fish_name_${index}`}
+                                                    name={`fish[${index}][fish_name]`}
+                                                    type="text"
+                                                    onChange={(e) => handleInputChange2(index, e)}
+                                                    className="form-input bg-white placeholder:text-white-dark"
+                                                />
+                                                {errors[`fish_name_${index}`] && (
+                                                    <p className="text-red-400">{errors[`fish_name_${index}`]}</p>
+                                                )}
                                             </div>
                                         </div>
-                                    )}
-                                    {/* Kategori Ikan */}
-                                    <div>
-                                        <label htmlFor={`event_price_id_${index}`}>Kategori ikan</label>
-                                        <div className="relative text-white-dark">
-                                            <Controller
-                                                name={`fish[${index}][event_price_id]`}
-                                                control={control}
-                                                render={({ field }) => (
-                                                    <Select
-                                                        id={`event_price_id_${index}`}
-                                                        isSearchable={false}
-                                                        {...field}
-                                                        placeholder="Pilih kategori ikan"
-                                                        options={
-                                                            eventPrices?.map((price) => ({
-                                                                value: price.event_price_id,
-                                                                label: `${
-                                                                    price.event_price_name
-                                                                } (Biaya: ${formatToRupiah(price.event_price_amount)})`,
-                                                            })) || []
-                                                        }
-                                                        styles={{
-                                                            control: (provided) => ({ ...provided, paddingLeft: 6 }),
-                                                        }}
-                                                        onChange={(selectedOption) => {
-                                                            handleInputChange2(index, {
-                                                                target: {
-                                                                    name: `fish[${index}][event_price_id]`,
-                                                                    value: selectedOption.value,
-                                                                },
-                                                            } as React.ChangeEvent<HTMLInputElement | HTMLSelectElement>);
-                                                        }}
-                                                    />
+                                        {/* Ukuran Panjang Ikan */}
+                                        <div>
+                                            <label htmlFor={`fish_size_${index}`}>Ukuran panjang ikan</label>
+                                            <div className="relative text-white-dark">
+                                                <input
+                                                    id={`fish_size_${index}`}
+                                                    name={`fish[${index}][fish_size]`}
+                                                    type="number"
+                                                    maxLength={100}
+                                                    min={1}
+                                                    placeholder="Satuan centimeter"
+                                                    onChange={(e) => handleInputChange2(index, e)}
+                                                    className="form-input relative pr-10 placeholder:text-white-dark"
+                                                />
+                                                <span className="absolute right-3 top-1/2 -translate-y-1/2 transform text-black">
+                                                    centimeter
+                                                </span>
+                                                {errors[`fish_size_${index}`] && (
+                                                    <p className="absolute left-0 top-full mt-1 text-red-400">
+                                                        {errors[`fish_size_${index}`]}
+                                                    </p>
                                                 )}
-                                            />
-                                        </div>
-                                        {errors[`event_price_id_${index}`] && (
-                                            <p className="text-red-400">{errors[`event_price_id_${index}`]}</p>
-                                        )}
-                                    </div>
-                                    {/* Nama Ikan */}
-                                    <div>
-                                        <label htmlFor={`fish_name_${index}`}>Nama ikan</label>
-                                        <div className="relative text-white-dark">
-                                            <input
-                                                id={`fish_name_${index}`}
-                                                name={`fish[${index}][fish_name]`}
-                                                type="text"
-                                                onChange={(e) => handleInputChange2(index, e)}
-                                                className="form-input2 placeholder:text-white-dark"
-                                            />
-                                            {errors[`fish_name_${index}`] && (
-                                                <p className="text-red-400">{errors[`fish_name_${index}`]}</p>
-                                            )}
-                                        </div>
-                                    </div>
-                                    {/* Ukuran Panjang Ikan */}
-                                    <div>
-                                        <label htmlFor={`fish_size_${index}`}>Ukuran panjang ikan</label>
-                                        <div className="relative text-white-dark">
-                                            <input
-                                                id={`fish_size_${index}`}
-                                                name={`fish[${index}][fish_size]`}
-                                                type="number"
-                                                maxLength={100}
-                                                min={1}
-                                                placeholder="Satuan centimeter"
-                                                onChange={(e) => handleInputChange2(index, e)}
-                                                className="form-input2 relative pr-10 placeholder:text-white-dark"
-                                            />
-                                            <span className="absolute right-3 top-1/2 -translate-y-1/2 transform text-black">
-                                                centimeter
-                                            </span>
-                                            {errors[`fish_size_${index}`] && (
-                                                <p className="absolute left-0 top-full mt-1 text-red-400">
-                                                    {errors[`fish_size_${index}`]}
-                                                </p>
-                                            )}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -548,7 +587,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                         disabled={isLoading}
                                         type="button"
                                         onClick={handleBack}
-                                        className="btn2 btn-gradient2 !mt-16 w-fit border-0 py-1.5 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
+                                        className="btn2 btn-gradient2 !mt-14 w-fit border-0 py-1.5 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
                                     >
                                         <ArrowLeft />
                                         &nbsp; Kembali
@@ -556,7 +595,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                     <button
                                         disabled={isLoading}
                                         type="button"
-                                        className="btn btn-gradient !mt-16 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
+                                        className="btn btn-gradient !mt-14 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
                                         onClick={handleOpenModal2}
                                     >
                                         {isLoading ? 'Sedang diproses...' : 'Daftarkan ikan'}
@@ -576,6 +615,16 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                 handleConfirm={handleConfirm2}
                             />
                         </form>
+                    )}
+                    {step === 3 && (
+                        <div className="mb-20 mt-20 flex w-full flex-col items-center justify-center gap-4">
+                            <h1 className="dark:text-shadow-dark-mode text-xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">
+                                Pendaftaran Berhasil!
+                            </h1>
+                            <p className="text-sm font-bold leading-normal text-dark dark:text-white-dark ">
+                                Mengalihkan ke halaman pembayaran...
+                            </p>
+                        </div>
                     )}
                 </div>
             )}

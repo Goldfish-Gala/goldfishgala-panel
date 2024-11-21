@@ -2,7 +2,7 @@
 import { updateUserApi } from '@/api/api-user';
 import { formUserCompletingDataSchema } from './form-schemas';
 import { revalidatePath } from 'next/cache';
-import { fishRegisterApi } from '@/api/api-fish';
+import { fishRegisterApi, updateFishUrlApi } from '@/api/api-fish';
 import { eventRegisterApi } from '@/api/api-event';
 import { cookies } from 'next/headers';
 import { createInvoceApi } from '@/api/api-invoice';
@@ -84,5 +84,22 @@ export async function fishRegisterSubmit(
         return { message: 'Ikan berhasil didaftarkan', data: createInvoice.data.invoiceUrl };
     } catch (error: any) {
         return { message: `Gagal mendaftarkan ikan` };
+    }
+}
+
+export async function updateFishUrlSubmit(fishId: string, prevState: any, formData: FormData) {
+    const validatedFields = {
+        fish_submission_link: formData.get('fish_submission_link') as string,
+    };
+
+    try {
+        const response = await updateFishUrlApi(fishId, validatedFields, authCookie?.value);
+        if (response.success) {
+            return { message: 'Data berhasil diperbarui' };
+        }
+
+        return { message: 'Gagal memperbarui data' };
+    } catch (error: any) {
+        return { message: 'Gagal memperbarui data' };
     }
 }

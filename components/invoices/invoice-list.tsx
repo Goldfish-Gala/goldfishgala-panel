@@ -9,7 +9,7 @@ import { DataTableSortStatus, DataTable } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
 import { expiringTime } from '@/utils/date-format';
@@ -41,37 +41,47 @@ const InvoiceList = () => {
         enabled: !!authCookie && !!user?.user_id,
     });
 
+    const flattenedFishes: FlattenedFishType[] = useMemo(() => {
+        if (!data) return [];
+        return data.flatMap((registration) =>
+            registration.fishes.map((fish) => ({
+                ...registration,
+                fish,
+            }))
+        );
+    }, [data]);
+
     const [page, setPage] = useState(1);
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
-    const [records, setRecords] = useState<UserRegDetailType[]>([]);
+    const [records, setRecords] = useState<FlattenedFishType[]>([]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
         direction: 'asc',
     });
 
     useEffect(() => {
-        if (data) {
-            const sortedData = sortBy(data, 'invoice_code');
+        if (flattenedFishes) {
+            const sortedData = sortBy(flattenedFishes, 'invoice_code');
             setRecords(sortedData.slice(0, pageSize));
         }
-    }, [data, pageSize]);
+    }, [flattenedFishes, pageSize]);
 
     useEffect(() => {
         const from = (page - 1) * pageSize;
         const to = from + pageSize;
-        if (data) {
-            setRecords(sortBy(data, sortStatus.columnAccessor).slice(from, to));
+        if (flattenedFishes) {
+            setRecords(sortBy(flattenedFishes, sortStatus.columnAccessor).slice(from, to));
         }
-    }, [page, pageSize, sortStatus, data]);
+    }, [page, pageSize, sortStatus, flattenedFishes]);
 
     useEffect(() => {
-        if (data) {
-            const sortedData = sortBy(data, sortStatus.columnAccessor);
+        if (flattenedFishes) {
+            const sortedData = sortBy(flattenedFishes, sortStatus.columnAccessor);
             setRecords(sortStatus.direction === 'desc' ? sortedData.reverse() : sortedData);
             setPage(1);
         }
-    }, [sortStatus, data]);
+    }, [sortStatus, flattenedFishes]);
 
     return (
         <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
@@ -108,9 +118,9 @@ const InvoiceList = () => {
                                     accessor: 'fish_name',
                                     title: 'Nama ikan',
                                     sortable: true,
-                                    render: ({ fish_name, fish_id }) => (
+                                    render: ({ fish }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{fish_name}</div>
+                                            <div>{fish.fish_name}</div>
                                         </div>
                                     ),
                                 },
@@ -138,7 +148,11 @@ const InvoiceList = () => {
                                                     : 'badge-outline-danger'
                                             } `}
                                         >
-                                            {invoice_status}
+                                            {invoice_status === 'paid'
+                                                ? 'Lunas'
+                                                : invoice_status === 'pending'
+                                                ? 'Belum bayar'
+                                                : 'Kadaluarsa'}
                                         </span>
                                     ),
                                 },

@@ -1,15 +1,13 @@
 'use client';
 
 import { useCookies } from 'next-client-cookies';
-import SpinnerWithText from '../UI/Spinner';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
-import { fetchUserProfile, storeUser } from '@/utils/store-user';
+import { fetchUserProfile } from '@/utils/store-user';
 import Link from 'next/link';
-import IconMultipleForwardRight from '../icon/icon-multiple-forward-right';
 import { expiringTime } from '@/utils/date-format';
 import { getAllUserRegByStatus } from '@/api/api-payment';
 
@@ -45,6 +43,16 @@ const PendingPayment = () => {
         enabled: !!authCookie && !!user?.user_id,
     });
 
+    const flattenedFishes: FlattenedFishType[] = useMemo(() => {
+        if (!data) return [];
+        return data.flatMap((registration) =>
+            registration.fishes.map((fish) => ({
+                ...registration,
+                fish,
+            }))
+        );
+    }, [data]);
+
     const handlePay = (url: string) => {
         window.location.href = url;
     };
@@ -52,7 +60,7 @@ const PendingPayment = () => {
     return (
         <div
             className={`grid grid-cols-1 gap-6 lg:col-span-2 lg:grid-cols-2 ${
-                isPending || data?.length === 0 ? 'hidden' : ''
+                isPending || flattenedFishes?.length === 0 ? 'hidden' : ''
             }`}
         >
             <div className="panel h-full w-full lg:col-span-2">
@@ -72,13 +80,13 @@ const PendingPayment = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {data?.map((payment) => (
+                            {flattenedFishes?.map((payment) => (
                                 <tr key={payment.user_reg_id} className="group text-white-dark">
                                     <td>{payment.event_name}</td>
-                                    <td>{payment.fish_name}</td>
+                                    <td>{payment.fish.fish_name}</td>
                                     <td>{payment.invoice_code}</td>
                                     <td className="text-center">
-                                        <span className="badge whitespace-nowrap bg-danger shadow-md">
+                                        <span className="badge badge-outline-warning whitespace-nowrap shadow-md">
                                             Belum dibayar
                                         </span>
                                     </td>
