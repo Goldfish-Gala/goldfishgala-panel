@@ -15,8 +15,12 @@ export const createInvoceApi = async (userRegId: string, cookie: string | undefi
     }
 };
 
-export const getInvoiceByCode = async (cookie: string | undefined, invoiceCode?: string) => {
-    const query = `/invoices/guest?invoice_code=${invoiceCode}`;
+export const getInvoiceByCode = async (
+    cookie: string | undefined,
+    invoiceCode: string,
+    user_id: string | undefined
+) => {
+    const query = `/invoices/guest?invoice_code=${invoiceCode}&user_id=${user_id}`;
     try {
         const response = await api.get(query, {
             headers: {
