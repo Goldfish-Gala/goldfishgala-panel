@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 'use client';
 import IconDownload from '@/components/icon/icon-download';
 import IconEdit from '@/components/icon/icon-edit';
@@ -13,30 +14,38 @@ import { useCookies } from 'next-client-cookies';
 import { IRootState } from '@/store';
 import { storeUser } from '@/utils/store-user';
 import { getInvoiceByCode } from '@/api/api-invoice';
+import SpinnerWithText from '../UI/Spinner';
+import { formatToRupiah } from '@/utils/curency-format';
+import { expiringTime, formatedDate } from '@/utils/date-format';
 
 const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);
+    const [itemsDetail, setItemsDetail] = useState<ItemDetail[] | []>([]);
     const [isFetching, setFetching] = useState(false);
+    const user = useSelector((state: IRootState) => state.auth.user);
 
     const fetchInvoice = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getInvoiceByCode(authCookie, params.invoiceId);
+            const response = await getInvoiceByCode(authCookie, params.invoiceId, user?.user_id);
             if (response.success) {
                 setInvoice(response.data[0]);
+                setItemsDetail(response.data[0].fish_details);
                 setFetching(false);
             }
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie, params.invoiceId]);
+    }, [authCookie, params.invoiceId, user?.user_id]);
 
     useEffect(() => {
-        fetchInvoice();
-    }, [fetchInvoice]);
+        if (!invoice) {
+            fetchInvoice();
+        }
+    }, [fetchInvoice, invoice]);
 
     const generatePDF = (isDownload = false) => {
         const pdf = new jsPDF({
@@ -62,40 +71,50 @@ const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
             pdf.setLineWidth(0.5);
             pdf.line(margin, 30, a4Width - margin, 30);
             pdf.setLineWidth(1);
-            pdf.setFontSize(14);
+            pdf.setFontSize(12);
             pdf.text('Nomor invoice', margin, margin + 30);
             pdf.text(':', margin + 50, margin + 30);
             pdf.setFontSize(12);
-            pdf.text('2134123424', margin + 55, margin + 30);
-            pdf.setFontSize(14);
+            pdf.text(invoice?.invoice_code || '', margin + 55, margin + 30);
+            pdf.setFontSize(12);
             pdf.text('Nama tertagih', margin, margin + 38);
             pdf.text(':', margin + 50, margin + 38);
             pdf.setFontSize(12);
-            pdf.text('rpb', margin + 55, margin + 38);
-            pdf.setFontSize(14);
+            pdf.text(user?.user_fname + ' ' + user?.user_lname || '', margin + 55, margin + 38);
+            pdf.setFontSize(12);
             pdf.text('Tagihan untuk', margin, margin + 46);
             pdf.text(':', margin + 50, margin + 46);
             pdf.setFontSize(12);
             pdf.text('Pendaftaran event lomba ikan', margin + 55, margin + 46);
-            pdf.setFontSize(14);
+            pdf.setFontSize(12);
             pdf.text('Tanggal invoice', margin, margin + 54);
             pdf.text(':', margin + 50, margin + 54);
             pdf.setFontSize(12);
-            pdf.text('26 okt 2024', margin + 55, margin + 54);
-            pdf.setFontSize(14);
+            pdf.text(formatedDate(invoice?.invoice_created_date) || '', margin + 55, margin + 54);
+            pdf.setFontSize(12);
             pdf.text('Batas pembayaran', margin, margin + 62);
             pdf.text(':', margin + 50, margin + 62);
             pdf.setFontSize(12);
-            pdf.text('26 okt, 17:30', margin + 55, margin + 62);
-            pdf.setFontSize(14);
+            pdf.text(expiringTime(invoice?.invoice_due_date) || '', margin + 55, margin + 62);
+            pdf.setFontSize(12);
             pdf.text('Status invoice', margin, margin + 70);
             pdf.text(':', margin + 50, margin + 70);
-            pdf.setFontSize(18);
-            pdf.setTextColor(150, 150, 150);
-            pdf.text('BELUM BAYAR', margin + 55, margin + 71);
+            pdf.setFontSize(12);
+            const status =
+                invoice?.invoice_status === 'paid'
+                    ? 'Lunas'
+                    : invoice?.invoice_status === 'pending'
+                    ? 'Belum Bayar'
+                    : 'Kadaluarsa';
+            pdf.text(status || '', margin + 56, margin + 70);
 
-            const tableColumn = ['S.NO', 'ITEMS', 'QTY', 'PRICE', 'AMOUNT'];
-            const tableRows = items.map((item) => [item.item, item.quantity, `$${item.price}`]);
+            const tableColumn = ['Nama Item', 'Jumlah', 'Harga', 'Total Harga'];
+            const tableRows = itemsDetail.map((item) => [
+                item.fish_size,
+                item.fish_count,
+                formatToRupiah(item.fish_price),
+                formatToRupiah(item.fish_price * item.fish_count),
+            ]);
 
             autoTable(pdf, {
                 head: [tableColumn],
@@ -108,24 +127,42 @@ const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
                     textColor: [0, 0, 0],
                     lineWidth: 0,
                     lineColor: [255, 255, 255],
-                    cellPadding: 5,
+                    cellPadding: 4,
                 },
                 headStyles: {
-                    fillColor: [230, 230, 230],
+                    fillColor: [224, 230, 237],
                     textColor: [0, 0, 0],
                     lineWidth: 0,
+                    fontSize: 12,
+                },
+                didParseCell: (hookData) => {
+                    if (hookData.section === 'head') {
+                        if (hookData.column.dataKey === 1) {
+                            hookData.cell.styles.halign = 'center';
+                        }
+                        if (hookData.column.dataKey === 2 || hookData.column.dataKey === 3) {
+                            hookData.cell.styles.halign = 'right';
+                        }
+                    }
+                },
+                columnStyles: {
+                    0: { halign: 'left', fontSize: 12 },
+                    1: { halign: 'center', fontSize: 12 },
+                    2: { halign: 'right', fontSize: 12 },
+                    3: { halign: 'right', fontSize: 12 },
                 },
             });
 
             pdf.setFontSize(12);
-            pdf.setTextColor(0, 0, 0);
-
-            const totalStartY = pdf.lastAutoTable.finalY + 10;
-            pdf.text('Subtotal: $3255', margin, totalStartY);
-            pdf.text('Tax: $700', margin, totalStartY + 10);
-            pdf.text('Shipping Rate: $0', margin, totalStartY + 20);
-            pdf.text('Discount: $10', margin, totalStartY + 30);
-            pdf.text('Total: $3945', margin, totalStartY + 40);
+            pdf.setLineWidth(0.5);
+            pdf.line(100, 180, 190, 180);
+            pdf.setLineWidth(1);
+            const text = `Total akhir : ${formatToRupiah(
+                itemsDetail.reduce((total, item) => total + item.fish_price * item.fish_count, 0)
+            )}`;
+            const textWidth = pdf.getTextWidth(text);
+            const xPosition = a4Width - 24 - textWidth;
+            pdf.text(text, xPosition, 190);
 
             if (isDownload) {
                 pdf.save('invoice.pdf');
@@ -138,101 +175,118 @@ const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
         };
     };
 
-    const items = [
-        {
-            id: 1,
-            item: 'nama event : lomba ikan | nama ikan : lala',
-            quantity: 1,
-            price: '120',
-        },
-    ];
-
-    const columns = [
-        { key: 'item', label: 'Nama Item' },
-        { key: 'quantity', label: 'Jumlah Item', class: 'text-left' },
-        { key: 'price', label: 'harga', class: 'ltr:text-right rtl:text-left' },
-    ];
-
     return (
         <div>
-            <div className="mb-6 flex flex-wrap items-center justify-center gap-4 lg:justify-end">
-                <button type="button" className="btn btn-primary gap-2" onClick={() => generatePDF(false)}>
-                    <IconPrinter />
-                    Print
-                </button>
+            {isFetching ? (
+                <div className="flex min-h-[600px] min-w-[320px] flex-col items-center justify-center ">
+                    <SpinnerWithText text="Memuat..." />
+                </div>
+            ) : (
+                <>
+                    <div className="mb-6 flex flex-wrap items-center justify-center gap-4 lg:justify-end">
+                        <button type="button" className="btn btn-primary gap-2" onClick={() => generatePDF(false)}>
+                            <IconPrinter />
+                            Print
+                        </button>
 
-                <button type="button" className="btn btn-success gap-2" onClick={() => generatePDF(true)}>
-                    <IconDownload />
-                    Download
-                </button>
-            </div>
-            <div className="panel mx-auto max-w-[1000px] !bg-white !p-16 !text-black">
-                <div className="flex flex-wrap justify-between gap-4 px-4">
-                    <div className="text-2xl font-semibold uppercase">Invoice</div>
-                    <div className="shrink-0">
-                        <img src="/assets/images/desktop-logo.png" alt="img" className="w-44 ltr:ml-auto rtl:mr-auto" />
+                        <button type="button" className="btn btn-success gap-2" onClick={() => generatePDF(true)}>
+                            <IconDownload />
+                            Download
+                        </button>
                     </div>
-                </div>
-                <hr className="my-6 border-white-light dark:border-[#1b2e4b]" />
-                <div className="flex flex-col flex-wrap justify-between gap-6 lg:flex-row">
-                    <div className="flex flex-col justify-between gap-6 sm:flex-row lg:w-2/3">
-                        <div className="xl:1/3 sm:w-1/2 lg:w-2/5">
-                            <div className="mb-2 flex w-full items-center justify-between">
-                                <div className="text-white-dark">No Invoice :</div>
-                                <div>#8701</div>
+                    <div className="overflow-auto">
+                        <div className="panel mx-auto w-[700px] !bg-white !p-16 !pb-48 !text-black">
+                            <div className="flex flex-wrap justify-between gap-4 px-4">
+                                <div className="text-2xl font-semibold uppercase">Invoice</div>
+                                <div className="shrink-0">
+                                    <img src="/assets/images/desktop-logo.png" alt="img" className="w-48" />
+                                </div>
                             </div>
-                            <div className="mb-2 flex w-full items-center justify-between">
-                                <div className="text-white-dark">Nama Tertagih :</div>
-                                <div>Rpb</div>
+                            <hr className="my-6 border-white-light dark:border-[#1b2e4b]" />
+                            <div className="flex w-full flex-col justify-between gap-6 pt-10">
+                                <div className="flex flex-col justify-between gap-6 sm:flex-row lg:w-2/3">
+                                    <div className="grid gap-y-2">
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                                            <div className="text-white-dark">No Invoice</div>
+                                            <div className="text-center">:&nbsp;</div>
+                                            <div>{invoice?.invoice_code}</div>
+                                        </div>
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                                            <div className="text-white-dark">Nama Tertagih</div>
+                                            <div className="text-center">:&nbsp;</div>
+                                            <div>
+                                                {user?.user_fname}&nbsp;{user?.user_lname}
+                                            </div>
+                                        </div>
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                                            <div className="text-white-dark">Tanggal Invoice</div>
+                                            <div className="text-center">:&nbsp;</div>
+                                            <div>{formatedDate(invoice?.invoice_created_date)}</div>
+                                        </div>
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                                            <div className="text-white-dark">Batas Pembayaran</div>
+                                            <div className="text-center">:&nbsp;</div>
+                                            <div>{expiringTime(invoice?.invoice_due_date)}</div>
+                                        </div>
+                                        <div className="grid grid-cols-[1fr_auto_1fr] items-center">
+                                            <div className="text-white-dark">Status Invoice</div>
+                                            <div className="text-center">:&nbsp;</div>
+                                            <div>
+                                                {invoice?.invoice_status === 'paid'
+                                                    ? 'Lunas'
+                                                    : invoice?.invoice_status === 'pending'
+                                                    ? 'Belum Bayar'
+                                                    : 'Kadaluarsa'}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div className="mb-2 flex w-full items-center justify-between">
-                                <div className="text-white-dark">Tanggal Invoice :</div>
-                                <div>13 Sep 2022</div>
+                            <div className="table-responsive mt-14 h-[300px]">
+                                <table className="table">
+                                    <thead>
+                                        <tr className="!bg-white-light font-extrabold">
+                                            <th>Nama Item</th>
+                                            <th className="text-center">Jumlah</th>
+                                            <th className="text-right">Harga</th>
+                                            <th className="text-right">Total Harga</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {itemsDetail.map((item) => (
+                                            <tr key={item.fish_size}>
+                                                <td>{item.fish_size}</td>
+                                                <td className="text-center">{item.fish_count}</td>
+                                                <td className="text-right">{formatToRupiah(item.fish_price)}</td>
+                                                <td className="text-right">
+                                                    {formatToRupiah(item.fish_price * item.fish_count)}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
                             </div>
-                            <div className="mb-2 flex w-full items-center justify-between">
-                                <div className="text-white-dark">Batas Pembayaran :</div>
-                                <div>13 Sep 20.20</div>
-                            </div>
-                            <div className="mb-2 flex w-full items-center justify-between">
-                                <div className="text-white-dark">Status :</div>
-                                <div>Belum Bayar</div>
+                            <div className="mt grid grid-cols-1 px-4 sm:grid-cols-2">
+                                <div></div>
+                                <div className="space-y-2 ltr:text-right rtl:text-left">
+                                    <hr className="my-6 border-white-light dark:border-[#1b2e4b]" />
+                                    <div className="flex items-center">
+                                        <div className="flex-1">Total Akhir</div>
+                                        <div className="w-[37%]">
+                                            {formatToRupiah(
+                                                itemsDetail.reduce(
+                                                    (total, item) => total + item.fish_price * item.fish_count,
+                                                    0
+                                                )
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div className="table-responsive mt-6">
-                    <table className="table-striped">
-                        <thead>
-                            <tr className="!bg-white !bg-none dark:!bg-white">
-                                {columns.map((column) => (
-                                    <th key={column.key} className={column?.class + '!bg-white'}>
-                                        {column.label}
-                                    </th>
-                                ))}
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {items.map((item) => (
-                                <tr key={item.id}>
-                                    <td>{item.item}</td>
-                                    <td>{item.quantity}</td>
-                                    <td className="ltr:text-right rtl:text-left">${item.price}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-                <div className="mt-6 grid grid-cols-1 px-4 sm:grid-cols-2">
-                    <div></div>
-                    <div className="space-y-2 ltr:text-right rtl:text-left">
-                        <hr className="my-6 border-white-light dark:border-[#1b2e4b]" />
-                        <div className="flex items-center">
-                            <div className="flex-1">Total</div>
-                            <div className="w-[37%]">$3945</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+                </>
+            )}
         </div>
     );
 };

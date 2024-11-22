@@ -211,6 +211,13 @@ interface UserRegDetailType {
     invoice_checkout_url: string;
 }
 
+interface ItemDetail {
+    fish_size: string;
+    fish_count: number;
+    fish_ids: string[];
+    fish_price: number;
+}
+
 interface InvoiceDetail {
     invoice_id: string;
     user_reg_id: string;
@@ -220,6 +227,9 @@ interface InvoiceDetail {
     invoice_amount: number;
     invoice_due_date: string;
     invoice_created_date: string;
+    invoice_checkout_url: string;
+    event_id: string;
+    fish_details: ItemDetail[];
 }
 
 interface FlattenedFishType extends UserRegDetailType {

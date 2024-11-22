@@ -1,4 +1,7 @@
-export const expiringTime = (isoDate: string): string => {
+export const expiringTime = (isoDate: string | undefined): string => {
+    if (!isoDate) {
+        return '';
+    }
     const date = new Date(isoDate);
 
     const dateFormatter = new Intl.DateTimeFormat('id-ID', {

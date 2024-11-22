@@ -183,6 +183,7 @@ const InvoiceList = () => {
                                 },
                             ]}
                             highlightOnHover
+                            key="invoice_code"
                             totalRecords={data ? data.length : 0}
                             recordsPerPage={pageSize}
                             page={page}

@@ -26,6 +26,19 @@ export const getOneEvent = async (cookie: string | undefined, eventId: string) =
     }
 };
 
+export const getOneEventDetail = async (cookie: string | undefined, eventId: string) => {
+    try {
+        const response = await api.get(`/events/detailed/${eventId}`, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
 export const eventRegisterApi = async (data: EventRegisterType, cookie: string | undefined) => {
     try {
         const response = await api.post(`/user-regs`, data, {

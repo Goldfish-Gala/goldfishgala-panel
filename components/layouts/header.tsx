@@ -36,6 +36,7 @@ import { getTranslation } from '@/i18n';
 import { useCookies } from 'next-client-cookies';
 import Image from 'next/image';
 import { fetchUserProfile } from '@/utils/store-user';
+import { formatName } from '@/utils/name-format';
 
 const Header = () => {
     const pathname = usePathname();
@@ -235,11 +236,16 @@ const Header = () => {
                             >
                                 <ul className="w-[230px] !py-0 font-semibold text-dark dark:text-white-dark dark:text-white-light/90">
                                     <li>
-                                        <div className="flex items-center px-4 py-4">
+                                        <div className="flex items-center px-4 pb-2 pt-4">
                                             <div className="truncate ltr:pl-4 rtl:pr-4">
                                                 <h4 className="text-base">
-                                                    {user?.user_fname}&nbsp;{user?.user_lname}
-                                                    <span className="rounded bg-success-light px-1 text-xs text-success ltr:ml-2 rtl:ml-2">
+                                                    {formatName(user?.user_fname || '', user?.user_lname || '', 22)}
+                                                </h4>
+                                                <h4 className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white">
+                                                    {user?.user_email}
+                                                </h4>
+                                                <h4 className="mt-2">
+                                                    <span className="rounded bg-success-light px-1 text-xs text-success">
                                                         {user?.role_id === 1
                                                             ? 'Guest'
                                                             : user?.role_id === 2
@@ -247,12 +253,6 @@ const Header = () => {
                                                             : 'Admin'}
                                                     </span>
                                                 </h4>
-                                                <button
-                                                    type="button"
-                                                    className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white"
-                                                >
-                                                    {user?.user_email}
-                                                </button>
                                             </div>
                                         </div>
                                     </li>
