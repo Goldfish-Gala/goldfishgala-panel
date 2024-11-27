@@ -1,21 +1,20 @@
 'use client';
 
-import { API_URL } from '@/api/api-config';
-import IconGoogle from '@/components/icon/icon-google';
 
-const GoogleButton = () => {
-    const handleLogin = () => (window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`);
+import IconGoogle from "@/components/icon/icon-google";
+
+const GoogleButton = ({ text = "Sign up with Google" }) => {
+    const handleLogin = () => {
+        window.location.href = `${process.env.NEXT_PUBLIC_API_URL}/auth/login`;
+    };
+
     return (
         <button
-            className="inline-flex h-12 w-56 items-center justify-center rounded-full p-0 transition hover:scale-110"
-            style={{
-                background: 'linear-gradient(135deg, rgba(239, 18, 98, 1) 0%, rgba(67, 97, 238, 1) 100%)',
-            }}
             onClick={handleLogin}
+            className="inline-flex items-center justify-center h-12 w-64 rounded-md border border-blue-500 text-blue-500 font-medium hover:bg-blue-50 transition bg-white"
         >
-            Masuk dengan &nbsp;
-            <IconGoogle />
-            &nbsp; Google
+            <IconGoogle className="h-6 w-6 mr-2" />
+            {text}
         </button>
     );
 };
