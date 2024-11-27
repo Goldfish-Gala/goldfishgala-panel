@@ -44,7 +44,6 @@ const BoxedSignIn = () => {
                     height={300}
                     className="absolute right-0 top-0 h-[300px]"
                 />
-
                 <Image
                     src="/assets/images/auth/polygon-object.svg"
                     alt="polygon object"
@@ -74,7 +73,7 @@ const BoxedSignIn = () => {
                                     />
                                 </div>
                                 <h1 className="text-2xl font-extrabold !leading-snug bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-yellow-500 md:text-3xl">
-                                    Login to Goldfish Gala
+                                    Sign Up to Goldfish Gala
                                 </h1>
                                 <p className="mt-2 text-center text-gray-200">
                                     Enjoy effortless & secure access with Google
@@ -83,21 +82,21 @@ const BoxedSignIn = () => {
                             <div>
                                 <ul className="flex justify-center gap-3.5 text-white">
                                     <li>
-                                        <GoogleButton text="Login with Google" />
+                                        <GoogleButton text='Sign Up with Google' />
                                     </li>
                                 </ul>
                             </div>
 
                             <div className="mt-4 text-center text-white">
-                                <p className="mb-3">Don&apos;t have an Account ? {" "}
+                                <p className="mb-3">Already have an Account ? {" "}
                                     <a
-                                        href="/register"
+                                        href="/auth"
                                         className="text-yellow-400 hover:text-white"
                                     >
-                                        Sign Up
+                                        Login
                                     </a>{" "} here. </p>
                                 <p className="text-xs">
-                                    By loging in, you are agreeing to the{" "}
+                                    By signing up, you are agreeing to the{" "}
                                     <a
                                         href="#"
                                         className="text-yellow-400 hover:text-white"
