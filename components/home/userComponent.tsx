@@ -20,8 +20,12 @@ const UserComponent = () => {
             if (authCookie) {
                 const userProfile = await fetchUserComponent(authCookie, dispatch, router);
                 if (userProfile) {
+                    if (userProfile.role_id === 4) {
+                    }
                     if (userProfile.user_is_first_login) {
                         router.replace('/pre-member');
+                    } else if (userProfile.role_id === 4) {
+                        router.replace('/fish-candidates');
                     } else {
                         router.replace('/dashboard');
                     }

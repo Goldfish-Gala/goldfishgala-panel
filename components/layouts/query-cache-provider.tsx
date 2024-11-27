@@ -8,9 +8,9 @@ interface IProps {
 }
 
 const QueryCacheProvider = ({ children }: IProps) => {
-    const [client] = useState(new QueryClient());
+    const [queryClient] = useState(new QueryClient());
 
-    return <QueryClientProvider client={client}>{children}</QueryClientProvider>;
+    return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
 };
 
 export default QueryCacheProvider;

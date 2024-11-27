@@ -21,11 +21,6 @@ const FishDetail = ({ params }: { params: { fishId: string } }) => {
                 <div className="panel relative w-full max-w-lg p-0">
                     <FishDetailComponent params={params} />
                 </div>
-                {/* <div className="panel relative w-full rounded-md">
-                    <div className="relative flex flex-col rounded-md bg-white/60 px-6 backdrop-blur-lg dark:bg-black/50">
-                        test
-                    </div>
-                </div> */}
             </div>
         </div>
     );

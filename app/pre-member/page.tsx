@@ -65,10 +65,10 @@ const BoxedSignUp = () => {
                         <div className="mx-auto w-full max-w-[440px]">
                             <div className="mb-10">
                                 <h1 className="dark:text-shadow-dark-mode text-2xl font-extrabold uppercase !leading-snug text-primary md:text-3xl">
-                                    Pembaruan Data
+                                    Update User Data
                                 </h1>
                                 <p className="text-base font-bold leading-normal text-dark dark:text-white-dark ">
-                                    Lengkapi data diri untuk melanjutkan ke dashboard
+                                    Complete the user data for continue to panel page
                                 </p>
                             </div>
                             <FirstLoginForm />
