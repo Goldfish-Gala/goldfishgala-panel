@@ -160,6 +160,15 @@ const Header = () => {
         setNotifications(notifications.filter((user) => user.id !== value));
     };
 
+    const badgeStyle =
+        user?.role_id === 4
+            ? 'bg-danger/20 text-danger dark:bg-danger/50'
+            : user?.role_id === 3
+            ? 'bg-warning/20 text-warning dark:bg-warning/50'
+            : user?.role_id === 2
+            ? 'bg-success/20 text-success dark:bg-success/30'
+            : 'border border-success bg-none text-success';
+
     // const [search, setSearch] = useState(false);
 
     return (
@@ -167,7 +176,10 @@ const Header = () => {
             <div className="shadow-sm">
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
-                        <Link href="/dashboard" className="main-logo flex shrink-0 items-center">
+                        <Link
+                            href={user?.role_id === 4 ? '/judges' : '/dashboard'}
+                            className="main-logo flex shrink-0 items-center"
+                        >
                             <Image
                                 width={800}
                                 height={800}
@@ -244,13 +256,17 @@ const Header = () => {
                                                 <h4 className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white">
                                                     {user?.user_email}
                                                 </h4>
-                                                <h4 className="mt-2">
-                                                    <span className="rounded bg-success-light px-1 text-xs text-success">
+                                                <h4 className="mb-0.5 mt-3">
+                                                    <span
+                                                        className={`rounded px-2 py-0.5 text-xs font-bold ${badgeStyle}`}
+                                                    >
                                                         {user?.role_id === 1
                                                             ? 'Guest'
                                                             : user?.role_id === 2
                                                             ? 'Member'
-                                                            : 'Admin'}
+                                                            : user?.role_id === 3
+                                                            ? 'Admin'
+                                                            : 'Judges'}
                                                     </span>
                                                 </h4>
                                             </div>

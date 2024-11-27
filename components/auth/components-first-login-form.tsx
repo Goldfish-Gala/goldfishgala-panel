@@ -87,26 +87,26 @@ const FirstLoginForm = () => {
 
     useEffect(() => {
         if (state?.message === 'Data berhasil diperbarui') {
-            showMessage(state.message);
+            showMessage('Data updated successfully');
             setTimeout(() => {
-                router.push('/dashboard');
+                router.push(user?.role_id === 4 ? '/judges' : '/dashboard');
             }, 3000);
         } else if (state?.message === 'Gagal memperbarui data') {
             setLoading(false);
-            showMessage(state.message, 'error');
+            showMessage('Data failed to update', 'error');
         }
-    }, [router, state?.message]);
+    }, [router, state?.message, user?.role_id]);
 
     return (
         <form className="space-y-5 dark:text-white" action={handleSubmit}>
             <div>
-                <label htmlFor="firstName">Nama Depan</label>
+                <label htmlFor="firstName">First Name</label>
                 <div className="relative text-white-dark">
                     <input
                         id="firstName"
                         name="user_fname"
                         type="text"
-                        placeholder="Masukan nama depan"
+                        placeholder="input first name"
                         onChange={handleInputChange}
                         className="form-input ps-10 placeholder:text-white-dark"
                     />
@@ -118,14 +118,14 @@ const FirstLoginForm = () => {
             </div>
             <div>
                 <label htmlFor="lastName">
-                    Nama Belakang <span className="font-extralight italic">(opsional)</span>
+                    Last Name <span className="font-extralight italic">(optional)</span>
                 </label>
                 <div className="relative text-white-dark">
                     <input
                         id="lastName"
                         name="user_lname"
                         type="text"
-                        placeholder="Masukan nama belakang"
+                        placeholder="input last name"
                         onChange={handleInputChange}
                         className="form-input ps-10 placeholder:text-white-dark"
                     />
@@ -135,30 +135,30 @@ const FirstLoginForm = () => {
                 </div>
             </div>
             <div>
-                <label htmlFor="phone">Nomor Telepon</label>
+                <label htmlFor="phone">Phone Number</label>
                 <div className="relative text-white-dark">
                     <input
                         id="phone"
                         name="user_phone"
                         type="text"
-                        placeholder="Contoh : 628523456789"
+                        placeholder="example : 628523456789"
                         onChange={handleInputChange}
                         className="form-input ps-10 placeholder:text-white-dark"
                     />
                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                         <IconPhone />
                     </span>
-                    {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
                 </div>
+                {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
             </div>
             <div>
-                <label htmlFor="user_ig">Username Instagram</label>
+                <label htmlFor="user_ig">Instagram Username</label>
                 <div className="relative text-white-dark">
                     <input
                         id="user_ig"
                         name="user_ig"
                         type="text"
-                        placeholder="contoh : goldfishgala"
+                        placeholder="example : goldfishgala"
                         onChange={handleInputChange}
                         className="form-input ps-10 placeholder:text-white-dark"
                     />
@@ -166,14 +166,14 @@ const FirstLoginForm = () => {
                         <IconInstagram />
                     </span>
                 </div>
-                {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
+                {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
             </div>
             <button
                 disabled={isLoading}
                 type="submit"
                 className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
             >
-                {isLoading ? 'Sedang diproses...' : 'Perbarui Data'}
+                {isLoading ? 'Proccessing...' : 'Submit Data'}
             </button>
         </form>
     );

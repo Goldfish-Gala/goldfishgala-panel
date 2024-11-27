@@ -154,6 +154,40 @@ interface FishDetailType {
     ];
 }
 
+interface FishJudgesType {
+    fish_id: string;
+    user_id: string;
+    fish_name: string;
+    fish_size: string;
+    fish_is_nominated: boolean;
+    fish_submission_link: string;
+    event_price_id: string;
+    event_price_code: string;
+    event_price_name: string;
+    event_price_amount: number;
+    user_reg_id: string;
+    event_id: string;
+    user_reg_user_id: string;
+    user_reg_status_id: string;
+    user_reg_created_date: string;
+    user_reg_status_code: string;
+    user_reg_status_name: string;
+    event_name: string;
+    event_desc: string;
+    event_start_date: string;
+    event_end_date: string;
+    event_created_date: string;
+    event_reg_id: string;
+    event_is_active: boolean;
+    exiting?: boolean;
+}
+
+interface FishCandidateType {
+    success: boolean;
+    message: string;
+    data: FishJudgesType[];
+}
+
 interface EventRegisterType {
     event_id: string;
     user_id: string | undefined;

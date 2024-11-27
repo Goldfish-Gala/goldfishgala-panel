@@ -7,6 +7,7 @@ import { getOneEvent, getAllOngoingEvents } from '@/api/api-event';
 import SpinnerWithText from '../UI/Spinner';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
+import Swal from 'sweetalert2';
 
 const OngoingEvent = () => {
     const router = useRouter();
@@ -27,6 +28,21 @@ const OngoingEvent = () => {
         enabled: !!authCookie,
     });
 
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
+
     const statusCode = data?.event_reg_status_code;
     const statusColor =
         statusCode === 'green_status'
@@ -44,7 +60,16 @@ const OngoingEvent = () => {
             ? 'Pendaftaran ditutup'
             : phaseCode === 'on_review_phase'
             ? 'Sedang dalam penilaian'
+            : phaseCode === 'coming_soon_phase'
+            ? 'Segera hadir'
+            : phaseCode === 'content_upload_phase'
+            ? 'Submit post instagram'
             : 'Pengumuman juara';
+
+    const handleRegisterFalse = async () => {
+        const msg = phaseCode === 'coming_soon_phase' ? 'Pendaftaran belum dibuka' : 'Pendaftaran sudah ditutup';
+        showMessage(msg, 'info');
+    };
 
     const dayLeft = () => {
         const endDate = data?.event_reg_end_date ? new Date(data.event_reg_end_date) : null;
@@ -73,39 +98,48 @@ const OngoingEvent = () => {
                         <p className="text-xl font-extrabold text-dark dark:text-white-dark md:text-2xl lg:text-3xl xl:text-4xl">
                             {data?.event_name}
                         </p>
-                        <div className="w-[320px] rounded border border-[#ebedf2] p-6 dark:border-0 dark:bg-[#1b2e4b] md:w-[400px]">
-                            <div className="flex flex-col items-center justify-between">
+                        <div className="w-[320px] rounded border border-[#ebedf2] p-6 px-3 dark:border-0 dark:bg-[#1b2e4b] sm:px-6 md:w-[420px]">
+                            <div className="flex flex-col items-center gap-1">
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="w-1/2 text-sm font-bold md:text-lg">Status</p>
-                                    <div className="flex w-1/2 items-center justify-between">
+                                    <div className="flex w-[40%] items-center justify-between">
+                                        <p className="text-sm font-bold md:text-lg">Status / Fase</p>
                                         <p>:</p>
-                                        <div className="item-center flex gap-2">
-                                            <div className="pt-0.5 md:pt-1">
-                                                <IconCircle fill={statusColor} />
-                                            </div>
-                                            <p className="text-xs font-semibold md:text-sm">{eventPhase}</p>
+                                    </div>
+                                    <div className="item-center flex gap-2">
+                                        <div className="pt-0.5 md:pt-1">
+                                            <IconCircle fill={statusColor} />
                                         </div>
+                                        <p className="text-xs font-semibold md:text-sm">{eventPhase}</p>
                                     </div>
                                 </div>
                                 <div className="flex w-full items-center justify-between">
-                                    <p className="w-1/2 text-sm font-bold md:text-lg">Batas pendaftaran</p>
-                                    <div className="flex w-1/2 items-center justify-between">
+                                    <div className="flex w-[40%] items-center justify-between">
+                                        <p className="text-sm font-bold md:text-lg">Durasi</p>
                                         <p>:</p>
-                                        <p className="flex items-center rounded-full bg-white-light px-3 py-1 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
-                                            <IconClock className="h-3 w-3 ltr:mr-1 rtl:ml-1" />
-                                            {dayLeft()} Hari lagi
-                                        </p>
                                     </div>
+                                    <p className="flex items-center rounded-full bg-white-light px-2 py-0.5 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
+                                        <IconClock className="h-3 w-3 ltr:mr-1 rtl:ml-1" />
+                                        {dayLeft()} Hari lagi
+                                    </p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <button
-                        className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
-                        onClick={() => router.push(`/fish-registration/${data?.event_id}`)}
-                    >
-                        Daftarkan Ikanmu Sekarang
-                    </button>
+                    {phaseCode === 'open_phase' ? (
+                        <button
+                            className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
+                            onClick={() => router.push(`/fish-registration/${data?.event_id}`)}
+                        >
+                            Daftarkan Ikanmu Sekarang
+                        </button>
+                    ) : (
+                        <button
+                            className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
+                            onClick={handleRegisterFalse}
+                        >
+                            Daftarkan Ikanmu Sekarang
+                        </button>
+                    )}
                 </div>
             )}
         </div>
