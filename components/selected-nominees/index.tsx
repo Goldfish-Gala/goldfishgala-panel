@@ -157,8 +157,8 @@ const SelectedFishes = () => {
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
                     >
-                        <option value="asc">Ascending</option>
-                        <option value="desc">Descending</option>
+                        <option value="asc">Newest</option>
+                        <option value="desc">Oldest</option>
                     </select>
                 </div>
             </div>
