@@ -33,7 +33,7 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
     const detailEmbed = () => {
         return (
             <>
-                <div className="w-[325px] rounded bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark">
+                <div className="w-[325px] bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark sm:rounded">
                     {[
                         { label: 'Fish Name', value: fish?.fish_name },
                         {
@@ -73,18 +73,18 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
         <>
             {!isValidInstagramUrl(url) || !url ? (
                 <div
-                    className={`panel flex w-full flex-col items-center justify-center gap-2 pb-6 transition-all duration-500 ease-in-out ${
+                    className={`panel flex w-full flex-col items-center justify-center gap-2 px-1 pb-6 pt-1 transition-all duration-500 ease-in-out ${
                         isExiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
                     }`}
                 >
-                    <div className="mb-2 flex h-[680px] w-full items-center justify-center rounded border border-white-light dark:border-white-dark">
+                    <div className="mb-2 flex h-full min-h-[400px] w-full items-center justify-center rounded border border-white-light dark:border-white-dark">
                         <p>Link Instagram invalid / privacy not public</p>
                     </div>
                     {detailEmbed()}
                 </div>
             ) : (
                 <div
-                    className={`panel flex w-full flex-col items-center justify-center gap-2 pb-6 transition-all duration-500 ease-in-out ${
+                    className={`panel flex w-full flex-col items-center justify-center gap-2 px-0 pb-6 pt-0 transition-all duration-500 ease-in-out ${
                         isExiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
                     }`}
                 >

@@ -101,7 +101,9 @@ const InvoiceList = () => {
                                     title: 'No invoice',
                                     sortable: true,
                                     render: ({ invoice_code }) => (
-                                        <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
+                                        <Link href={`/invoice-preview/${invoice_code}`}>
+                                            <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
+                                        </Link>
                                     ),
                                 },
                                 {
@@ -195,7 +197,7 @@ const InvoiceList = () => {
                             // selectedRecords={selectedRecords}
                             // onSelectedRecordsChange={setSelectedRecords}
                             paginationText={({ from, to, totalRecords }) =>
-                                `Showing  ${from} to ${to} of ${totalRecords} entries`
+                                `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                             }
                         />
                     )}
