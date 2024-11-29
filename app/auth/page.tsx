@@ -21,8 +21,6 @@ const BoxedSignIn = () => {
             </div>
 
             <div className="relative flex min-h-screen items-center justify-center bg-cover bg-center px-6 py-10 dark:bg-[#060818] sm:px-16">
-
-
                 <Image
                     src="/assets/images/auth/coming-soon-object1.png"
                     alt="coming soon object 1"
@@ -57,7 +55,7 @@ const BoxedSignIn = () => {
                     <div className="relative flex min-h-[500px] flex-col justify-center rounded-md bg-white/60 px-6 py-4 backdrop-blur-3xl dark:bg-black/50">
                         <div className="mx-auto flex h-[420px] w-full flex-col items-center justify-between">
                             <div className="flex w-full flex-col items-center justify-center">
-                                <div className="main-logo flex shrink-0 items-center mb-8">
+                                <div className="main-logo mb-8 flex shrink-0 items-center">
                                     <Image
                                         width={400}
                                         height={400}
@@ -73,10 +71,10 @@ const BoxedSignIn = () => {
                                         alt="logo"
                                     />
                                 </div>
-                                <h1 className="text-2xl font-extrabold !leading-snug bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-yellow-500 md:text-3xl">
+                                <h1 className="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-2xl font-extrabold !leading-snug text-transparent md:text-3xl">
                                     Login to Goldfish Gala
                                 </h1>
-                                <p className="mt-2 text-center text-gray-200">
+                                <p className="mt-2 text-center text-dark dark:text-gray-200">
                                     Enjoy effortless & secure access with Google
                                 </p>
                             </div>
@@ -88,29 +86,24 @@ const BoxedSignIn = () => {
                                 </ul>
                             </div>
 
-                            <div className="mt-4 text-center text-white">
-                                <p className="mb-3">Don&apos;t have an Account ? {" "}
-                                    <a
-                                        href="/register"
-                                        className="text-yellow-400 hover:text-white"
-                                    >
+                            <div className="mt-4 text-center text-dark dark:text-white">
+                                <p className="mb-3">
+                                    Don&apos;t have an Account ?{' '}
+                                    <a href="/register" className="text-yellow-400 hover:text-white">
                                         Sign Up
-                                    </a>{" "} here. </p>
+                                    </a>{' '}
+                                    here.{' '}
+                                </p>
                                 <p className="text-xs">
-                                    By loging in, you are agreeing to the{" "}
-                                    <a
-                                        href="#"
-                                        className="text-yellow-400 hover:text-white"
-                                    >
+                                    By loging in, you are agreeing to the{' '}
+                                    <a href="#" className="text-yellow-400 hover:text-white">
                                         Goldfish Gala of Service
-                                    </a>{" "}
-                                    and{" "}
-                                    <a
-                                        href="#"
-                                        className="text-yellow-400 hover:text-white"
-                                    >
+                                    </a>{' '}
+                                    and{' '}
+                                    <a href="#" className="text-yellow-400 hover:text-white">
                                         Privacy Policy
-                                    </a>.
+                                    </a>
+                                    .
                                 </p>
                             </div>
                         </div>
