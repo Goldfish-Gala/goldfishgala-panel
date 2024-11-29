@@ -32,7 +32,6 @@ const AuthSuccess = () => {
             </div>
 
             <div className="relative flex min-h-screen items-center justify-center bg-cover bg-center px-6 py-10 dark:bg-[#060818] sm:px-16">
-
                 <Image
                     src="/assets/images/auth/coming-soon-object1.png"
                     alt="coming soon object 1"
@@ -64,7 +63,7 @@ const AuthSuccess = () => {
                 <div className="relative w-full max-w-[500px] rounded-md dark:bg-[linear-gradient(52.22deg,#0E1726_0%,rgba(14,23,38,0)_18.66%,rgba(14,23,38,0)_51.04%,rgba(14,23,38,0)_80.07%,#0E1726_100%)]">
                     <div className="relative flex min-h-[400px] flex-col justify-center rounded-md bg-white/60 px-6 py-4 backdrop-blur-3xl dark:bg-black/50">
                         <div className="mx-auto flex h-[300px] w-full flex-col items-center justify-around">
-                            <div className="main-logo flex shrink-0 items-center mb-8">
+                            <div className="main-logo mb-8 flex shrink-0 items-center">
                                 <Image
                                     width={400}
                                     height={400}
@@ -80,10 +79,10 @@ const AuthSuccess = () => {
                                     alt="logo"
                                 />
                             </div>
-                            <h1 className="text-2xl font-extrabold !leading-snug bg-clip-text text-transparent bg-gradient-to-r from-yellow-200 to-yellow-500 md:text-3xl">
+                            <h1 className="bg-gradient-to-r from-yellow-300 to-yellow-500 bg-clip-text text-2xl font-extrabold !leading-snug text-transparent md:text-3xl">
                                 Login Success !
                             </h1>
-                            <p className="mt-2 text-center text-md text-white">
+                            <p className="text-md mt-2 text-center text-dark dark:text-white">
                                 You will be redirected to the Dashboard Panel in a few seconds.
                             </p>
                             <div className="flex flex-col items-center gap-2">

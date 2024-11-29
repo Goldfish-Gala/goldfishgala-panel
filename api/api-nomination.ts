@@ -29,9 +29,9 @@ export const cancelFishNomineesApi = async (fishId: string, cookie: string | und
     }
 };
 
-export const getAllFishCandidateApi = async (page: number, cookie: string | undefined) => {
+export const getAllFishCandidateApi = async (page: number, limit: number, sort: string, cookie: string | undefined) => {
     try {
-        const response = await api.get(`/fishes?page=${page}`, {
+        const response = await api.get(`/fishes?page=${page}&limit=${limit}&sort=${sort}`, {
             headers: {
                 Authorization: `Bearer ${cookie}`,
             },
@@ -43,13 +43,22 @@ export const getAllFishCandidateApi = async (page: number, cookie: string | unde
     }
 };
 
-export const getAllSelectedFishApi = async (user: User | null, page: number, cookie: string | undefined) => {
+export const getAllSelectedFishApi = async (
+    user: User | null,
+    page: number,
+    limit: number,
+    sort: string,
+    cookie: string | undefined
+) => {
     try {
-        const response = await api.get(`/fish-nominations/judge/${user?.user_id}?page=${page}`, {
-            headers: {
-                Authorization: `Bearer ${cookie}`,
-            },
-        });
+        const response = await api.get(
+            `/fish-nominations/judge/${user?.user_id}?page=${page}&limit=${limit}&sort=${sort}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${cookie}`,
+                },
+            }
+        );
         return response.data;
     } catch (error) {
         console.error(error);

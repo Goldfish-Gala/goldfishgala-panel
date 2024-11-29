@@ -1,8 +1,6 @@
 import FishCandidates from '@/components/fish-candidates';
 import { Metadata } from 'next';
-import Link from 'next/link';
 import React from 'react';
-import { useSelector } from 'react-redux';
 
 export const metadata: Metadata = {
     title: 'Fish Candidates',

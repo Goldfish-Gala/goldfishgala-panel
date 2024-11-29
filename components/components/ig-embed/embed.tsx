@@ -33,7 +33,7 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
     const detailEmbed = () => {
         return (
             <>
-                <div className="w-[300px] rounded bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark">
+                <div className="w-[325px] rounded bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark">
                     {[
                         { label: 'Fish Name', value: fish?.fish_name },
                         {
@@ -44,10 +44,9 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
                                   }`
                                 : 'N/A',
                         },
-                        { label: 'Category', value: fish?.event_price_name },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">
-                            <div className="grid w-full grid-cols-[1fr_auto_1fr] gap-6 text-black dark:text-white">
+                            <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
                                 <p className="capitalize">{item.label}</p>
                                 <p className="-ml-4 mr-2 text-center">:</p>
                                 <p>
@@ -64,7 +63,7 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
                     ))}
                 </div>
                 <button className="btn2 btn-gradient3 mt-4 px-4 py-2" disabled={isLoading} onClick={handleNominate}>
-                    buttonText
+                    {buttonText}
                 </button>
             </>
         );
@@ -84,8 +83,14 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
                     {detailEmbed()}
                 </div>
             ) : (
-                <div className="w-full rounded-md">
-                    <InstagramEmbed url={url} width="100%" />
+                <div
+                    className={`panel flex w-full flex-col items-center justify-center gap-2 pb-6 transition-all duration-500 ease-in-out ${
+                        isExiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
+                    }`}
+                >
+                    <div className="w-full">
+                        <InstagramEmbed url={url} width="100%" />
+                    </div>
                     {detailEmbed()}
                 </div>
             )}

@@ -182,10 +182,17 @@ interface FishJudgesType {
     exiting?: boolean;
 }
 
-interface FishCandidateType {
+interface FishPaginationType {
     success: boolean;
     message: string;
     data: FishJudgesType[];
+    pagination: {
+        totalData: number;
+        currentPage: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
 }
 
 interface EventRegisterType {
