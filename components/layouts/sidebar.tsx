@@ -152,7 +152,7 @@ const Sidebar = () => {
                     </div>
                     <PerfectScrollbar className="relative h-[calc(100vh-80px)]">
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
-                            {!user ? (
+                            {!user || !T ? (
                                 <></>
                             ) : user?.role_id === 4 ? (
                                 <li className="menu nav-item">

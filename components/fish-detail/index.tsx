@@ -348,11 +348,19 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                                 <IconVisit /> Kunjungi
                                             </div>
                                         </button>
-                                        <button onClick={() => handleEdit(true)}>
-                                            <div className="border-1.5 flex gap-1 rounded-md border-white bg-success p-1 pr-2 text-sm text-white hover:bg-green-400 active:scale-90">
-                                                <IconEdit /> Ubah
-                                            </div>
-                                        </button>
+                                        {submitPhase !== 'content_upload_phase' ? (
+                                            <button type="button" disabled={isLoading} onClick={handleSubmitPhaseFalse}>
+                                                <div>
+                                                    <IconEdit /> Ubah
+                                                </div>
+                                            </button>
+                                        ) : (
+                                            <button onClick={() => handleEdit(true)}>
+                                                <div className="border-1.5 flex gap-1 rounded-md border-white bg-success p-1 pr-2 text-sm text-white hover:bg-green-400 active:scale-90">
+                                                    <IconEdit /> Ubah
+                                                </div>
+                                            </button>
+                                        )}
                                     </>
                                 )}
                             </div>

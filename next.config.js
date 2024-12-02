@@ -1,6 +1,11 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     reactStrictMode: true,
+    experimental: {
+        staleTimes: {
+            dynamic: 120,
+        }
+    },
     images: {
         remotePatterns: [{ hostname: 'lh3.googleusercontent.com' }],
     },
