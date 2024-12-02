@@ -169,6 +169,7 @@ const SelectedFishes = () => {
                             url={fish.fish_submission_link}
                             key={fish.fish_id}
                             fish={fish}
+                            username={fish.user_name}
                             handleModal={handleOpenModal}
                             isLoading={isLoading}
                             buttonText="Select as nominee"

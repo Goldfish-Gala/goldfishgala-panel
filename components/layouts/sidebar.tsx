@@ -243,6 +243,264 @@ const Sidebar = () => {
                                             </div>
                                         </Link>
                                     </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('akun')}</span>
+                                    </h2>
+
+                                    <li className="menu nav-item">
+                                        <button
+                                            type="button"
+                                            className={`${
+                                                currentMenu === 'users' ? 'active' : ''
+                                            } nav-link group w-full`}
+                                            onClick={() => toggleMenu('users')}
+                                        >
+                                            <div className="flex items-center">
+                                                <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('User')}
+                                                </span>
+                                            </div>
+
+                                            <div className={currentMenu !== 'users' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                                <IconCaretDown />
+                                            </div>
+                                        </button>
+
+                                        <AnimateHeight duration={300} height={currentMenu === 'users' ? 'auto' : 0}>
+                                            <ul className="sub-menu text-gray-500">
+                                                <li>
+                                                    <Link href="/users/profile">{t('profile')}</Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/users/user-account-settings">
+                                                        {t('Pengaturan Akun')}
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        </AnimateHeight>
+                                    </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('Bantuan')}</span>
+                                    </h2>
+
+                                    <li className="menu nav-item">
+                                        <Link
+                                            href="https://vristo.sbthemes.com"
+                                            target="_blank"
+                                            className="nav-link group"
+                                        >
+                                            <div className="flex items-center">
+                                                <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('FAQ')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                </li>
+                            ) : user.role_id === 3 ? (
+                                <li className="menu nav-item">
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('Judges')}</span>
+                                    </h2>
+                                    <button
+                                        type="button"
+                                        className={`${
+                                            currentMenu === 'nomination' ? 'active' : ''
+                                        } nav-link group w-full`}
+                                        onClick={() => toggleMenu('nomination')}
+                                    >
+                                        <div className="flex items-center">
+                                            <IconNominee className="shrink-0 group-hover:!text-primary" />
+                                            <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                {t('Nomination')}
+                                            </span>
+                                        </div>
+
+                                        <div className={currentMenu !== 'nomination' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                            <IconCaretDown />
+                                        </div>
+                                    </button>
+
+                                    <AnimateHeight duration={300} height={currentMenu === 'nomination' ? 'auto' : 0}>
+                                        <ul className="sub-menu text-gray-500">
+                                            <li>
+                                                <Link href="/fish-candidates">
+                                                    <div className="flex items-center">
+                                                        <IconSelection className="shrink-0 group-hover:!text-primary" />
+                                                        <span
+                                                            className={`${
+                                                                pathname === '/fish-candidates'
+                                                                    ? 'text-primary'
+                                                                    : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                                            } ltr:pl-3 rtl:pr-3`}
+                                                        >
+                                                            {t('Fish Candidates')}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                            <li>
+                                                <Link href={'/selected-nominees'}>
+                                                    <div className="flex items-center">
+                                                        <IconCircleCheck className="shrink-0 group-hover:!text-primary" />
+                                                        <span
+                                                            className={`${
+                                                                pathname === '/selected-nominees'
+                                                                    ? 'text-primary'
+                                                                    : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                                            } ltr:pl-3 rtl:pr-3`}
+                                                        >
+                                                            {t('Selected Nominees')}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+                                            </li>
+                                        </ul>
+                                    </AnimateHeight>
+                                    <li className="menu nav-item">
+                                        <Link href={'/fishes-score'}>
+                                            <div className="flex items-center">
+                                                <IconPencilPaper className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('Fishes Score')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <li className="menu nav-item">
+                                        <Link href={'/winner-selection'}>
+                                            <div className="flex items-center">
+                                                <IconAward className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('Winner Selection')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('Dashboard')}</span>
+                                    </h2>
+                                    <li className="menu nav-item">
+                                        <Link href={'/dashboard'}>
+                                            <div className="flex items-center">
+                                                <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('dashboard')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('event')}</span>
+                                    </h2>
+                                    <li className="menu nav-item">
+                                        <Link href={'/registered-fishes'}>
+                                            <div className="flex items-center">
+                                                <IconMenuElements className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('Ikan terdaftar')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('tagihan')}</span>
+                                    </h2>
+                                    <li className="nav-item">
+                                        <ul>
+                                            <li className="menu nav-item">
+                                                <Link href={'/invoices'}>
+                                                    <div className="flex items-center">
+                                                        <IconMenuInvoice className="shrink-0 group-hover:!text-primary" />
+                                                        <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                            {t('Riwayat Tagihan')}
+                                                        </span>
+                                                    </div>
+                                                </Link>
+
+                                                <AnimateHeight
+                                                    duration={300}
+                                                    height={currentMenu === 'invoice' ? 'auto' : 0}
+                                                >
+                                                    <ul className="sub-menu text-gray-500">
+                                                        <li>
+                                                            <Link href="/apps/invoice/list">{t('Belum dibayar')}</Link>
+                                                        </li>
+                                                        <li>
+                                                            <Link href="/apps/invoice/preview">
+                                                                {t('Sudah dibayar')}
+                                                            </Link>
+                                                        </li>
+                                                    </ul>
+                                                </AnimateHeight>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('akun')}</span>
+                                    </h2>
+
+                                    <li className="menu nav-item">
+                                        <button
+                                            type="button"
+                                            className={`${
+                                                currentMenu === 'users' ? 'active' : ''
+                                            } nav-link group w-full`}
+                                            onClick={() => toggleMenu('users')}
+                                        >
+                                            <div className="flex items-center">
+                                                <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('User')}
+                                                </span>
+                                            </div>
+
+                                            <div className={currentMenu !== 'users' ? '-rotate-90 rtl:rotate-90' : ''}>
+                                                <IconCaretDown />
+                                            </div>
+                                        </button>
+
+                                        <AnimateHeight duration={300} height={currentMenu === 'users' ? 'auto' : 0}>
+                                            <ul className="sub-menu text-gray-500">
+                                                <li>
+                                                    <Link href="/users/profile">{t('profile')}</Link>
+                                                </li>
+                                                <li>
+                                                    <Link href="/users/user-account-settings">
+                                                        {t('Pengaturan Akun')}
+                                                    </Link>
+                                                </li>
+                                            </ul>
+                                        </AnimateHeight>
+                                    </li>
+                                    <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
+                                        <IconMinus className="hidden h-5 w-4 flex-none" />
+                                        <span>{t('Bantuan')}</span>
+                                    </h2>
+
+                                    <li className="menu nav-item">
+                                        <Link
+                                            href="https://vristo.sbthemes.com"
+                                            target="_blank"
+                                            className="nav-link group"
+                                        >
+                                            <div className="flex items-center">
+                                                <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {t('FAQ')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
                                 </li>
                             ) : (
                                 <>

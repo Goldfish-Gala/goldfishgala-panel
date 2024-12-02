@@ -10,6 +10,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
+import Link from 'next/link';
 
 const FishList = () => {
     const router = useRouter();
@@ -50,10 +51,6 @@ const FishList = () => {
         );
     }, [data]);
 
-    const handleDetail = (fishId: string) => {
-        router.push(`/fish-detail/${fishId}`);
-    };
-
     const gradients = [
         'bg-gradient-to-r from-cyan-500 to-cyan-400',
         'bg-gradient-to-r from-violet-500 to-violet-400',
@@ -92,13 +89,14 @@ const FishList = () => {
                                 <p className="text-xl font-extrabold">{fish.fish_name}</p>
                                 <p className="mt-1 text-sm font-semibold">Event : {event_name}</p>
                             </div>
-                            <button
-                                type="button"
-                                className="btn btn-secondary btn-sm border-1 border-white bg-gradient-to-r from-[#1e9afe] to-[#3d38e1] text-sm text-white hover:bg-gradient-to-l"
-                                onClick={() => handleDetail(fish.fish_id)}
-                            >
-                                Detail
-                            </button>
+                            <Link href={`/fish-detail/${fish.fish_id}`}>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary btn-sm border-1 border-white bg-gradient-to-r from-[#1e9afe] to-[#3d38e1] text-sm text-white hover:bg-gradient-to-l"
+                                >
+                                    Detail
+                                </button>
+                            </Link>
                         </div>
                     );
                 })}
