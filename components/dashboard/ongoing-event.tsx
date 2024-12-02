@@ -87,13 +87,13 @@ const OngoingEvent = () => {
     };
 
     return (
-        <>
+        <div className="panel lg:col-span-2">
             {isPending ? (
                 <div className="flex min-h-[336px] w-full flex-col items-center justify-center md:min-h-[348px]">
                     <SpinnerWithText text="Memuat..." />
                 </div>
             ) : (
-                <div className="panel lg:col-span-2">
+                <>
                     <div className="mb-5">
                         <h5 className="text-lg font-semibold dark:text-white-light">Event sedang berlangsung</h5>
                     </div>
@@ -148,9 +148,9 @@ const OngoingEvent = () => {
                             </button>
                         )}
                     </div>
-                </div>
+                </>
             )}
-        </>
+        </div>
     );
 };
 
