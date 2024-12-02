@@ -51,7 +51,7 @@ const Sidebar = () => {
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
-    const { t } = getTranslation();
+    const [T, setT] = useState<(key: string) => any>();
     const pathname = usePathname();
     const [currentMenu, setCurrentMenu] = useState<string>('');
     const [errorSubMenu, setErrorSubMenu] = useState(false);
@@ -71,20 +71,26 @@ const Sidebar = () => {
     };
 
     useEffect(() => {
-        const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
-        if (selector) {
-            selector.classList.add('active');
-            const ul: any = selector.closest('ul.sub-menu');
-            if (ul) {
-                let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link') || [];
-                if (ele.length) {
-                    ele = ele[0];
-                    setTimeout(() => {
-                        ele.click();
-                    });
+        const initialize = async () => {
+            const { t } = await getTranslation();
+            setT(() => t);
+
+            const selector = document.querySelector('.sidebar ul a[href="' + window.location.pathname + '"]');
+            if (selector) {
+                selector.classList.add('active');
+                const ul: any = selector.closest('ul.sub-menu');
+                if (ul) {
+                    let ele: any = ul.closest('li.menu').querySelectorAll('.nav-link') || [];
+                    if (ele.length) {
+                        ele = ele[0];
+                        setTimeout(() => {
+                            ele.click();
+                        });
+                    }
                 }
             }
-        }
+        };
+        initialize();
     }, []);
 
     useEffect(() => {
@@ -152,7 +158,7 @@ const Sidebar = () => {
                                 <li className="menu nav-item">
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Judges')}</span>
+                                        <span>{T!('Judges')}</span>
                                     </h2>
                                     <button
                                         type="button"
@@ -164,7 +170,7 @@ const Sidebar = () => {
                                         <div className="flex items-center">
                                             <IconNominee className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                {t('Nomination')}
+                                                {T!('Nomination')}
                                             </span>
                                         </div>
 
@@ -186,7 +192,7 @@ const Sidebar = () => {
                                                                     : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
                                                             } ltr:pl-3 rtl:pr-3`}
                                                         >
-                                                            {t('Fish Candidates')}
+                                                            {T!('Fish Candidates')}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -202,7 +208,7 @@ const Sidebar = () => {
                                                                     : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
                                                             } ltr:pl-3 rtl:pr-3`}
                                                         >
-                                                            {t('Selected Nominees')}
+                                                            {T!('Selected Nominees')}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -214,7 +220,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconPencilPaper className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('Fishes Score')}
+                                                    {T!('Fishes Score')}
                                                 </span>
                                             </div>
                                         </Link>
@@ -224,28 +230,28 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconAward className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('Winner Selection')}
+                                                    {T!('Winner Selection')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Dashboard')}</span>
+                                        <span>{T!('Dashboard')}</span>
                                     </h2>
                                     <li className="menu nav-item">
                                         <Link href={'/dashboard'}>
                                             <div className="flex items-center">
                                                 <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('dashboard')}
+                                                    {T!('dashboard')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('akun')}</span>
+                                        <span>{T!('akun')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -259,7 +265,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('User')}
+                                                    {T!('User')}
                                                 </span>
                                             </div>
 
@@ -271,11 +277,11 @@ const Sidebar = () => {
                                         <AnimateHeight duration={300} height={currentMenu === 'users' ? 'auto' : 0}>
                                             <ul className="sub-menu text-gray-500">
                                                 <li>
-                                                    <Link href="/users/profile">{t('profile')}</Link>
+                                                    <Link href="/users/profile">{T!('profile')}</Link>
                                                 </li>
                                                 <li>
                                                     <Link href="/users/user-account-settings">
-                                                        {t('Pengaturan Akun')}
+                                                        {T!('Pengaturan Akun')}
                                                     </Link>
                                                 </li>
                                             </ul>
@@ -283,7 +289,7 @@ const Sidebar = () => {
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Bantuan')}</span>
+                                        <span>{T!('Bantuan')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -295,7 +301,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('FAQ')}
+                                                    {T!('FAQ')}
                                                 </span>
                                             </div>
                                         </Link>
@@ -305,7 +311,7 @@ const Sidebar = () => {
                                 <li className="menu nav-item">
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Judges')}</span>
+                                        <span>{T!('Judges')}</span>
                                     </h2>
                                     <button
                                         type="button"
@@ -317,7 +323,7 @@ const Sidebar = () => {
                                         <div className="flex items-center">
                                             <IconNominee className="shrink-0 group-hover:!text-primary" />
                                             <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                {t('Nomination')}
+                                                {T!('Nomination')}
                                             </span>
                                         </div>
 
@@ -339,7 +345,7 @@ const Sidebar = () => {
                                                                     : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
                                                             } ltr:pl-3 rtl:pr-3`}
                                                         >
-                                                            {t('Fish Candidates')}
+                                                            {T!('Fish Candidates')}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -355,7 +361,7 @@ const Sidebar = () => {
                                                                     : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
                                                             } ltr:pl-3 rtl:pr-3`}
                                                         >
-                                                            {t('Selected Nominees')}
+                                                            {T!('Selected Nominees')}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -367,7 +373,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconPencilPaper className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('Fishes Score')}
+                                                    {T!('Fishes Score')}
                                                 </span>
                                             </div>
                                         </Link>
@@ -377,42 +383,42 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconAward className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('Winner Selection')}
+                                                    {T!('Winner Selection')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Dashboard')}</span>
+                                        <span>{T!('Dashboard')}</span>
                                     </h2>
                                     <li className="menu nav-item">
                                         <Link href={'/dashboard'}>
                                             <div className="flex items-center">
                                                 <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('dashboard')}
+                                                    {T!('dashboard')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('event')}</span>
+                                        <span>{T!('event')}</span>
                                     </h2>
                                     <li className="menu nav-item">
                                         <Link href={'/registered-fishes'}>
                                             <div className="flex items-center">
                                                 <IconMenuElements className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('Ikan terdaftar')}
+                                                    {T!('Ikan terdaftar')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('tagihan')}</span>
+                                        <span>{T!('tagihan')}</span>
                                     </h2>
                                     <li className="nav-item">
                                         <ul>
@@ -421,7 +427,7 @@ const Sidebar = () => {
                                                     <div className="flex items-center">
                                                         <IconMenuInvoice className="shrink-0 group-hover:!text-primary" />
                                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                            {t('Riwayat Tagihan')}
+                                                            {T!('Riwayat Tagihan')}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -432,11 +438,11 @@ const Sidebar = () => {
                                                 >
                                                     <ul className="sub-menu text-gray-500">
                                                         <li>
-                                                            <Link href="/apps/invoice/list">{t('Belum dibayar')}</Link>
+                                                            <Link href="/apps/invoice/list">{T!('Belum dibayar')}</Link>
                                                         </li>
                                                         <li>
                                                             <Link href="/apps/invoice/preview">
-                                                                {t('Sudah dibayar')}
+                                                                {T!('Sudah dibayar')}
                                                             </Link>
                                                         </li>
                                                     </ul>
@@ -446,7 +452,7 @@ const Sidebar = () => {
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('akun')}</span>
+                                        <span>{T!('akun')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -460,7 +466,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('User')}
+                                                    {T!('User')}
                                                 </span>
                                             </div>
 
@@ -472,11 +478,11 @@ const Sidebar = () => {
                                         <AnimateHeight duration={300} height={currentMenu === 'users' ? 'auto' : 0}>
                                             <ul className="sub-menu text-gray-500">
                                                 <li>
-                                                    <Link href="/users/profile">{t('profile')}</Link>
+                                                    <Link href="/users/profile">{T!('profile')}</Link>
                                                 </li>
                                                 <li>
                                                     <Link href="/users/user-account-settings">
-                                                        {t('Pengaturan Akun')}
+                                                        {T!('Pengaturan Akun')}
                                                     </Link>
                                                 </li>
                                             </ul>
@@ -484,7 +490,7 @@ const Sidebar = () => {
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Bantuan')}</span>
+                                        <span>{T!('Bantuan')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -496,7 +502,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('FAQ')}
+                                                    {T!('FAQ')}
                                                 </span>
                                             </div>
                                         </Link>
@@ -509,28 +515,28 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('dashboard')}
+                                                    {T!('dashboard')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('event')}</span>
+                                        <span>{T!('event')}</span>
                                     </h2>
                                     <li className="menu nav-item">
                                         <Link href={'/registered-fishes'}>
                                             <div className="flex items-center">
                                                 <IconMenuElements className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('Ikan terdaftar')}
+                                                    {T!('Ikan terdaftar')}
                                                 </span>
                                             </div>
                                         </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('tagihan')}</span>
+                                        <span>{T!('tagihan')}</span>
                                     </h2>
                                     <li className="nav-item">
                                         <ul>
@@ -539,7 +545,7 @@ const Sidebar = () => {
                                                     <div className="flex items-center">
                                                         <IconMenuInvoice className="shrink-0 group-hover:!text-primary" />
                                                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                            {t('Riwayat Tagihan')}
+                                                            {T!('Riwayat Tagihan')}
                                                         </span>
                                                     </div>
                                                 </Link>
@@ -550,11 +556,11 @@ const Sidebar = () => {
                                                 >
                                                     <ul className="sub-menu text-gray-500">
                                                         <li>
-                                                            <Link href="/apps/invoice/list">{t('Belum dibayar')}</Link>
+                                                            <Link href="/apps/invoice/list">{T!('Belum dibayar')}</Link>
                                                         </li>
                                                         <li>
                                                             <Link href="/apps/invoice/preview">
-                                                                {t('Sudah dibayar')}
+                                                                {T!('Sudah dibayar')}
                                                             </Link>
                                                         </li>
                                                     </ul>
@@ -564,7 +570,7 @@ const Sidebar = () => {
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('akun')}</span>
+                                        <span>{T!('akun')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -578,7 +584,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('User')}
+                                                    {T!('User')}
                                                 </span>
                                             </div>
 
@@ -590,11 +596,11 @@ const Sidebar = () => {
                                         <AnimateHeight duration={300} height={currentMenu === 'users' ? 'auto' : 0}>
                                             <ul className="sub-menu text-gray-500">
                                                 <li>
-                                                    <Link href="/users/profile">{t('profile')}</Link>
+                                                    <Link href="/users/profile">{T!('profile')}</Link>
                                                 </li>
                                                 <li>
                                                     <Link href="/users/user-account-settings">
-                                                        {t('Pengaturan Akun')}
+                                                        {T!('Pengaturan Akun')}
                                                     </Link>
                                                 </li>
                                             </ul>
@@ -602,7 +608,7 @@ const Sidebar = () => {
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{t('Bantuan')}</span>
+                                        <span>{T!('Bantuan')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -614,7 +620,7 @@ const Sidebar = () => {
                                             <div className="flex items-center">
                                                 <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {t('FAQ')}
+                                                    {T!('FAQ')}
                                                 </span>
                                             </div>
                                         </Link>

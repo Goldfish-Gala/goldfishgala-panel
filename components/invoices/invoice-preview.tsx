@@ -18,7 +18,7 @@ import SpinnerWithText from '../UI/Spinner';
 import { formatToRupiah } from '@/utils/curency-format';
 import { expiringTime, formatedDate } from '@/utils/date-format';
 
-const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
+const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
@@ -30,7 +30,7 @@ const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
     const fetchInvoice = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getInvoiceByCode(authCookie, params.invoiceId, user?.user_id);
+            const response = await getInvoiceByCode(authCookie, params.invoice_id, user?.user_id);
             if (response.success) {
                 setInvoice(response.data[0]);
                 setItemsDetail(response.data[0].fish_details);
@@ -39,7 +39,7 @@ const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie, params.invoiceId, user?.user_id]);
+    }, [authCookie, params.invoice_id, user?.user_id]);
 
     useEffect(() => {
         if (!invoice) {
@@ -165,7 +165,7 @@ const InvoicePreview = ({ params }: { params: { invoiceId: string } }) => {
             pdf.text(text, xPosition, 190);
 
             if (isDownload) {
-                pdf.save('invoice.pdf');
+                pdf.save(`${invoice?.invoice_code}.pdf`);
             } else {
                 const pdfBlob = pdf.output('blob');
                 const pdfUrl = URL.createObjectURL(pdfBlob);

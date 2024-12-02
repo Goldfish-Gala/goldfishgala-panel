@@ -8,7 +8,10 @@ export const metadata: Metadata = {
     title: 'Event Registration',
 };
 
-const FishRegistration = ({ params }: { params: { eventId: string } }) => {
+type Params = Promise<{ eventId: string }>;
+
+const FishRegistration = async (props: { params: Params }) => {
+    const event_id = { event_id: (await props.params).eventId };
     return (
         <div className="flex w-full flex-col items-center justify-center">
             <ul className="mb-5 flex space-x-2 rtl:space-x-reverse">
@@ -19,7 +22,7 @@ const FishRegistration = ({ params }: { params: { eventId: string } }) => {
                     <span>Pendaftaran event</span>
                 </li>
             </ul>
-            <FishRegistrationForm params={params} />
+            <FishRegistrationForm params={event_id} />
         </div>
     );
 };

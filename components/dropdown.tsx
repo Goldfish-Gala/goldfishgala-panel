@@ -5,8 +5,8 @@ import { usePopper } from 'react-popper';
 const Dropdown = (props: any, forwardedRef: any) => {
     const [visibility, setVisibility] = useState<any>(false);
 
-    const referenceRef = useRef<any>();
-    const popperRef = useRef<any>();
+    const referenceRef = useRef<any>(null);
+    const popperRef = useRef<any>(null);
 
     const { styles, attributes } = usePopper(referenceRef.current, popperRef.current, {
         placement: props.placement || 'bottom-end',
@@ -43,11 +43,22 @@ const Dropdown = (props: any, forwardedRef: any) => {
 
     return (
         <>
-            <button ref={referenceRef} type="button" className={props.btnClassName} onClick={() => setVisibility(!visibility)}>
+            <button
+                ref={referenceRef}
+                type="button"
+                className={props.btnClassName}
+                onClick={() => setVisibility(!visibility)}
+            >
                 {props.button}
             </button>
 
-            <div ref={popperRef} style={styles.popper} {...attributes.popper} className="z-50" onClick={() => setVisibility(!visibility)}>
+            <div
+                ref={popperRef}
+                style={styles.popper}
+                {...attributes.popper}
+                className="z-50"
+                onClick={() => setVisibility(!visibility)}
+            >
                 {visibility && props.children}
             </div>
         </>

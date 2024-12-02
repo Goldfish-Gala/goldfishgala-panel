@@ -6,7 +6,7 @@ import IconPhone from '../icon/icon-phone';
 import IconHome from '../icon/icon-home';
 import IconInstagram from '../icon/icon-instagram';
 import { updateUserSubmit } from '@/lib/form-actions';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
 import { formUserCompletingDataSchema } from '@/lib/form-schemas';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
@@ -27,7 +27,7 @@ const FirstLoginForm = () => {
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
-    const [state, formAction] = useFormState(updateUserSubmit.bind(null, user), null);
+    const [state, formAction] = useActionState(updateUserSubmit.bind(null, user), null);
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
 

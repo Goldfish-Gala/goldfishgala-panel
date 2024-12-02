@@ -7,8 +7,11 @@ import { eventRegisterApi } from '@/api/api-event';
 import { cookies } from 'next/headers';
 import { createInvoceApi } from '@/api/api-invoice';
 
-const cookieStore = cookies();
-const authCookie = cookieStore?.get('token');
+const getCookies = async () => {
+    const cookieStore = await cookies();
+    const authCookie = cookieStore?.get('token');
+    return authCookie?.value;
+};
 
 export async function updateUserSubmit(user: User | null, prevState: any, formData: FormData) {
     const validatedFields = {
@@ -19,8 +22,10 @@ export async function updateUserSubmit(user: User | null, prevState: any, formDa
         user_address: formData.get('user_address') as string,
     };
 
+    const authToken = await getCookies();
+
     try {
-        const response = await updateUserApi(user?.user_id, validatedFields, authCookie?.value);
+        const response = await updateUserApi(user?.user_id, validatedFields, authToken);
         if (response.success) {
             return { message: 'Data berhasil diperbarui' };
         }
@@ -54,7 +59,7 @@ export async function fishRegisterSubmit(
         index++;
     }
 
-    const authToken = authCookie?.value;
+    const authToken = await getCookies();
 
     try {
         for (const fishData of fishArray) {
@@ -92,8 +97,10 @@ export async function updateFishUrlSubmit(fishId: string, prevState: any, formDa
         fish_submission_link: formData.get('fish_submission_link') as string,
     };
 
+    const authToken = await getCookies();
+
     try {
-        const response = await updateFishUrlApi(fishId, validatedFields, authCookie?.value);
+        const response = await updateFishUrlApi(fishId, validatedFields, authToken);
         if (response.success) {
             return { message: 'Data berhasil diperbarui' };
         }

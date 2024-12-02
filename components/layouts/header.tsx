@@ -40,7 +40,7 @@ import { formatName } from '@/utils/name-format';
 
 const Header = () => {
     const pathname = usePathname();
-    const { t, i18n } = getTranslation();
+    // const { t, i18n } = getTranslation();
     const dispatch = useDispatch();
     const router = useRouter();
     const cookies = useCookies();
@@ -294,7 +294,7 @@ const Header = () => {
                 </div>
 
                 {/* horizontal menu */}
-                <ul className="horizontal-menu hidden border-t border-[#ebedf2] bg-white px-6 py-1.5 font-semibold text-black dark:border-[#191e3a] dark:bg-black dark:text-white-dark lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse">
+                {/* <ul className="horizontal-menu hidden border-t border-[#ebedf2] bg-white px-6 py-1.5 font-semibold text-black dark:border-[#191e3a] dark:bg-black dark:text-white-dark lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse">
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
@@ -810,7 +810,7 @@ const Header = () => {
                             </li>
                         </ul>
                     </li>
-                </ul>
+                </ul> */}
             </div>
         </header>
     );
