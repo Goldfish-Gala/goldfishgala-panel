@@ -9,7 +9,8 @@ export const metadata: Metadata = {
 
 type Params = Promise<{ invoiceId: string }>;
 
-const InvoiceById = (props: { params: Params }) => {
+const InvoiceById = async (props: { params: Params }) => {
+    const ivoice_id = { invoice_id: (await props.params).invoiceId };
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
@@ -22,7 +23,7 @@ const InvoiceById = (props: { params: Params }) => {
             </ul>
             <div className="pt-5">
                 <div className="mb-5 grid grid-cols-1 gap-5">
-                    <InvoicePreview params={props.params} />
+                    <InvoicePreview params={ivoice_id} />
                 </div>
             </div>
         </div>

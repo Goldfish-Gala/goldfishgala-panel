@@ -18,10 +18,7 @@ import SpinnerWithText from '../UI/Spinner';
 import { formatToRupiah } from '@/utils/curency-format';
 import { expiringTime, formatedDate } from '@/utils/date-format';
 
-type Params = Promise<{ invoiceId: string }>;
-
-const InvoicePreview = async (props: { params: Params }) => {
-    const invoice_id = (await props.params).invoiceId;
+const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
@@ -33,7 +30,7 @@ const InvoicePreview = async (props: { params: Params }) => {
     const fetchInvoice = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getInvoiceByCode(authCookie, invoice_id, user?.user_id);
+            const response = await getInvoiceByCode(authCookie, params.invoice_id, user?.user_id);
             if (response.success) {
                 setInvoice(response.data[0]);
                 setItemsDetail(response.data[0].fish_details);
@@ -42,7 +39,7 @@ const InvoicePreview = async (props: { params: Params }) => {
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie, invoice_id, user?.user_id]);
+    }, [authCookie, params.invoice_id, user?.user_id]);
 
     useEffect(() => {
         if (!invoice) {
