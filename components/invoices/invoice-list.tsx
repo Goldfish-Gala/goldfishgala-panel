@@ -39,6 +39,7 @@ const InvoiceList = () => {
         queryKey: ['allInvoicePayment'],
         queryFn: () => getAllInvoicePayment(),
         enabled: !!authCookie && !!user?.user_id,
+        refetchOnWindowFocus: false,
     });
 
     const flattenedFishes: FlattenedFishType[] = useMemo(() => {
