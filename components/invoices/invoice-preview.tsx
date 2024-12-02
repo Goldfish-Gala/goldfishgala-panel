@@ -17,6 +17,7 @@ import { getInvoiceByCode } from '@/api/api-invoice';
 import SpinnerWithText from '../UI/Spinner';
 import { formatToRupiah } from '@/utils/curency-format';
 import { expiringTime, formatedDate } from '@/utils/date-format';
+import BackButton from '../components/back-button';
 
 const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
     const router = useRouter();
@@ -183,16 +184,19 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
                 </div>
             ) : (
                 <>
-                    <div className="mb-6 flex flex-wrap items-center justify-center gap-4 lg:justify-end">
-                        <button type="button" className="btn btn-primary gap-2" onClick={() => generatePDF(false)}>
-                            <IconPrinter />
-                            Print
-                        </button>
+                    <div className="mb-6 flex flex-wrap items-center justify-between">
+                        <BackButton />
+                        <div className="flex flex-wrap items-center gap-4">
+                            <button type="button" className="btn btn-primary gap-2" onClick={() => generatePDF(false)}>
+                                <IconPrinter />
+                                Print
+                            </button>
 
-                        <button type="button" className="btn btn-success gap-2" onClick={() => generatePDF(true)}>
-                            <IconDownload />
-                            Download
-                        </button>
+                            <button type="button" className="btn btn-success gap-2" onClick={() => generatePDF(true)}>
+                                <IconDownload />
+                                Download
+                            </button>
+                        </div>
                     </div>
                     <div className="overflow-auto">
                         <div className="panel mx-auto w-[700px] !bg-white !p-16 !pb-48 !text-black">
