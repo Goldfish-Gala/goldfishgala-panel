@@ -6,7 +6,7 @@ import { formatToRupiah } from '@/utils/curency-format';
 import { formatedDate } from '@/utils/date-format';
 import { useCookies } from 'next-client-cookies';
 import { useRouter } from 'next/navigation';
-import { use, useCallback, useEffect, useRef, useState } from 'react';
+import { startTransition, useActionState, useCallback, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { InstagramEmbed } from 'react-social-media-embed';
 import IconCopy from '../icon/icon-copy';
@@ -16,7 +16,6 @@ import IconVisit from '../icon/icon-visit';
 import Swal from 'sweetalert2';
 import IconCancel from '../icon/icon-cancel';
 import { useForm } from 'react-hook-form';
-import { useFormState } from 'react-dom';
 import { updateFishUrlSubmit } from '@/lib/form-actions';
 import IconSubmit from '../icon/icon-submit';
 import ConfirmationModal from '../components/confirmation-modal';
@@ -24,7 +23,7 @@ import { formLinkSubmitSchema } from '@/lib/form-schemas';
 import { getOneEventDetail } from '@/api/api-event';
 import SpinnerWithText from '../UI/Spinner';
 
-const FishDetailComponent = ({ params }: { params: { fishId: string } }) => {
+const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
     const [fishData, setFishData] = useState<FishDetailType | null>(null);
     const [submitPhase, setSubmitPhase] = useState('');
     const [loadTime, setLoadTime] = useState(8);
@@ -50,12 +49,12 @@ const FishDetailComponent = ({ params }: { params: { fishId: string } }) => {
         reset,
         setValue,
     } = form;
-    const [state, formAction] = useFormState(updateFishUrlSubmit.bind(null, params.fishId), null);
+    const [state, formAction] = useActionState(updateFishUrlSubmit.bind(null, params.fish_id), null);
 
     const FetchFishDetail = useCallback(async () => {
         setFetching(true);
         try {
-            const fishDetail = await getFishDetailApi(params.fishId, authCookie);
+            const fishDetail = await getFishDetailApi(params.fish_id, authCookie);
             const eventPhase = await getOneEventDetail(authCookie, fishDetail.data[0].event_id);
             if (fishDetail) {
                 setFishData(fishDetail.data[0]);
@@ -67,7 +66,7 @@ const FishDetailComponent = ({ params }: { params: { fishId: string } }) => {
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie, params.fishId]);
+    }, [authCookie, params.fish_id]);
 
     useEffect(() => {
         reset({
@@ -186,7 +185,9 @@ const FishDetailComponent = ({ params }: { params: { fishId: string } }) => {
         });
 
         setErrors({});
-        form.handleSubmit(() => formAction(formValues))();
+        startTransition(() => {
+            formAction(formValues);
+        });
     };
 
     useEffect(() => {

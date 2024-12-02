@@ -17,24 +17,28 @@ import { getTranslation } from '@/i18n';
 function App({ children }: PropsWithChildren) {
     const themeConfig = useSelector((state: IRootState) => state.themeConfig);
     const dispatch = useDispatch();
-    const { initLocale } = getTranslation();
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        dispatch(toggleTheme(localStorage.getItem('theme') || themeConfig.theme));
-        dispatch(toggleMenu(localStorage.getItem('menu') || themeConfig.menu));
-        dispatch(toggleLayout(localStorage.getItem('layout') || themeConfig.layout));
-        dispatch(toggleRTL(localStorage.getItem('rtlClass') || themeConfig.rtlClass));
-        dispatch(toggleAnimation(localStorage.getItem('animation') || themeConfig.animation));
-        dispatch(toggleNavbar(localStorage.getItem('navbar') || themeConfig.navbar));
-        dispatch(toggleSemidark(localStorage.getItem('semidark') || themeConfig.semidark));
-        // locale
-        initLocale(themeConfig.locale);
+        const initialize = async () => {
+            const { initLocale } = await getTranslation();
 
-        setIsLoading(false);
+            dispatch(toggleTheme(localStorage.getItem('theme') || themeConfig.theme));
+            dispatch(toggleMenu(localStorage.getItem('menu') || themeConfig.menu));
+            dispatch(toggleLayout(localStorage.getItem('layout') || themeConfig.layout));
+            dispatch(toggleRTL(localStorage.getItem('rtlClass') || themeConfig.rtlClass));
+            dispatch(toggleAnimation(localStorage.getItem('animation') || themeConfig.animation));
+            dispatch(toggleNavbar(localStorage.getItem('navbar') || themeConfig.navbar));
+            dispatch(toggleSemidark(localStorage.getItem('semidark') || themeConfig.semidark));
+
+            await initLocale(themeConfig.locale);
+
+            setIsLoading(false);
+        };
+
+        initialize();
     }, [
         dispatch,
-        initLocale,
         themeConfig.theme,
         themeConfig.menu,
         themeConfig.layout,

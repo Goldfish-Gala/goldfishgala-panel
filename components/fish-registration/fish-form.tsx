@@ -9,7 +9,8 @@ import IconHome from '../icon/icon-home';
 import IconInstagram from '../icon/icon-instagram';
 import IconX from '../icon/icon-x';
 import { fishRegisterSubmit, updateUserSubmit } from '@/lib/form-actions';
-import { useFormState } from 'react-dom';
+import { useActionState } from 'react';
+import { startTransition } from 'react';
 import { formFishRegistrationSchema, formUserCompletingDataSchemaRegFish } from '@/lib/form-schemas';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
@@ -27,12 +28,7 @@ import { Stepper } from '@mantine/core';
 import IconUserCheck from '../icon/icon-user-check';
 import IconFish from '../icon/icon-fish';
 
-interface Price {
-    value: string;
-    label: string;
-}
-
-const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
+const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
     const router = useRouter();
     const dispatch = useDispatch();
     const cookies = useCookies();
@@ -65,9 +61,9 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         reset,
         setValue,
     } = form1;
-    const [state1, formAction1] = useFormState(updateUserSubmit.bind(null, user), null);
-    const [state2, formAction2] = useFormState(
-        fishRegisterSubmit.bind(null, { user: user, eventId: params.eventId }),
+    const [state1, formAction1] = useActionState(updateUserSubmit.bind(null, user), null);
+    const [state2, formAction2] = useActionState(
+        fishRegisterSubmit.bind(null, { user: user, eventId: params.event_id }),
         null
     );
 
@@ -87,7 +83,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
     const fetchAllEventPrices = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getEventPricesApi(params.eventId, authCookie);
+            const response = await getEventPricesApi(params.event_id, authCookie);
             if (response.success) {
                 setEventPrices(response.data);
                 setFetching(false);
@@ -95,7 +91,7 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie, params.eventId]);
+    }, [authCookie, params.event_id]);
 
     useEffect(() => {
         fetchAllEventPrices();
@@ -215,7 +211,10 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
 
         setErrors({});
         setLoading(true);
-        form1.handleSubmit(() => formAction1(formValues))();
+
+        startTransition(() => {
+            formAction1(formValues);
+        });
     };
 
     const handleValidation2 = (formData: FormData): boolean => {
@@ -269,7 +268,9 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
             validFormData.append(`fish[${i}][fish_name]`, formData.get(`fish[${i}][fish_name]`) as string);
         }
 
-        formAction2(validFormData);
+        startTransition(() => {
+            formAction2(validFormData);
+        });
     };
 
     useEffect(() => {
@@ -509,12 +510,12 @@ const FishRegistrationForm = ({ params }: { params: { eventId: string } }) => {
                                                                 })) || []
                                                             }
                                                             styles={{
-                                                                control: (provided) => ({
+                                                                control: (provided: any) => ({
                                                                     ...provided,
                                                                     paddingLeft: 6,
                                                                 }),
                                                             }}
-                                                            onChange={(selectedOption) => {
+                                                            onChange={(selectedOption: any) => {
                                                                 handleInputChange2(index, {
                                                                     target: {
                                                                         name: `fish[${index}][event_price_id]`,
