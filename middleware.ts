@@ -9,7 +9,17 @@ type ProtectedRoutes = {
 };
 
 const protectedRoutes: ProtectedRoutes = {
-    1: ['/dashboard', '/'],
+    1: [
+        '/dashboard',
+        '/',
+        '/fish-registration',
+        '/invoice/preview',
+        '/invoices',
+        '/payment-success',
+        '/registered-fishes',
+        '/users',
+        '/profile',
+    ],
     2: [
         '/',
         '/dashboard',
@@ -37,7 +47,16 @@ const protectedRoutes: ProtectedRoutes = {
         '/selected-nominees',
         '/winner-selection',
     ],
-    4: ['/fish-candidates', '/fish-score', '/selected-nominees', '/winner-selection', '/', '/dashboard'],
+    4: [
+        '/fish-candidates',
+        '/fish-score',
+        '/selected-nominees',
+        '/winner-selection',
+        '/',
+        '/dashboard',
+        '/users',
+        '/profile',
+    ],
 };
 
 export async function middleware(req: NextRequest) {

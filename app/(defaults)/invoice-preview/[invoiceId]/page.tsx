@@ -1,18 +1,13 @@
-import OngoingEvent from '@/components/dashboard/ongoing-event';
-import PendingPayment from '@/components/dashboard/pending-payment';
-import WelcomeCard from '@/components/dashboard/welcome-card';
-import InvoiceList from '@/components/invoices/invoice-list';
+import Loading from '@/app/loading';
 import InvoicePreview from '@/components/invoices/invoice-preview';
-import FishList from '@/components/registered-fishes/fish-list';
 import { Metadata } from 'next';
-import Link from 'next/link';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
     title: 'Invoices',
 };
 
-const Test = ({ params }: { params: { invoiceId: string } }) => {
+const InvoiceById = ({ params }: { params: { invoiceId: string } }) => {
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
@@ -32,4 +27,4 @@ const Test = ({ params }: { params: { invoiceId: string } }) => {
     );
 };
 
-export default Test;
+export default InvoiceById;

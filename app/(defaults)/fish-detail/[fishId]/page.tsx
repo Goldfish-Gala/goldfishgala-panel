@@ -1,6 +1,7 @@
+import Loading from '@/app/loading';
 import FishDetailComponent from '@/components/fish-detail';
 import { Metadata } from 'next';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
     title: 'Fish Detail',

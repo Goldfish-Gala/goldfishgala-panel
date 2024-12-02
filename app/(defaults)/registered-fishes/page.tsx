@@ -1,10 +1,11 @@
+import Loading from '@/app/loading';
 import OngoingEvent from '@/components/dashboard/ongoing-event';
 import PendingPayment from '@/components/dashboard/pending-payment';
 import WelcomeCard from '@/components/dashboard/welcome-card';
 import FishList from '@/components/registered-fishes/fish-list';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { Suspense } from 'react';
 
 export const metadata: Metadata = {
     title: 'Registered fishes',

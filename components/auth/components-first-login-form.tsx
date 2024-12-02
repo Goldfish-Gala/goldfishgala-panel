@@ -89,7 +89,7 @@ const FirstLoginForm = () => {
         if (state?.message === 'Data berhasil diperbarui') {
             showMessage('Data updated successfully');
             setTimeout(() => {
-                router.push(user?.role_id === 4 ? '/judges' : '/dashboard');
+                router.push(user?.role_id === 4 ? '/fish-candidates' : '/dashboard');
             }, 3000);
         } else if (state?.message === 'Gagal memperbarui data') {
             setLoading(false);

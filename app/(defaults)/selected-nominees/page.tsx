@@ -1,7 +1,8 @@
+import Loading from '@/app/loading';
 import SelectedFishes from '@/components/selected-nominees';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 export const metadata: Metadata = {

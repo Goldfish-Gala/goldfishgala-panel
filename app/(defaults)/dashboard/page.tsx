@@ -1,3 +1,4 @@
+import Loading from '@/app/loading';
 import OngoingEvent from '@/components/dashboard/ongoing-event';
 import PendingPayment from '@/components/dashboard/pending-payment';
 import WelcomeCard from '@/components/dashboard/welcome-card';
@@ -20,7 +21,7 @@ import ComponentsUsersProfilePaymentHistory from '@/components/users/profile/com
 import { IRootState } from '@/store';
 import { Metadata } from 'next';
 import Link from 'next/link';
-import React from 'react';
+import React, { Suspense } from 'react';
 import { useSelector } from 'react-redux';
 
 export const metadata: Metadata = {

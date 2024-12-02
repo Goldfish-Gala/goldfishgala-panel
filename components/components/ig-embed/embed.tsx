@@ -10,9 +10,10 @@ interface IgEmbedType {
     handleModal: (fishId: string) => void;
     isLoading: boolean;
     buttonText: string;
+    username: string;
 }
 
-const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType) => {
+const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: IgEmbedType) => {
     const [isExiting, setIsExiting] = useState(fish.exiting || false);
 
     const handleNominate = async () => {
@@ -44,6 +45,7 @@ const IGEmbed = ({ url, fish, handleModal, isLoading, buttonText }: IgEmbedType)
                                   }`
                                 : 'N/A',
                         },
+                        { label: 'User', value: username },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">
                             <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
