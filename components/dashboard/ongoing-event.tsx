@@ -29,6 +29,7 @@ const OngoingEvent = () => {
         queryKey: ['ongoingEvent'],
         queryFn: () => fetchOngoingEvent(),
         enabled: !!authCookie,
+        refetchOnWindowFocus: false,
     });
 
     const showMessage = (msg = '', type = 'success') => {
@@ -63,14 +64,15 @@ const OngoingEvent = () => {
             ? 'Pendaftaran ditutup'
             : phaseCode === 'on_review_phase'
             ? 'Sedang dalam penilaian'
-            : phaseCode === 'coming_soon_phase'
-            ? 'Segera hadir'
             : phaseCode === 'content_upload_phase'
             ? 'Submit post instagram'
             : 'Pengumuman juara';
 
     const handleRegisterFalse = async () => {
-        const msg = phaseCode === 'coming_soon_phase' ? 'Pendaftaran belum dibuka' : 'Pendaftaran sudah ditutup';
+        const msg =
+            phaseCode === 'coming_soon_phase' || statusCode !== 'grey_status'
+                ? 'Pendaftaran belum dibuka'
+                : 'Pendaftaran sudah ditutup';
         showMessage(msg, 'info');
     };
 
@@ -97,57 +99,65 @@ const OngoingEvent = () => {
                     <div className="mb-5">
                         <h5 className="text-lg font-semibold dark:text-white-light">Event sedang berlangsung</h5>
                     </div>
-                    <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
-                        <div className="flex w-full flex-col items-center gap-8 font-semibold text-white-dark xl:mt-2">
-                            <p className="text-xl font-extrabold text-dark dark:text-white-dark md:text-2xl lg:text-3xl xl:text-4xl">
-                                {data?.event_name}
+                    {!data ? (
+                        <div className="flex min-h-[200px] flex-wrap">
+                            <p className="mx-auto mt-10 text-base font-extrabold text-dark dark:text-white-dark md:mt-10">
+                                Tidak ada event berlangsung
                             </p>
-                            <div className="w-[320px] rounded border border-[#ebedf2] p-6 px-3 dark:border-0 dark:bg-[#1b2e4b] sm:px-6 md:w-[420px]">
-                                <div className="flex flex-col items-center gap-1">
-                                    <div className="flex w-full items-center justify-between">
-                                        <div className="flex w-[40%] items-center justify-between">
-                                            <p className="text-sm font-bold md:text-lg">Status / Fase</p>
-                                            <p>:</p>
-                                        </div>
-                                        <div className="item-center flex gap-2">
-                                            <div className="pt-0.5 md:pt-1">
-                                                <IconCircle fill={statusColor} />
+                        </div>
+                    ) : (
+                        <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
+                            <div className="flex w-full flex-col items-center gap-8 font-semibold text-white-dark xl:mt-2">
+                                <p className="text-xl font-extrabold text-dark dark:text-white-dark md:text-2xl lg:text-3xl xl:text-4xl">
+                                    {data?.event_name}
+                                </p>
+                                <div className="w-[320px] rounded border border-[#ebedf2] p-6 px-3 dark:border-0 dark:bg-[#1b2e4b] sm:px-6 md:w-[420px]">
+                                    <div className="flex flex-col items-center gap-1">
+                                        <div className="flex w-full items-center justify-between">
+                                            <div className="flex w-[40%] items-center justify-between">
+                                                <p className="text-sm font-bold md:text-lg">Status / Fase</p>
+                                                <p>:</p>
                                             </div>
-                                            <p className="text-xs font-semibold md:text-sm">{eventPhase}</p>
+                                            <div className="item-center flex gap-2">
+                                                <div className="pt-0.5 md:pt-1">
+                                                    <IconCircle fill={statusColor} />
+                                                </div>
+                                                <p className="text-xs font-semibold md:text-sm">{eventPhase}</p>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="flex w-full items-center justify-between">
-                                        <div className="flex w-[40%] items-center justify-between">
-                                            <p className="text-sm font-bold md:text-lg">Durasi</p>
-                                            <p>:</p>
+                                        <div className="flex w-full items-center justify-between">
+                                            <div className="flex w-[40%] items-center justify-between">
+                                                <p className="text-sm font-bold md:text-lg">Durasi</p>
+                                                <p>:</p>
+                                            </div>
+                                            <p className="flex items-center rounded-full bg-white-light px-2 py-0.5 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
+                                                <IconClock className="h-3 w-3 ltr:mr-1 rtl:ml-1" />
+                                                {dayLeft()} Hari lagi
+                                            </p>
                                         </div>
-                                        <p className="flex items-center rounded-full bg-white-light px-2 py-0.5 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
-                                            <IconClock className="h-3 w-3 ltr:mr-1 rtl:ml-1" />
-                                            {dayLeft()} Hari lagi
-                                        </p>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        {phaseCode === 'open_phase' ? (
-                            <Link href={`/fish-registration/${data?.event_id}`}>
+                            {phaseCode === 'open_phase' && statusCode !== 'grey_status' ? (
+                                <Link href={`/fish-registration/${data?.event_id}`}>
+                                    <button
+                                        disabled={isDisable}
+                                        className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
+                                        onClick={() => setDisable(true)}
+                                    >
+                                        {isDisable ? 'Loading...' : 'Daftarkan Ikanmu Sekarang'}
+                                    </button>
+                                </Link>
+                            ) : (
                                 <button
-                                    disabled={isDisable}
                                     className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
-                                    onClick={() => setDisable(true)}
+                                    onClick={handleRegisterFalse}
                                 >
-                                    {isDisable ? 'Loading...' : 'Daftarkan Ikanmu Sekarang'}
+                                    Daftarkan Ikanmu Sekarang
                                 </button>
-                            </Link>
-                        ) : (
-                            <button
-                                className="btn btn-primary mb-5 hover:bg-info  active:scale-95"
-                                onClick={handleRegisterFalse}
-                            >
-                                Daftarkan Ikanmu Sekarang
-                            </button>
-                        )}
-                    </div>
+                            )}
+                        </div>
+                    )}
                 </>
             )}
         </div>

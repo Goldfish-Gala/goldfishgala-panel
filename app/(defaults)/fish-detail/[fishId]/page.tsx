@@ -1,4 +1,5 @@
 import Loading from '@/app/loading';
+import BackButton from '@/components/components/back-button';
 import FishDetailComponent from '@/components/fish-detail';
 import { Metadata } from 'next';
 import React, { Suspense } from 'react';
@@ -21,6 +22,9 @@ const FishDetail = async (props: { params: Params }) => {
                     <span>Detail ikan</span>
                 </li>
             </ul>
+            <div className="mt-4 flex flex-wrap items-center justify-start">
+                <BackButton />
+            </div>
             <div className="flex w-full items-center justify-center">
                 <div className="panel relative w-full max-w-lg p-0">
                     <FishDetailComponent params={fish_id} />

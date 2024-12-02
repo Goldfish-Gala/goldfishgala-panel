@@ -41,6 +41,7 @@ const PendingPayment = () => {
         queryKey: ['pendingPayment'],
         queryFn: () => fetchPendingPayment(),
         enabled: !!authCookie && !!user?.user_id,
+        refetchOnWindowFocus: false,
     });
 
     const flattenedFishes: FlattenedFishType[] = useMemo(() => {
