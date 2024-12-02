@@ -95,6 +95,7 @@ const Header = () => {
 
     const handleLogout = () => {
         cookies.remove('token', { path: '/' });
+        sessionStorage.removeItem('sessionExpiration');
     };
 
     function createMarkup(messages: any) {

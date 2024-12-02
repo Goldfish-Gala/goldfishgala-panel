@@ -10,6 +10,12 @@ const AuthSuccess = () => {
     const router = useRouter();
 
     useEffect(() => {
+        const session = sessionStorage.getItem('sessionExpiration');
+        const sessionTimestamp = Date.now();
+        if (!session) {
+            sessionStorage.setItem('sessionExpiration', sessionTimestamp.toString());
+        }
+
         const timer = setInterval(() => {
             setCountdown((prevCountdown) => (prevCountdown > 0 ? prevCountdown - 1 : 0));
         }, 1000);
