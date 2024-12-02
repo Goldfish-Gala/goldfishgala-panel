@@ -165,7 +165,7 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
             pdf.text(text, xPosition, 190);
 
             if (isDownload) {
-                pdf.save('invoice.pdf');
+                pdf.save(`${invoice?.invoice_code}.pdf`);
             } else {
                 const pdfBlob = pdf.output('blob');
                 const pdfUrl = URL.createObjectURL(pdfBlob);
