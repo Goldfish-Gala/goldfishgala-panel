@@ -196,6 +196,57 @@ interface FishPaginationType {
     };
 }
 
+interface FishScore {
+    fish_score_id: string;
+    champion_category_id: string;
+    champion_category_name: string;
+    judge_user_id: string;
+    fish_score: number | null;
+}
+
+interface FishScoresType {
+    fish_id: string;
+    user_id: string;
+    event_price_id: string;
+    fish_name: string;
+    fish_size: string;
+    fish_submission_link: string;
+    fish_created_date: string;
+    fish_updated_date: string;
+    fish_owner_name: string;
+    user_email: string;
+    user_phone: string;
+    fishscores: FishScore[];
+}
+interface FishScorePaginationType {
+    success: boolean;
+    message: string;
+    data: FishScoreType[];
+    pagination: {
+        totalData: number;
+        currentPage: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
+}
+
+interface FishScoresModalType {
+    fish_score_id: string;
+    fish_id: string;
+    champion_category_id: string;
+    user_id: string;
+    fish_score: number;
+    fish_score_updated_at: string;
+    fish_name: string;
+    fish_size: string;
+    fish_submission_link: string;
+    champion_category_name: string;
+    role_id: number;
+    user_fname: string;
+    user_lname: string;
+}
+
 interface EventRegisterType {
     event_id: string;
     user_id: string | undefined;

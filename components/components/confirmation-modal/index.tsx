@@ -84,7 +84,7 @@ const ConfirmationModal = ({
                                                 <button
                                                     onClick={handleConfirm}
                                                     disabled={isLoading}
-                                                    type="submit"
+                                                    type="button"
                                                     className={`btn2 btn-gradient3 !px-6 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] ${
                                                         isLoading ? 'hover:bg-gray-500' : ''
                                                     }`}

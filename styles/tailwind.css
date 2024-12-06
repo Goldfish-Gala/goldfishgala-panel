@@ -58,6 +58,12 @@
         @apply bg-[#060818];
     }
 
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
     /* Panel */
     .panel {
         @apply relative rounded-md bg-white p-5 shadow dark:bg-black;

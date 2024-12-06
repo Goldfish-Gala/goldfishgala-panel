@@ -1,3 +1,4 @@
+import FishScore from '@/components/fishes-score';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -19,7 +20,7 @@ const Judges = () => {
                 </li>
             </ul>
             <div className="pt-5">
-                <div className="mb-5 grid grid-cols-1 gap-5 lg:grid-cols-3"></div>
+                <FishScore />
             </div>
         </div>
     );

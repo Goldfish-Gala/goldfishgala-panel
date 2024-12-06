@@ -1,12 +1,13 @@
 'use client';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useCookies } from 'next-client-cookies';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import { useInView } from 'react-intersection-observer';
+import { useCookies } from 'next-client-cookies';
+import Swal from 'sweetalert2';
 import SpinnerWithText from '../UI/Spinner';
 import { getAllFishCandidateApi, selectFishNominateApi } from '@/api/api-nomination';
-import Swal from 'sweetalert2';
 import ConfirmationModal from '../components/confirmation-modal';
 import IGEmbed from '../components/ig-embed/embed';
 
@@ -16,6 +17,7 @@ const FishCandidates = () => {
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const queryClient = useQueryClient();
+    const { ref, inView } = useInView();
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 6));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
@@ -52,6 +54,12 @@ const FishCandidates = () => {
             }
         }
     }, [data, limit, queryClient]);
+
+    useEffect(() => {
+        if (inView && data?.pages[data.pages.length - 1].pagination.hasNextPage) {
+            fetchNextPage();
+        }
+    }, [inView, data, fetchNextPage]);
 
     const showMessage = (msg = '', type = 'success') => {
         const toast: any = Swal.mixin({
@@ -167,6 +175,7 @@ const FishCandidates = () => {
             </div>
 
             <button
+                ref={ref}
                 disabled={isFetchingNextPage || !data.pages[data.pages.length - 1].pagination.hasNextPage}
                 className="btn2 btn-gradient2 mx-auto mt-6 text-base"
                 onClick={() => fetchNextPage()}
