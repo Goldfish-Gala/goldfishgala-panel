@@ -27,3 +27,7 @@ export const formLinkSubmitSchema = z.object({
         .min(1, { message: 'Kategori ikan wajib di isi' })
         .url({ message: 'Link tidak valid' }),
 });
+
+export const formFishScoreSchema = z.object({
+    fishscores: z.number().min(1, { message: 'Kategori ikan wajib di isi' }),
+});

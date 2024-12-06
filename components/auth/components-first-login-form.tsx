@@ -95,7 +95,7 @@ const FirstLoginForm = () => {
             setLoading(false);
             showMessage('Data failed to update', 'error');
         }
-    }, [router, state?.message, user?.role_id]);
+    }, [router, state, user?.role_id]);
 
     return (
         <form className="space-y-5 dark:text-white" action={handleSubmit}>

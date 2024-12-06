@@ -6,6 +6,7 @@ import { fishRegisterApi, updateFishUrlApi } from '@/api/api-fish';
 import { eventRegisterApi } from '@/api/api-event';
 import { cookies } from 'next/headers';
 import { createInvoceApi } from '@/api/api-invoice';
+import { updateScoreApi } from '@/api/api-nomination';
 
 const getCookies = async () => {
     const cookieStore = await cookies();
@@ -108,5 +109,23 @@ export async function updateFishUrlSubmit(fishId: string, prevState: any, formDa
         return { message: 'Gagal memperbarui data' };
     } catch (error: any) {
         return { message: 'Gagal memperbarui data' };
+    }
+}
+
+export async function updateFishScoreSubmit(
+    state: { message: string } | null,
+    payload: { fish_score_id: string; fish_score: number }[]
+): Promise<{ message: string }> {
+    const authToken = await getCookies();
+
+    try {
+        const response = await updateScoreApi(payload, authToken);
+        if (response.success) {
+            return { message: 'Fish score submitted succesfully' };
+        }
+
+        return { message: 'Fish score failed to submit' };
+    } catch (error: any) {
+        return { message: 'Fish score failed to submit' };
     }
 }

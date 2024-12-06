@@ -285,7 +285,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
             setLoading(false);
             showMessage(state1?.message, 'error');
         }
-    }, [authCookie, dispatch, router, state1?.message]);
+    }, [authCookie, dispatch, router, state1]);
 
     useEffect(() => {
         if (state2?.message === 'Ikan berhasil didaftarkan') {
@@ -299,7 +299,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
             setLoading(false);
             showMessage(state2.message, 'error');
         }
-    }, [state2?.data, state2?.message]);
+    }, [state2?.data, state2]);
 
     return (
         <div className="panel mx-auto w-[330px] px-6 pb-4 pt-10 sm:w-[450px] sm:px-8">

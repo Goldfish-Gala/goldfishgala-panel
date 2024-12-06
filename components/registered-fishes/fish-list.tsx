@@ -87,8 +87,8 @@ const FishList = () => {
                             key={fish.fish_id}
                         >
                             <div className="text-white">
-                                <p className="text-xl font-extrabold">{fish.fish_name}</p>
-                                <p className="mt-1 text-sm font-semibold">Event : {event_name}</p>
+                                <p className="text-xl font-extrabold capitalize">{fish.fish_name}</p>
+                                <p className="mt-1 text-sm font-semibold capitalize">Event : {event_name}</p>
                             </div>
                             <Link href={`/fish-detail/${fish.fish_id}`}>
                                 <button

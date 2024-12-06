@@ -12,11 +12,13 @@ import { cancelFishNomineesApi, getAllSelectedFishApi } from '@/api/api-nominati
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
+import { useInView } from 'react-intersection-observer';
 
 const SelectedFishes = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const searchParams = useSearchParams();
+    const { ref, inView } = useInView();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const user = useSelector((state: IRootState) => state.auth.user);
@@ -64,6 +66,12 @@ const SelectedFishes = () => {
             }
         }
     }, [data, limit, queryClient, sort]);
+
+    useEffect(() => {
+        if (inView && data?.pages[data.pages.length - 1].pagination.hasNextPage) {
+            fetchNextPage();
+        }
+    }, [inView, data, fetchNextPage]);
 
     const showMessage = (msg = '', type = 'success') => {
         const toast: any = Swal.mixin({
@@ -172,12 +180,13 @@ const SelectedFishes = () => {
                             username={fish.user_name}
                             handleModal={handleOpenModal}
                             isLoading={isLoading}
-                            buttonText="Select as nominee"
+                            buttonText="Remove from nominees"
                         />
                     ))
                 )}
             </div>
             <button
+                ref={ref}
                 disabled={isFetchingNextPage || !data.pages[data.pages.length - 1].pagination.hasNextPage}
                 className="btn2 btn-gradient2 mx-auto mt-6 text-base"
                 onClick={() => fetchNextPage()}

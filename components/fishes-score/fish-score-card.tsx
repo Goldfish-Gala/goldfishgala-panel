@@ -1,30 +1,30 @@
 'use client';
 
-import { render } from '@headlessui/react/dist/utils/render';
-import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import { InstagramEmbed } from 'react-social-media-embed';
+import FishScoreModal from './fish-score-modal';
+import { useEffect, useState } from 'react';
 
 interface IgEmbedType {
-    url: string;
-    fish: FishJudgesType;
-    handleModal: (fishId: string) => void;
-    isLoading: boolean;
-    buttonText: string;
-    username: string;
+    fish: FishScoresType;
+    setDataChange: (change: boolean | ((prev: boolean) => boolean)) => void;
 }
 
-const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: IgEmbedType) => {
-    const [isExiting, setIsExiting] = useState(fish.exiting || false);
+const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
+    const [openModal, setOpenModal] = useState(false);
+    const form = useForm<FishScoresType>({
+        defaultValues: {
+            fishscores: fish.fishscores,
+        },
+    });
 
-    const handleNominate = async () => {
-        handleModal(fish.fish_id);
-    };
+    const { register, reset } = form;
 
     useEffect(() => {
-        if (fish.exiting) {
-            setIsExiting(true);
-        }
-    }, [fish.exiting]);
+        reset({
+            fishscores: fish.fishscores,
+        });
+    }, [fish, reset]);
 
     const isValidInstagramUrl = (url: string | null) => {
         const regex = /^https:\/\/www\.instagram\.com\/p\/[\w-]+(\/.*)?(\?[\w&%=+-]*)?$/;
@@ -45,7 +45,7 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
                                   }`
                                 : 'N/A',
                         },
-                        { label: 'User', value: username },
+                        { label: 'Owner', value: fish.fish_owner_name },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">
                             <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
@@ -64,21 +64,39 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
                         </div>
                     ))}
                 </div>
-                <button className="btn2 btn-gradient3 mt-4 px-4 py-2" disabled={isLoading} onClick={handleNominate}>
-                    {buttonText}
-                </button>
+                <form className="mt-4 flex w-full flex-col items-center justify-between gap-6">
+                    <div className="grid w-full grid-cols-2 gap-2">
+                        {fish.fishscores.map((item, index) => (
+                            <div className="flex items-center justify-between gap-2" key={index}>
+                                <label htmlFor={item.fish_score_id}>{item.champion_category_name}</label>
+                                <input
+                                    className="form-input w-[60px] bg-white placeholder:text-white-dark"
+                                    type="number"
+                                    readOnly
+                                    id={item.fish_score_id}
+                                    {...register(`fishscores.${index}.fish_score`)}
+                                    disabled
+                                />
+                            </div>
+                        ))}
+                    </div>
+                    <button
+                        type="button"
+                        className="btn2 btn-gradient3 h-fit px-2 py-1.5"
+                        onClick={() => setOpenModal(true)}
+                    >
+                        Edit Scores
+                    </button>
+                    <FishScoreModal fish={fish} open={openModal} setOpen={setOpenModal} setDataChange={setDataChange} />
+                </form>
             </div>
         );
     };
 
     return (
         <>
-            {!isValidInstagramUrl(url) || !url ? (
-                <div
-                    className={`panel flex w-full flex-col items-center justify-center gap-2 px-1 pb-6 pt-1 transition-all duration-500 ease-in-out ${
-                        isExiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
-                    }`}
-                >
+            {!isValidInstagramUrl(fish.fish_submission_link) || !fish.fish_submission_link ? (
+                <div className={`panel flex w-full flex-col items-center justify-center gap-2 px-1 pb-6 pt-1`}>
                     <div className="mb-2 flex h-full min-h-[400px] w-full items-center justify-center rounded border border-white-light dark:border-white-dark">
                         <p>Link Instagram invalid / privacy not public</p>
                     </div>
@@ -86,12 +104,10 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
                 </div>
             ) : (
                 <div
-                    className={`panel flex h-full w-full flex-col items-center justify-center gap-2 px-0 pb-6 pl-0.5 pt-1 transition-all duration-500 ease-in-out sm:pt-4 ${
-                        isExiting ? 'scale-95 opacity-0' : 'scale-100 opacity-100'
-                    }`}
+                    className={`panel flex h-full w-full flex-col items-center justify-center gap-2 px-0 pb-0 pl-0.5 pt-1`}
                 >
                     <div className="flex w-full flex-grow items-center justify-center border-white md:w-11/12">
-                        <InstagramEmbed url={url} width="100%" />
+                        <InstagramEmbed url={fish.fish_submission_link} width="100%" />
                     </div>
                     {detailEmbed()}
                 </div>
@@ -100,4 +116,4 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
     );
 };
 
-export default IGEmbed;
+export default FishCard;
