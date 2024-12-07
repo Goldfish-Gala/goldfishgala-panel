@@ -1,3 +1,5 @@
+'use server';
+
 import { updateUserApi } from '@/api/api-user';
 import { formUserCompletingDataSchema } from './form-schemas';
 import { revalidatePath } from 'next/cache';
