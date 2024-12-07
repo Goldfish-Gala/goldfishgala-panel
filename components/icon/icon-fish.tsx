@@ -1,3 +1,4 @@
+'use client';
 const IconFish = ({ className }: { className?: string }) => {
     return (
         <svg
