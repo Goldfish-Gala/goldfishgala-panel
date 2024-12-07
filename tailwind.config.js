@@ -31,7 +31,7 @@ module.exports = {
                 },
                 success: {
                     DEFAULT: '#00ab55',
-                    light: '#ddf5f0',
+                    light: '#28D47E',
                     'dark-light': 'rgba(0,171,85,.15)',
                 },
                 danger: {

@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form';
 import { InstagramEmbed } from 'react-social-media-embed';
 import FishScoreModal from './fish-score-modal';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 
 interface IgEmbedType {
     fish: FishScoresType;
@@ -30,6 +30,10 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
         const regex = /^https:\/\/www\.instagram\.com\/p\/[\w-]+(\/.*)?(\?[\w&%=+-]*)?$/;
         return url && regex.test(url);
     };
+
+    const hasIncompleteScores = useMemo(() => {
+        return fish.fishscores.some((item) => item.fish_score === null || item.fish_score === 0);
+    }, [fish.fishscores]);
 
     const detailEmbed = () => {
         return (
@@ -82,10 +86,14 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
                     </div>
                     <button
                         type="button"
-                        className="btn2 btn-gradient3 h-fit px-2 py-1.5"
+                        className={`btn2 ${
+                            hasIncompleteScores
+                                ? 'bg-danger hover:bg-danger-light'
+                                : 'bg-success hover:bg-success-light'
+                        } h-fit px-2 py-1.5 text-white`}
                         onClick={() => setOpenModal(true)}
                     >
-                        Edit Scores
+                        {hasIncompleteScores ? 'Submit Scores' : 'Edit Scores'}
                     </button>
                     <FishScoreModal fish={fish} open={openModal} setOpen={setOpenModal} setDataChange={setDataChange} />
                 </form>
