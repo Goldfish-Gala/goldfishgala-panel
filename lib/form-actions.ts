@@ -23,17 +23,12 @@ export async function updateUserSubmit(user: User | null, prevState: any, formDa
     };
 
     const authToken = await getCookies();
-
-    try {
-        const response = await updateUserApi(user?.user_id, validatedFields, authToken);
-        if (response.success) {
-            return { message: 'Data berhasil diperbarui' };
-        }
-
-        return { message: 'Gagal memperbarui data' };
-    } catch (error: any) {
-        return { message: 'Gagal memperbarui data' };
+    const response = await updateUserApi(user?.user_id, validatedFields, authToken);
+    if (response.success) {
+        return { message: 'Data berhasil diperbarui' };
     }
+
+    return { message: 'Gagal memperbarui data' };
 }
 
 export async function fishRegisterSubmit(
@@ -60,36 +55,31 @@ export async function fishRegisterSubmit(
     }
 
     const authToken = await getCookies();
-
-    try {
-        for (const fishData of fishArray) {
-            const createFish = await fishRegisterApi(fishData, authToken);
-            if (!createFish.success) {
-                return { message: 'Gagal mendaftarkan ikan' };
-            }
-            fishIds.push(createFish.data[0].fish_id);
-        }
-
-        const body = {
-            event_id: params.eventId,
-            user_id: params.user.user_id,
-            fish_id: fishIds,
-        };
-
-        const eventReg = await eventRegisterApi(body, authToken);
-        if (!eventReg.success) {
+    for (const fishData of fishArray) {
+        const createFish = await fishRegisterApi(fishData, authToken);
+        if (!createFish.success) {
             return { message: 'Gagal mendaftarkan ikan' };
         }
-
-        const createInvoice = await createInvoceApi(eventReg.data[0].user_reg_id, authToken);
-        if (!createInvoice.success) {
-            return { message: 'Gagal mendaftarkan ikan' };
-        }
-
-        return { message: 'Ikan berhasil didaftarkan', data: createInvoice.data.invoiceUrl };
-    } catch (error: any) {
-        return { message: `Gagal mendaftarkan ikan` };
+        fishIds.push(createFish.data[0].fish_id);
     }
+
+    const body = {
+        event_id: params.eventId,
+        user_id: params.user.user_id,
+        fish_id: fishIds,
+    };
+
+    const eventReg = await eventRegisterApi(body, authToken);
+    if (!eventReg.success) {
+        return { message: 'Gagal mendaftarkan ikan' };
+    }
+
+    const createInvoice = await createInvoceApi(eventReg.data[0].user_reg_id, authToken);
+    if (!createInvoice.success) {
+        return { message: 'Gagal mendaftarkan ikan' };
+    }
+
+    return { message: 'Ikan berhasil didaftarkan', data: createInvoice.data.invoiceUrl };
 }
 
 export async function updateFishUrlSubmit(fishId: string, prevState: any, formData: FormData) {
@@ -98,17 +88,12 @@ export async function updateFishUrlSubmit(fishId: string, prevState: any, formDa
     };
 
     const authToken = await getCookies();
-
-    try {
-        const response = await updateFishUrlApi(fishId, validatedFields, authToken);
-        if (response.success) {
-            return { message: 'Data berhasil diperbarui' };
-        }
-
-        return { message: 'Gagal memperbarui data' };
-    } catch (error: any) {
-        return { message: 'Gagal memperbarui data' };
+    const response = await updateFishUrlApi(fishId, validatedFields, authToken);
+    if (response.success) {
+        return { message: 'Data berhasil diperbarui' };
     }
+
+    return { message: 'Gagal memperbarui data' };
 }
 
 export async function updateFishScoreSubmit(
@@ -116,15 +101,10 @@ export async function updateFishScoreSubmit(
     payload: { fish_score_id: string; fish_score: number }[]
 ): Promise<{ message: string }> {
     const authToken = await getCookies();
-
-    try {
-        const response = await updateScoreApi(payload, authToken);
-        if (response.success) {
-            return { message: 'Fish score submitted succesfully' };
-        }
-
-        return { message: 'Fish score failed to submit' };
-    } catch (error: any) {
-        return { message: 'Fish score failed to submit' };
+    const response = await updateScoreApi(payload, authToken);
+    if (response.success) {
+        return { message: 'Fish score submitted succesfully' };
     }
+
+    return { message: 'Fish score failed to submit' };
 }
