@@ -62,6 +62,10 @@ const protectedRoutes: ProtectedRoutes = {
 export async function middleware(req: NextRequest) {
     const authCookie = req.cookies.get('token');
 
+    if (req.nextUrl.pathname.startsWith('/_next/')) {
+        return NextResponse.redirect(new URL('/auth', req.url));
+    }
+
     if (authCookie) {
         try {
             const userProfile = await getUser(authCookie.value);
