@@ -38,65 +38,84 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
     const detailEmbed = () => {
         return (
             <div className="flex flex-col items-center justify-center">
-                <div className="w-[325px] bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark sm:rounded">
-                    {[
-                        { label: 'Fish Name', value: fish?.fish_name },
-                        {
-                            label: 'Size',
-                            value: fish?.fish_size
-                                ? `${
-                                      fish.fish_size.toString().endsWith('cm') ? fish.fish_size : `${fish.fish_size} cm`
-                                  }`
-                                : 'N/A',
-                        },
-                        { label: 'Owner', value: fish.fish_owner_name },
-                    ].map((item, index) => (
-                        <div key={index} className="flex items-center justify-center pl-4">
-                            <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
-                                <p className="capitalize">{item.label}</p>
-                                <p className="-ml-4 mr-2 text-center">:</p>
-                                <p>
-                                    {item.label === 'Size' ? (
-                                        <span>
-                                            {item.value.replace(' cm', '')} <span className="normal-case">cm</span>
-                                        </span>
-                                    ) : (
-                                        <span className="capitalize">{item.value}</span>
-                                    )}
-                                </p>
-                            </div>
-                        </div>
-                    ))}
-                </div>
-                <form className="mt-4 flex w-full flex-col items-center justify-between gap-6">
-                    <div className="grid w-full grid-cols-2 gap-2">
-                        {fish.fishscores.map((item, index) => (
-                            <div className="flex items-center justify-between gap-2" key={index}>
-                                <label htmlFor={item.fish_score_id}>{item.champion_category_name}</label>
-                                <input
-                                    className="form-input w-[60px] bg-white placeholder:text-white-dark"
-                                    type="number"
-                                    readOnly
-                                    id={item.fish_score_id}
-                                    {...register(`fishscores.${index}.fish_score`)}
-                                    disabled
-                                />
-                            </div>
-                        ))}
+                {!hasIncompleteScores ? (
+                    <div className="w-full px-6 pb-6 text-center text-base font-bold">
+                        <p>
+                            Judges must select at least one nominee from the fish candidates, to enable the submit score
+                            feature.
+                        </p>
                     </div>
-                    <button
-                        type="button"
-                        className={`btn2 ${
-                            hasIncompleteScores
-                                ? 'bg-danger hover:bg-danger-light'
-                                : 'bg-success hover:bg-success-light'
-                        } h-fit px-2 py-1.5 text-white`}
-                        onClick={() => setOpenModal(true)}
-                    >
-                        {hasIncompleteScores ? 'Submit Scores' : 'Edit Scores'}
-                    </button>
-                    <FishScoreModal fish={fish} open={openModal} setOpen={setOpenModal} setDataChange={setDataChange} />
-                </form>
+                ) : (
+                    <>
+                        <div className="w-[325px] bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark sm:rounded">
+                            {[
+                                { label: 'Fish Name', value: fish?.fish_name },
+                                {
+                                    label: 'Size',
+                                    value: fish?.fish_size
+                                        ? `${
+                                              fish.fish_size.toString().endsWith('cm')
+                                                  ? fish.fish_size
+                                                  : `${fish.fish_size} cm`
+                                          }`
+                                        : 'N/A',
+                                },
+                                { label: 'Owner', value: fish.fish_owner_name },
+                            ].map((item, index) => (
+                                <div key={index} className="flex items-center justify-center pl-4">
+                                    <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
+                                        <p className="capitalize">{item.label}</p>
+                                        <p className="-ml-4 mr-2 text-center">:</p>
+                                        <p>
+                                            {item.label === 'Size' ? (
+                                                <span>
+                                                    {item.value.replace(' cm', '')}{' '}
+                                                    <span className="normal-case">cm</span>
+                                                </span>
+                                            ) : (
+                                                <span className="capitalize">{item.value}</span>
+                                            )}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                        <form className="mt-4 flex w-full flex-col items-center justify-between gap-6">
+                            <div className="grid w-full grid-cols-2 gap-2">
+                                {fish.fishscores.map((item, index) => (
+                                    <div className="flex items-center justify-between gap-2" key={index}>
+                                        <label htmlFor={item.fish_score_id}>{item.champion_category_name}</label>
+                                        <input
+                                            className="form-input w-[60px] bg-white placeholder:text-white-dark"
+                                            type="number"
+                                            readOnly
+                                            id={item.fish_score_id}
+                                            {...register(`fishscores.${index}.fish_score`)}
+                                            disabled
+                                        />
+                                    </div>
+                                ))}
+                            </div>
+                            <button
+                                type="button"
+                                className={`btn2 ${
+                                    hasIncompleteScores
+                                        ? 'bg-danger hover:bg-danger-light'
+                                        : 'bg-success hover:bg-success-light'
+                                } h-fit px-2 py-1.5 text-white`}
+                                onClick={() => setOpenModal(true)}
+                            >
+                                {hasIncompleteScores ? 'Submit Scores' : 'Edit Scores'}
+                            </button>
+                            <FishScoreModal
+                                fish={fish}
+                                open={openModal}
+                                setOpen={setOpenModal}
+                                setDataChange={setDataChange}
+                            />
+                        </form>
+                    </>
+                )}
             </div>
         );
     };
@@ -114,7 +133,7 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
                 <div
                     className={`panel flex h-full w-full flex-col items-center justify-center gap-2 px-0 pb-0 pl-0.5 pt-1`}
                 >
-                    <div className="flex w-full flex-grow items-center justify-center border-white md:w-11/12">
+                    <div className="flex w-full flex-grow items-center justify-center border-white pt-2 md:w-11/12">
                         <InstagramEmbed url={fish.fish_submission_link} width="100%" />
                     </div>
                     {detailEmbed()}
