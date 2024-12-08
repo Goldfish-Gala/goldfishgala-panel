@@ -32,7 +32,7 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
     };
 
     const hasIncompleteScores = useMemo(() => {
-        return fish.fishscores.some((item) => !item.fish_score || item.fish_score === 0);
+        return fish.fishscores?.some((item) => !item.fish_score || item.fish_score === 0) ?? false;
     }, [fish.fishscores]);
 
     const detailEmbed = () => {
