@@ -272,14 +272,14 @@
     .btn {
         @apply relative flex items-center justify-center rounded-md border px-5 py-2 text-sm font-semibold shadow-[0_10px_20px_-10px] outline-none transition duration-300 hover:shadow-none active:scale-90;
         &:disabled {
-            @apply cursor-not-allowed opacity-50;
+            @apply scale-100 cursor-not-allowed bg-gray-500 opacity-90 hover:bg-gray-500;
             /* Make it look disabled */
         }
     }
     .btn2 {
         @apply relative flex items-center justify-center rounded-md border px-2 py-1 pb-0.5 text-xs font-semibold outline-none transition duration-300 active:scale-90;
         &:disabled {
-            @apply scale-100 cursor-not-allowed bg-gray-500 opacity-90;
+            @apply scale-100 cursor-not-allowed bg-gray-500 opacity-90 hover:bg-gray-500;
         }
     }
     .btn-lg {
