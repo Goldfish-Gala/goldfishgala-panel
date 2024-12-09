@@ -42,21 +42,9 @@ const protectedRoutes: ProtectedRoutes = {
         '/users',
         '/profile',
         '/admin',
-        '/fish-candidates',
-        '/fish-score',
-        '/selected-nominees',
-        '/winner-selection',
+        '/judges',
     ],
-    4: [
-        '/fish-candidates',
-        '/fish-score',
-        '/selected-nominees',
-        '/winner-selection',
-        '/',
-        '/dashboard',
-        '/users',
-        '/profile',
-    ],
+    4: ['/', '/dashboard', '/users', '/profile', '/judges'],
 };
 
 export async function middleware(req: NextRequest) {
@@ -77,13 +65,15 @@ export async function middleware(req: NextRequest) {
 
                 if (typeof roleId === 'number') {
                     const requestedPath = req.nextUrl.pathname;
-                    if (protectedRoutes[roleId]?.includes(requestedPath)) {
+                    const isAuthorized = protectedRoutes[roleId]?.some((route) => {
+                        return requestedPath === route || requestedPath.startsWith(`${route}/`);
+                    });
+
+                    if (isAuthorized) {
                         return NextResponse.next();
                     } else {
                         return NextResponse.redirect(new URL('/_error', req.url));
                     }
-                } else {
-                    return NextResponse.redirect(new URL('/_error', req.url));
                 }
             } else {
                 store.dispatch(logout());
@@ -102,10 +92,8 @@ export async function middleware(req: NextRequest) {
 
 export const config = {
     matcher: [
-        '/fish-candidates',
-        '/fish-score',
-        '/selected-nominees',
-        '/winner-selection',
+        '/admin/:path',
+        '/judges/:path',
         '/',
         '/dashboard',
         '/fish-registration',

@@ -3,7 +3,7 @@ const nextConfig = {
     reactStrictMode: true,
     experimental: {
         staleTimes: {
-            dynamic: 120,
+            dynamic: 30,
         }
     },
     images: {
