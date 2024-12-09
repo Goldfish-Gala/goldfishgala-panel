@@ -10,6 +10,7 @@ import { usePathname } from 'next/navigation';
 import IconCircleCheck from '../../icon/icon-circle-check';
 import IconMenuElements from '@/components/icon/menu/icon-menu-elements';
 import IconMenuInvoice from '@/components/icon/menu/icon-menu-invoice';
+import IconFishMenu from '@/components/icon/icon-fish-menu';
 
 interface AdminBarProps {
     currentMenu: string;
@@ -28,7 +29,7 @@ const MemberSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
             <li className="menu nav-item">
                 <Link href={'/registered-fishes'}>
                     <div className="flex items-center">
-                        <IconMenuElements className="shrink-0 group-hover:!text-primary" />
+                        <IconFishMenu className="shrink-0 group-hover:!text-primary" />
                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                             {T!('Ikan terdaftar')}
                         </span>
