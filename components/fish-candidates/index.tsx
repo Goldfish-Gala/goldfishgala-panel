@@ -37,13 +37,17 @@ const FishCandidates = () => {
         getNextPageParam: (lastPage) =>
             lastPage.pagination.hasNextPage ? lastPage.pagination.currentPage + 1 : undefined,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 50 * 1000,
     });
 
     useEffect(() => {
         const params = new URLSearchParams();
         params.set('limit', limit.toString());
         params.set('sort', sort);
-        router.replace(`?${params.toString()}`);
+        const newUrl = `${window.location.pathname}?${params.toString()}`;
+        if (window.location.href !== newUrl) {
+            window.history.replaceState(null, '', newUrl);
+        }
     }, [limit, sort, router]);
 
     useEffect(() => {

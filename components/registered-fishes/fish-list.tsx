@@ -75,6 +75,15 @@ const FishList = () => {
         );
     }
 
+    if (data.length === 0) {
+        return (
+            <div className="flex min-h-[75vh] w-full flex-col items-center justify-center text-red-500">
+                <p>No data</p>
+                <p>Belum ada ikan yang terdaftar</p>
+            </div>
+        );
+    }
+
     return (
         <>
             <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
