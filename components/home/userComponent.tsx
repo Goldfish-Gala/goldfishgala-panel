@@ -25,7 +25,7 @@ const UserComponent = () => {
                     if (userProfile.user_is_first_login) {
                         router.replace('/pre-member');
                     } else if (userProfile.role_id === 4) {
-                        router.replace('/fish-candidates');
+                        router.replace('/judges/fish-candidates');
                     } else {
                         router.replace('/dashboard');
                     }
