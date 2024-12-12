@@ -1,13 +1,11 @@
 'use server';
 
-import { updateUserApi } from '@/api/api-user';
-import { formUserCompletingDataSchema } from './form-schemas';
-import { revalidatePath } from 'next/cache';
-import { fishRegisterApi, updateFishUrlApi } from '@/api/api-fish';
-import { eventRegisterApi } from '@/api/api-event';
+import { updateUserApi } from '@/api/user/api-user';
+import { fishRegisterApi, updateFishUrlApi } from '@/api/fish/api-fish';
 import { cookies } from 'next/headers';
-import { createInvoceApi } from '@/api/api-invoice';
-import { updateScoreApi } from '@/api/api-nomination';
+import { eventRegisterApi } from '@/api/event-reg/api-event';
+import { createInvoceApi } from '@/api/invoice/api-invoice';
+import { updateScoreApi } from '@/api/nomination/api-nomination';
 
 const getCookies = async () => {
     const cookieStore = await cookies();

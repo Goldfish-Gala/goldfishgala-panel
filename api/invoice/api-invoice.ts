@@ -1,4 +1,4 @@
-import api from './api-config';
+import api from '../api-config';
 
 export const createInvoceApi = async (userRegId: string, cookie: string | undefined) => {
     const body = { user_reg_id: userRegId };

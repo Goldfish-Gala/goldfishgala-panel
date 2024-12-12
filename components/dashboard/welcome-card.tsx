@@ -1,12 +1,12 @@
 'use client';
 
-import { useCallback, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IRootState } from '@/store';
 import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
 import { useCookies } from 'next-client-cookies';
-import { fetchUserProfile, storeUser } from '@/utils/store-user';
+import { fetchUserProfile } from '@/utils/store-user';
 import IconInstagram from '../icon/icon-instagram';
 
 const Dashboard = () => {

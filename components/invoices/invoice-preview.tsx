@@ -1,26 +1,20 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 import IconDownload from '@/components/icon/icon-download';
-import IconEdit from '@/components/icon/icon-edit';
-import IconPlus from '@/components/icon/icon-plus';
 import IconPrinter from '@/components/icon/icon-printer';
-import Link from 'next/link';
 import React, { useCallback, useEffect, useState } from 'react';
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useCookies } from 'next-client-cookies';
 import { IRootState } from '@/store';
-import { storeUser } from '@/utils/store-user';
-import { getInvoiceByCode } from '@/api/api-invoice';
 import SpinnerWithText from '../UI/Spinner';
 import { formatToRupiah } from '@/utils/curency-format';
 import { expiringTime, formatedDate } from '@/utils/date-format';
 import BackButton from '../components/back-button';
+import { getInvoiceByCode } from '@/api/invoice/api-invoice';
 
 const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
-    const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const [invoice, setInvoice] = useState<InvoiceDetail | null>(null);

@@ -1,6 +1,6 @@
 import { Dispatch } from 'redux';
 import { setProfile } from '@/store/authSlice';
-import { getUser } from '@/api/api-user';
+import { getUser } from '@/api/user/api-user';
 
 interface Router {
     push: (url: string) => void;

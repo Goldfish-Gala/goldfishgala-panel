@@ -1,4 +1,4 @@
-import api from './api-config';
+import api from '../api-config';
 
 export const selectFishNominateApi = async (fishId: string, cookie: string | undefined) => {
     const body = { fish_id: fishId };

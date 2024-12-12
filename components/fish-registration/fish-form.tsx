@@ -21,12 +21,12 @@ import Swal from 'sweetalert2';
 import SpinnerWithText from '../UI/Spinner';
 import { ArrowLeft } from 'lucide-react';
 import ConfirmationModal from '../components/confirmation-modal';
-import { getEventPricesApi } from '@/api/api-event';
 import { formatToRupiah } from '@/utils/curency-format';
 import './style.css';
 import { Stepper } from '@mantine/core';
 import IconUserCheck from '../icon/icon-user-check';
 import IconFish from '../icon/icon-fish';
+import { getEventPricesApi } from '@/api/event-reg/api-event';
 
 const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
     const router = useRouter();

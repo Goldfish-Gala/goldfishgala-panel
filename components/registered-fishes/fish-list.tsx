@@ -1,16 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 'use client';
 
-import { getAllUserRegByStatus } from '@/api/api-payment';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
 import { useQuery } from '@tanstack/react-query';
 import { useCookies } from 'next-client-cookies';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
 import Link from 'next/link';
+import { getAllUserRegByStatus } from '@/api/payment/api-payment';
 
 const FishList = () => {
     const router = useRouter();
@@ -18,8 +18,6 @@ const FishList = () => {
     const authCookie = cookies?.get('token');
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
-    const [fishDetail, setFishDetail] = useState<UserRegDetailType | undefined>(undefined);
-    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         if (!user) {

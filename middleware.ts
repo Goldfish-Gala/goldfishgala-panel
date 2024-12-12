@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import store from './store';
 import { login, logout } from './store/authSlice';
-import { getUser } from './api/api-user';
+import { getUser } from './api/user/api-user';
 
 // Define the type for protected routes
 type ProtectedRoutes = {

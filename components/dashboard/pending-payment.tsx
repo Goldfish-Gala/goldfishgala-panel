@@ -9,7 +9,7 @@ import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
 import Link from 'next/link';
 import { expiringTime } from '@/utils/date-format';
-import { getAllUserRegByStatus } from '@/api/api-payment';
+import { getAllUserRegByStatus } from '@/api/payment/api-payment';
 
 const PendingPayment = () => {
     const router = useRouter();

@@ -1,6 +1,6 @@
 'use client';
 
-import { getUserList } from '@/api/api-user';
+import { getUserList } from '@/api/user/api-user';
 import SpinnerWithText from '@/components/UI/Spinner';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
