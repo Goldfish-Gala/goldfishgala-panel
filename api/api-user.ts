@@ -28,3 +28,17 @@ export const updateUserApi = async (userId: string | undefined, data: UpdateUser
         return error;
     }
 };
+
+export const getUserList = async (token: string | undefined, page: number, limit: number, sort: string) => {
+    try {
+        const response = await api.get(`/users?page=${page}&limit=${limit}&sort=${sort}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
