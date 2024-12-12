@@ -2,17 +2,15 @@
 import { useEffect, useState } from 'react';
 import Loading from '@/components/layouts/loading';
 import { useRouter } from 'next/navigation';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useCookies } from 'next-client-cookies';
-import { fetchUserComponent, fetchUserProfile, storeUser } from '@/utils/store-user';
-import { IRootState } from '@/store';
+import { fetchUserComponent } from '@/utils/store-user';
 
 const UserComponent = () => {
     const dispatch = useDispatch();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const router = useRouter();
-    const user = useSelector((state: IRootState) => state.auth.user);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {

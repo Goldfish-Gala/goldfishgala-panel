@@ -1,13 +1,11 @@
 'use client';
 
-import { getFishScoreByFishIdApi } from '@/api/api-nomination';
+import { getFishScoreByFishIdApi } from '@/api/nomination/api-nomination';
 import IconX from '@/components/icon/icon-x';
 import { updateFishScoreSubmit } from '@/lib/form-actions';
-import { formFishScoreSchema } from '@/lib/form-schemas';
 import { Transition, Dialog } from '@headlessui/react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useCookies } from 'next-client-cookies';
-import { useSearchParams } from 'next/navigation';
 import React, { Fragment, startTransition, useActionState, useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';

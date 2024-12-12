@@ -1,4 +1,4 @@
-import api from './api-config';
+import api from '../api-config';
 
 export const getUser = async (token: string | undefined) => {
     try {
@@ -26,5 +26,19 @@ export const updateUserApi = async (userId: string | undefined, data: UpdateUser
     } catch (error) {
         console.error(error);
         return error;
+    }
+};
+
+export const getUserList = async (token: string | undefined, page: number, limit: number, sort: string) => {
+    try {
+        const response = await api.get(`/users?page=${page}&limit=${limit}&sort=${sort}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
     }
 };

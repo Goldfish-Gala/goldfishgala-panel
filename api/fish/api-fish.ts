@@ -1,4 +1,4 @@
-import api from './api-config';
+import api from '../api-config';
 
 export const fishRegisterApi = async (data: FishRegisterType, cookie: string | undefined) => {
     try {

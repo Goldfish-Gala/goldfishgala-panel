@@ -3,13 +3,13 @@
 import { useCookies } from 'next-client-cookies';
 import IconClock from '../icon/icon-clock';
 import IconCircle from '../icon/menu/icon-circle';
-import { getOneEvent, getAllOngoingEvents } from '@/api/api-event';
 import SpinnerWithText from '../UI/Spinner';
 import { useRouter } from 'next/navigation';
 import { useQuery } from '@tanstack/react-query';
 import Swal from 'sweetalert2';
 import Link from 'next/link';
 import { useState } from 'react';
+import { getAllOngoingEvents } from '@/api/event-reg/api-event';
 
 const OngoingEvent = () => {
     const router = useRouter();

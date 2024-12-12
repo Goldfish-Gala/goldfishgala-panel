@@ -8,11 +8,11 @@ import { useEffect, useState } from 'react';
 import SpinnerWithText from '../UI/Spinner';
 import Swal from 'sweetalert2';
 import ConfirmationModal from '../components/confirmation-modal';
-import { cancelFishNomineesApi, getAllSelectedFishApi } from '@/api/api-nomination';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
 import { useInView } from 'react-intersection-observer';
+import { cancelFishNomineesApi, getAllSelectedFishApi } from '@/api/nomination/api-nomination';
 
 const SelectedFishes = () => {
     const router = useRouter();
