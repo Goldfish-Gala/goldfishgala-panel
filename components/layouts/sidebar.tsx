@@ -116,14 +116,13 @@ const Sidebar = () => {
     return (
         <div className={semidark ? 'dark' : ''}>
             <nav
-                className={`sidebar fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] transition-all duration-300 ${
-                    semidark ? 'text-white-dark' : ''
-                }`}
+                className={`sidebar fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] transition-all duration-300 ${semidark ? 'text-white-dark' : ''
+                    }`}
             >
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
                         <Link
-                            href={user?.role_id === 4 ? '/fish-candidates' : '/dashboard'}
+                            href={user?.role_id === 4 ? '/judges/fish-candidates' : '/dashboard'}
                             className="main-logo flex shrink-0 items-center"
                         >
                             <Image
@@ -220,9 +219,8 @@ const Sidebar = () => {
                                     <li className="menu nav-item">
                                         <button
                                             type="button"
-                                            className={`${
-                                                currentMenu === 'users' ? 'active' : ''
-                                            } nav-link group w-full`}
+                                            className={`${currentMenu === 'users' ? 'active' : ''
+                                                } nav-link group w-full`}
                                             onClick={() => toggleMenu('users')}
                                         >
                                             <div className="flex items-center">
