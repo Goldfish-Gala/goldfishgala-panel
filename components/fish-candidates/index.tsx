@@ -7,9 +7,9 @@ import { useInView } from 'react-intersection-observer';
 import { useCookies } from 'next-client-cookies';
 import Swal from 'sweetalert2';
 import SpinnerWithText from '../UI/Spinner';
-import { getAllFishCandidateApi, selectFishNominateApi } from '@/api/api-nomination';
 import ConfirmationModal from '../components/confirmation-modal';
 import IGEmbed from '../components/ig-embed/embed';
+import { getAllFishCandidateApi, selectFishNominateApi } from '@/api/nomination/api-nomination';
 
 const FishCandidates = () => {
     const router = useRouter();

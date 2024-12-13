@@ -1,6 +1,5 @@
 'use client';
 
-import { getAllPaymentRegisteredEvent } from '@/api/api-payment';
 import { IRootState } from '@/store';
 import { fetchUserProfile, storeUser } from '@/utils/store-user';
 import { useQuery } from '@tanstack/react-query';
@@ -13,6 +12,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
 import { expiringTime } from '@/utils/date-format';
+import { getAllPaymentRegisteredEvent } from '@/api/payment/api-payment';
 
 const InvoiceList = () => {
     const router = useRouter();

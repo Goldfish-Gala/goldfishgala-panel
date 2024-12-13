@@ -1,21 +1,17 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import ConfirmationModal from '../components/confirmation-modal';
 import { useSearchParams } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { useCookies } from 'next-client-cookies';
 import { IRootState } from '@/store';
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { startTransition, useActionState, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { fetchUserProfile } from '@/utils/store-user';
-import Swal from 'sweetalert2';
 import SpinnerWithText from '../UI/Spinner';
 import { useInView } from 'react-intersection-observer';
-import { useFieldArray, useForm } from 'react-hook-form';
-import { getAllFishNominatedApi, updateScoreApi } from '@/api/api-nomination';
-import { updateFishScoreSubmit } from '@/lib/form-actions';
 import FishCard from './fish-score-card';
+import { getAllFishNominatedApi } from '@/api/nomination/api-nomination';
 
 const FishScore = () => {
     const router = useRouter();

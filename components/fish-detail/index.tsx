@@ -1,6 +1,6 @@
 'use client';
 
-import { getFishDetailApi } from '@/api/api-fish';
+import { getFishDetailApi } from '@/api/fish/api-fish';
 import { formatToRupiah } from '@/utils/curency-format';
 import { formatedDate } from '@/utils/date-format';
 import { useCookies } from 'next-client-cookies';
@@ -17,8 +17,8 @@ import { updateFishUrlSubmit } from '@/lib/form-actions';
 import IconSubmit from '../icon/icon-submit';
 import ConfirmationModal from '../components/confirmation-modal';
 import { formLinkSubmitSchema } from '@/lib/form-schemas';
-import { getOneEventDetail } from '@/api/api-event';
 import SpinnerWithText from '../UI/Spinner';
+import { getOneEventDetail } from '@/api/event-reg/api-event';
 
 const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
     const [fishData, setFishData] = useState<FishDetailType | null>(null);
