@@ -240,11 +240,11 @@ const Sidebar = () => {
                                                 <li>
                                                     <Link href="/users/profile">{T!('profile')}</Link>
                                                 </li>
-                                                {/* <li>
+                                                <li>
                                                     <Link href="/users/user-account-settings">
                                                         {T!('Pengaturan Akun')}
                                                     </Link>
-                                                </li> */}
+                                                </li>
                                             </ul>
                                         </AnimateHeight>
                                     </li>
