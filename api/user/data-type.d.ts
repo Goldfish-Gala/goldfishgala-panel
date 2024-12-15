@@ -12,7 +12,6 @@ interface User {
     user_is_active: boolean;
     user_last_active: string;
     user_created_date: string;
-    role_name: string;
 }
 
 interface UpdateUserType {
