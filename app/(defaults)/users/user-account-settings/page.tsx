@@ -1,3 +1,4 @@
+import ComponentsUpdateUserProfile from '@/components/users/account-settings/components-update-user-profile';
 import ComponentsUsersAccountSettingsTabs from '@/components/users/account-settings/components-users-account-settings-tabs';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -18,7 +19,7 @@ const UserAccountSettings = () => {
                     <span>Pengaturan akun</span>
                 </li>
             </ul>
-            <ComponentsUsersAccountSettingsTabs />
+            <ComponentsUpdateUserProfile />
         </div>
     );
 };
