@@ -16,7 +16,7 @@ const UserAccountSettings = () => {
                     <span className="text-primary">User</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>Pengaturan akun</span>
+                    <span>Profile</span>
                 </li>
             </ul>
             <ComponentsUpdateUserProfile />
