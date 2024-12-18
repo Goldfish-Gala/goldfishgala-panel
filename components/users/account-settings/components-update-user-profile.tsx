@@ -93,7 +93,8 @@ const ComponentsUpdateUserProfile = () => {
     useEffect(() => {
         if (state?.message === 'Data berhasil diperbarui') {
             showMessage('Data updated successfully');
-            setTimeout(() => {
+            setTimeout(() => { 
+                window.location.reload();
                 router.push(user?.role_id === 1 ? '/users/user-account-settings' : '/dashboard');
             }, 3000);
         } else if (state?.message === 'Gagal memperbarui data') {
