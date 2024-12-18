@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/user/api-user';
+import IconPencilPaper from '@/components/icon/icon-pencil-paper';
 
 interface FormErrors {
     user_fname?: string;
@@ -29,7 +30,9 @@ const ComponentsUpdateUserProfile = () => {
     const user = useSelector((state: IRootState) => state.auth.user);
     const [state, formAction] = useActionState(updateUserSubmit.bind(null, user), null);
     const [isLoading, setLoading] = useState(false);
+    const [isDisabled, setIsDisabled] = useState(true);
     const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [isButtonVisible, setButtonVisible] = useState(false);
 
     useEffect(() => {
         if (!user) {
@@ -91,7 +94,7 @@ const ComponentsUpdateUserProfile = () => {
         if (state?.message === 'Data berhasil diperbarui') {
             showMessage('Data updated successfully');
             setTimeout(() => {
-                router.push(user?.role_id === 1 ? '/users/profile' : '/dashboard');
+                router.push(user?.role_id === 1 ? '/users/user-account-settings' : '/dashboard');
             }, 3000);
         } else if (state?.message === 'Gagal memperbarui data') {
             setLoading(false);
@@ -111,10 +114,20 @@ const ComponentsUpdateUserProfile = () => {
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
     });
-    
     return (
         <form className="mb-5 rounded-md border border-[#ebedf2] bg-white p-4 dark:border-[#191e3a] dark:bg-black"  action={handleSubmit}>
-            <h6 className="mb-5 text-lg font-bold">General Information</h6>
+            <div className='flex items-center justify-between'>
+                <h6 className="mb-5 text-lg font-bold">General Information</h6>
+                <button type="button" 
+                    className="btn btn-primary rounded-full p-2 ltr:ml-auto rtl:mr-auto"
+                    onClick={() => {
+                        setIsDisabled(!isDisabled); 
+                        setButtonVisible(!isButtonVisible);
+                      }}
+                >
+                    <IconPencilPaper />
+                </button>
+            </div>
                     {data && data.length > 0 && (
             <div className="flex flex-col sm:flex-row">
                 <div className="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
@@ -125,7 +138,7 @@ const ComponentsUpdateUserProfile = () => {
                             alt="img"
                             className="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32"
                         />
-                    
+
                 </div>
                 <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
                     <div>
@@ -134,7 +147,8 @@ const ComponentsUpdateUserProfile = () => {
                         type="text" name="user_fname"
                         placeholder={data[0].user_fname} 
                         defaultValue={data[0].user_fname} 
-                        className="form-input" 
+                        className="form-input disabled:opacity-50" 
+                        disabled={isDisabled}
                         onChange={handleInputChange}/>
                     </div>
                     {errors.user_fname && <p className="text-red-500">{errors.user_fname}</p>}
@@ -144,7 +158,8 @@ const ComponentsUpdateUserProfile = () => {
                         type="text" name="user_lname"
                         placeholder={data[0].user_lname} 
                         defaultValue={data[0].user_lname} 
-                        className="form-input" 
+                        className="form-input disabled:opacity-50" 
+                        disabled={isDisabled}
                         onChange={handleInputChange}/>
                     </div>
                     {errors.user_lname && <p className="text-red-500">{errors.user_lname}</p>}
@@ -154,7 +169,8 @@ const ComponentsUpdateUserProfile = () => {
                         type="text" name="user_address"
                         placeholder={data[0].user_address} 
                         defaultValue={data[0].user_address} 
-                        className="form-input" 
+                        className="form-input disabled:opacity-50" 
+                        disabled={isDisabled}
                         onChange={handleInputChange}/>
                     </div>
                     {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
@@ -165,7 +181,8 @@ const ComponentsUpdateUserProfile = () => {
                             type="text" name="user_phone"
                             placeholder={data[0].user_phone}
                             defaultValue={data[0].user_phone} 
-                            className="form-input"
+                            className="form-input disabled:opacity-50"
+                            disabled={isDisabled}
                             onChange={handleInputChange}/>
                     </div>
                     {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
@@ -176,7 +193,8 @@ const ComponentsUpdateUserProfile = () => {
                             type="email" name="user_email"
                             placeholder={data[0].user_email}
                             defaultValue={data[0].user_email} 
-                            className="form-input"
+                            className="form-input disabled:opacity-50"
+                            disabled={isDisabled}
                             onChange={handleInputChange}/>
                     </div>
                     {errors.email && <p className="text-red-500">{errors.email}</p>}
@@ -186,21 +204,33 @@ const ComponentsUpdateUserProfile = () => {
                         type="text" name="user_ig"
                         placeholder={data[0].user_ig} 
                         defaultValue={data[0].user_ig} 
-                        className="form-input" 
+                        className="form-input disabled:opacity-50" 
+                        disabled={isDisabled}
                         onChange={handleInputChange}/>
                     </div>
                     {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
-                    <div className="mt-3 sm:col-span-2 flex gap-5">
-                        <button type="button" className="btn bg-red-600 shadow-red-300 border-red-500 btn-primary">
+                    <li className="flex items-center gap-2">
+                        Joined on{" "}
+                        {new Intl.DateTimeFormat("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                        }).format(new Date(data[0].user_created_date))}
+                    </li>
+                    <div className="mt-3 sm:col-span-2 flex gap-5"
+                    >
+                        {/* <button type="button" className="btn bg-red-600 shadow-red-300 border-red-500 btn-primary">
                             <Link href="/users/profile">
                                 Back
                             </Link>
-                        </button> 
+                        </button>  */}
+                        {isButtonVisible && (
                         <button type="submit"
                         className="btn btn-primary"
                         disabled={isLoading}
                         > {isLoading ? 'Proccessing...' : 'Save'}
                         </button>  
+                        )}
                     </div>
                 </div>
             </div>
