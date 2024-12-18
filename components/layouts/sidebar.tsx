@@ -217,36 +217,14 @@ const Sidebar = () => {
                                     </h2>
 
                                     <li className="menu nav-item">
-                                        <button
-                                            type="button"
-                                            className={`${currentMenu === 'users' ? 'active' : ''
-                                                } nav-link group w-full`}
-                                            onClick={() => toggleMenu('users')}
-                                        >
+                                        <Link href="/users/user-account-settings">
                                             <div className="flex items-center">
                                                 <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                                                    {T!('User')}
+                                                    {T!('Profile')}
                                                 </span>
                                             </div>
-
-                                            <div className={currentMenu !== 'users' ? '-rotate-90 rtl:rotate-90' : ''}>
-                                                <IconCaretDown />
-                                            </div>
-                                        </button>
-
-                                        <AnimateHeight duration={300} height={currentMenu === 'users' ? 'auto' : 0}>
-                                            <ul className="sub-menu text-gray-500">
-                                                <li>
-                                                    <Link href="/users/profile">{T!('profile')}</Link>
-                                                </li>
-                                                {/* <li>
-                                                    <Link href="/users/user-account-settings">
-                                                        {T!('Pengaturan Akun')}
-                                                    </Link>
-                                                </li> */}
-                                            </ul>
-                                        </AnimateHeight>
+                                        </Link>
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
