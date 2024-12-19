@@ -6,6 +6,10 @@ import React, { Fragment, useEffect, useState } from 'react';
 import Image from 'next/image';
 import { formatedDate } from '@/utils/date-format';
 import IconVisit from '@/components/icon/icon-visit';
+import { blockUserApi } from '@/api/user/api-user';
+import { useCookies } from 'next-client-cookies';
+import Swal from 'sweetalert2';
+import { Spinner } from '@/components/UI/Spinner/spinner';
 
 interface ConfirmationModalProps {
     open: boolean;
@@ -14,7 +18,63 @@ interface ConfirmationModalProps {
 }
 
 const UserModal = ({ open, setOpen, user }: ConfirmationModalProps) => {
+    const cookies = useCookies();
+    const authCookie = cookies?.get('token');
     const [blockMode, setBlockMode] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
+
+    const handleBlock = async () => {
+        setIsLoading(true);
+        try {
+            const response = await blockUserApi(user, false, authCookie);
+            if (response.success) {
+                showMessage('User blocked successfully');
+                setIsLoading(false);
+                setTimeout(() => {
+                    setOpen(false);
+                }, 1000);
+            } else {
+                showMessage('Failed to block user', 'error');
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    const handleUnBlock = async () => {
+        setIsLoading(false);
+        try {
+            const response = await blockUserApi(user, true, authCookie);
+            if (response.success) {
+                showMessage('User unblocked successfully');
+                setIsLoading(false);
+                setTimeout(() => {
+                    setOpen(false);
+                }, 1000);
+            } else {
+                showMessage('Failed to unblock user', 'error');
+                setIsLoading(false);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    };
 
     useEffect(() => {
         if (open) {
@@ -198,10 +258,10 @@ const UserModal = ({ open, setOpen, user }: ConfirmationModalProps) => {
                                         <div className="mt-2 flex w-full items-center justify-end px-6">
                                             {!blockMode ? (
                                                 <button
-                                                    className="btn2 btn-gradient3 w-[80px] border-none p-2"
+                                                    className="btn2 btn-gradient3 w-[90px] border-none p-2"
                                                     onClick={() => setBlockMode(true)}
                                                 >
-                                                    Block User
+                                                    {user?.user_is_active ? 'Block User' : 'Unblock User'}
                                                 </button>
                                             ) : (
                                                 <div className="flex items-center gap-2">
@@ -212,9 +272,23 @@ const UserModal = ({ open, setOpen, user }: ConfirmationModalProps) => {
                                                     >
                                                         Cancel
                                                     </button>
-                                                    <button className="btn2 btn-gradient3 w-[60px] border-none p-2">
-                                                        Yes
-                                                    </button>
+                                                    {user?.user_is_active ? (
+                                                        <button
+                                                            className="btn2 btn-gradient3 w-[60px] border-none p-2"
+                                                            disabled={isLoading}
+                                                            onClick={handleBlock}
+                                                        >
+                                                            {isLoading ? <Spinner className="h-4 text-white" /> : 'Yes'}
+                                                        </button>
+                                                    ) : (
+                                                        <button
+                                                            className="btn2 btn-gradient3 w-[60px] border-none p-2"
+                                                            onClick={handleUnBlock}
+                                                            disabled={isLoading}
+                                                        >
+                                                            {isLoading ? <Spinner /> : 'Yes'}
+                                                        </button>
+                                                    )}
                                                 </div>
                                             )}
                                         </div>

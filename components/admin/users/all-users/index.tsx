@@ -18,6 +18,7 @@ const UserList = () => {
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const dispatch = useDispatch();
+    const queryClient = useQueryClient();
     const user = useSelector((state: IRootState) => state.auth.user);
     const [userDetail, setUserDetail] = useState<User | null>(null);
     const [openModal, setOpenModal] = useState(false);
@@ -58,6 +59,12 @@ const UserList = () => {
         refetchOnWindowFocus: false,
         placeholderData: (previousData, previousQuery) => previousData,
     });
+
+    useEffect(() => {
+        if (!openModal) {
+            queryClient.invalidateQueries({ queryKey: ['allUsers'] });
+        }
+    }, [openModal]);
 
     const PAGE_SIZES = [5, 10, 20, 30, 40];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
