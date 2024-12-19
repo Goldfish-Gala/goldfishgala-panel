@@ -5,12 +5,13 @@ import SpinnerWithText from '@/components/UI/Spinner';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { Link } from 'lucide-react';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
+import Link from 'next/link';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import UserModal from './user-detail-modal';
 
 const UserList = () => {
     const router = useRouter();
@@ -18,10 +19,11 @@ const UserList = () => {
     const authCookie = cookies?.get('token');
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
-    const queryClient = useQueryClient();
+    const [userDetail, setUserDetail] = useState<User | null>(null);
+    const [openModal, setOpenModal] = useState(false);
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
-    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
+    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 5));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
 
     useEffect(() => {
@@ -30,10 +32,10 @@ const UserList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllUserList = async (): Promise<User[]> => {
+    const getAllUserList = async (): Promise<AllUsersType> => {
         const getAllUsers = await getUserList(authCookie, page, limit, sort);
         if (getAllUsers.success) {
-            return getAllUsers.data;
+            return getAllUsers;
         }
         throw new Error('No ongoing event');
     };
@@ -54,14 +56,29 @@ const UserList = () => {
         queryFn: () => getAllUserList(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        placeholderData: (previousData, previousQuery) => previousData,
     });
 
-    const PAGE_SIZES = [10, 20, 30, 50, 100];
+    const PAGE_SIZES = [5, 10, 20, 30, 40];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
         direction: 'asc',
     });
+
+    const handleUserDetail = (user_id: string) => {
+        if (!data || !data.data) {
+            console.error('Data is not available');
+            return;
+        }
+        const currentUser = data.data.find((user) => user.user_id === user_id);
+        if (currentUser) {
+            setUserDetail(currentUser);
+            setOpenModal(true);
+        } else {
+            console.error(`User with ID ${user_id} not found.`);
+        }
+    };
 
     return (
         <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
@@ -74,7 +91,7 @@ const UserList = () => {
                     ) : (
                         <DataTable
                             className="table-hover min-h-[200px] whitespace-nowrap"
-                            records={data}
+                            records={data?.data}
                             columns={[
                                 {
                                     accessor: 'user_id',
@@ -125,22 +142,43 @@ const UserList = () => {
                                     ),
                                 },
                                 {
+                                    accessor: 'role',
+                                    title: 'Role',
+                                    sortable: true,
+                                    render: ({ role_id }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>
+                                                {role_id === 2
+                                                    ? 'Member'
+                                                    : role_id === 3
+                                                    ? 'Admin'
+                                                    : role_id === 4
+                                                    ? 'Judges'
+                                                    : 'Guest'}
+                                            </div>
+                                        </div>
+                                    ),
+                                },
+                                {
                                     accessor: 'action',
                                     title: 'Action',
                                     sortable: false,
                                     textAlignment: 'left',
                                     render: ({ user_id }) => (
                                         <div className="ml-[5%] flex w-full gap-4">
-                                            <Link href={`/user-detail/${user_id}`} className="flex hover:text-primary">
-                                                <button className="btn2 btn-gradient3">Lihan detail</button>
-                                            </Link>
+                                            <button
+                                                className="btn2 btn-gradient2"
+                                                onClick={() => handleUserDetail(user_id)}
+                                            >
+                                                Detail
+                                            </button>
                                         </div>
                                     ),
                                 },
                             ]}
                             highlightOnHover
-                            key="invoice_code"
-                            totalRecords={data ? data.length : 0}
+                            key="user_id"
+                            totalRecords={data?.data ? data.pagination.totalData : 0}
                             recordsPerPage={pageSize}
                             page={page}
                             onPageChange={(p) => setPage(p)}
@@ -157,6 +195,7 @@ const UserList = () => {
                     )}
                 </div>
             </div>
+            <UserModal open={openModal} setOpen={setOpenModal} user={userDetail} />
         </div>
     );
 };

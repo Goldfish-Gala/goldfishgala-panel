@@ -15,6 +15,19 @@ interface User {
     role_name: string;
 }
 
+interface AllUsersType {
+    success: boolean;
+    message: string;
+    data: User[];
+    pagination: {
+        totalData: number;
+        currentPage: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
+}
+
 interface UpdateUserType {
     user_fname: string;
     user_lname?: string;
