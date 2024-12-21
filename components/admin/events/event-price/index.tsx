@@ -1,16 +1,19 @@
 'use client';
 
-import { getAllEventPrice } from '@/api/event-price/api-event-price';
+import { getAllEventPrice, deleteEventPrice, getOneEventPrice } from '@/api/event-price/api-event-price';
 import SpinnerWithText from '@/components/UI/Spinner';
 import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
-import Link from 'next/link';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import CreateEventPriceModal from './components-create-event-price-modal';
+import { formatMataUang } from '@/utils/curency-format';
+import Swal from 'sweetalert2';
+import UpdateEventPriceModal from './components-update-event-price-modal';
 
 const EventPriceList = () => {
     const router = useRouter();
@@ -23,6 +26,16 @@ const EventPriceList = () => {
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
+    const [openModal, setOpenModal] = useState(false);
+    const [dataChange, setDataChange] = useState(false);
+    const [dataEventPrice, setDataEventPrice] = useState<EventPriceType>({
+        event_price_id: '',
+        event_price_code: '',
+        event_price_name: '',
+        event_price_amount: 0,
+    });
+    
+    const [openUpdateModal, setOpenUpdateModal] = useState(false);
 
     useEffect(() => {
         if (!user) {
@@ -37,6 +50,75 @@ const EventPriceList = () => {
         }
         throw new Error('No ongoing event');
     };
+
+    const { isPending, error, data, refetch } = useQuery({
+        queryKey: ['allEventPrices', page, limit, sort],
+        queryFn: () => getAllEventPrices(),
+        enabled: !!authCookie,
+        refetchOnWindowFocus: false,
+    });
+
+    const deleteEventPrices = async (event_price_id: string) => {
+        try {
+          const confirmResult = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone. Do you want to delete this event price?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+          });
+      
+          if (confirmResult.isConfirmed) {
+            const deleteOneEventPrice = await deleteEventPrice(event_price_id, authCookie);
+      
+            if (deleteOneEventPrice.success) {
+              await Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Event price deleted successfully.',
+                timer: 2000,
+                showConfirmButton: false,
+              });
+    
+              queryClient.invalidateQueries({ queryKey: ['allEventPrices'] });
+              return deleteOneEventPrice.data;
+            } else {
+              await Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: deleteOneEventPrice.response.data.message || 'Failed to delete event price.',
+              });
+            }
+          } else {
+            await Swal.fire({
+              icon: 'info',
+              title: 'Cancelled',
+              text: 'The event price was not deleted.',
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
+        } catch (error: any) {
+          console.error('Error deleting event price:', error);
+      
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: error?.message || 'An unexpected error occurred while deleting the event price.',
+          });
+        }
+      };
+
+      const getEventPrice = async (event_price_id: string): Promise<User[]> => {
+        const getEventPrice = await getOneEventPrice(event_price_id, authCookie);
+        if (getEventPrice.success) {
+            setOpenUpdateModal(true)
+            setDataEventPrice(getEventPrice.data[0])
+        }
+        throw new Error('No User Found');
+    };
     
     useEffect(() => {
         const params = new URLSearchParams();
@@ -47,14 +129,13 @@ const EventPriceList = () => {
         if (window.location.href !== newUrl) {
             window.history.replaceState(null, '', newUrl);
         }
-    }, [limit, sort, router]);
+        if (dataChange) {
+            refetch();
+            setDataChange(false);
+        }
+    }, [limit, sort, router, dataChange, refetch]);
 
-    const { isPending, error, data } = useQuery({
-        queryKey: ['allEventPrices', page, limit, sort],
-        queryFn: () => getAllEventPrices(),
-        enabled: !!authCookie,
-        refetchOnWindowFocus: false,
-    });
+
 
     const PAGE_SIZES = [10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
@@ -65,8 +146,23 @@ const EventPriceList = () => {
 
     
     return (
+        <>
+            <CreateEventPriceModal
+                open={openModal}
+                setOpen={setOpenModal}
+                setDataChange={setDataChange}
+            />
         <div className='flex-column gap-5'>
+            <button
+                    type="button"
+                    className="btn btn-primary mb-5"
+                    onClick={() => setOpenModal(true)}
+                >
+                    Create New
+                </button>
+
             <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
+                
             <div className="event-price-table">
                 <div className="datatables pagination-padding">
                     {isPending ? (
@@ -107,12 +203,12 @@ const EventPriceList = () => {
                                     ),
                                 },
                                 {
-                                    accessor: 'amount',
-                                    title: 'amount',
+                                    accessor: 'event_price_amount',
+                                    title: 'Amount',
                                     sortable: true,
                                     render: ({ event_price_amount }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{event_price_amount}</div>
+                                            <div>{ formatMataUang(event_price_amount)}</div>
                                         </div>
                                     ),
                                 },
@@ -120,12 +216,21 @@ const EventPriceList = () => {
                                     accessor: 'action',
                                     title: 'Action',
                                     sortable: false,
-                                    textAlignment: 'center',
                                     render: ({ event_price_id }) => (
                                         <div className="ml-[5%] flex w-full gap-4">
-                                            {/* <Link href={`/user-detail/${event_price_id}`} className="flex hover:text-primary"> */}
-                                                <button className="btn2 btn-gradient3">Remove/Add</button>
-                                            {/* </Link> */}
+                                                <button 
+                                                className="btn2 btn-primary"
+                                                onClick={()=>getEventPrice(event_price_id)}
+                                                >
+                                                    Update
+                                                </button>
+
+                                                <button 
+                                                className="btn2 btn-gradient3"
+                                                onClick={()=>deleteEventPrices(event_price_id)}
+                                                >
+                                                    Remove
+                                                </button>
                                         </div>
                                     ),
                                 },
@@ -150,13 +255,14 @@ const EventPriceList = () => {
                 </div>
             </div>
             </div>
-                <button type="button" className="btn btn-primary mt-5"> 
-                    <Link href="/event-price/new">
-                        Create New
-                    </Link>
-                </button>  
-
         </div>
+            <UpdateEventPriceModal
+                open={openUpdateModal}
+                setOpen={setOpenUpdateModal}
+                setDataChange={setDataChange}
+                eventPriceData={dataEventPrice}
+            />
+        </>
     );
 };
 

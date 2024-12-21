@@ -6,7 +6,7 @@ export const metadata: Metadata = {
     title: 'Dashboard',
 };
 
-const Dashboard = () => {
+const EventPrice = () => {
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
@@ -27,4 +27,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default EventPrice;
