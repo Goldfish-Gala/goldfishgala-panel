@@ -106,7 +106,7 @@ const UserList = () => {
                                 },
                                 {
                                     accessor: 'name',
-                                    title: 'name',
+                                    title: 'Name',
                                     sortable: true,
                                     render: ({ user_fname, user_lname }) => (
                                         <div className="flex items-center font-semibold">
