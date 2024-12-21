@@ -31,3 +31,9 @@ export const formLinkSubmitSchema = z.object({
 export const formFishScoreSchema = z.object({
     fishscores: z.number().min(1, { message: 'Kategori ikan wajib di isi' }),
 });
+
+export const formEventPriceSchema = z.object({
+    event_price_code: z.string().min(1, { message: 'Code event price wajib diisi' }),
+    event_price_name: z.string().min(1, { message: 'Nama event price wajib diisi' }),
+    event_price_amount: z.number().min(1, { message: 'Harga event price wajib diisi' }),
+});
