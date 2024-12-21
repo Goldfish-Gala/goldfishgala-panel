@@ -13,7 +13,7 @@ const UserAccountSettings = () => {
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
-                    <span className="text-primary">User</span>
+                    <span className="text-primary">Setting</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <span>Profile</span>
