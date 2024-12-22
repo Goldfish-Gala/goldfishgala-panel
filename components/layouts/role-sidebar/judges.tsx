@@ -88,11 +88,11 @@ const JudgesSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                 </Link>
             </li>
             <li className="menu nav-item">
-                <Link href={'/judges/winner-selection'}>
+                <Link href={'/judges/winner-list'}>
                     <div className="flex items-center">
                         <IconAward className="shrink-0 group-hover:!text-primary" />
                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                            {T!('Winner Selection')}
+                            {T!('Winner List')}
                         </span>
                     </div>
                 </Link>

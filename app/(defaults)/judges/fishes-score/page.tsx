@@ -1,4 +1,4 @@
-import FishScore from '@/components/fishes-score';
+import FishScore from '@/components/judges/fishes-score';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
