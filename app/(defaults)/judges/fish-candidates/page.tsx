@@ -1,4 +1,4 @@
-import FishCandidates from '@/components/fish-candidates';
+import FishCandidates from '@/components/judges/fish-candidates';
 import { Metadata } from 'next';
 import React from 'react';
 

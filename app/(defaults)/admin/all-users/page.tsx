@@ -2,10 +2,10 @@ import UserList from '@/components/admin/users/all-users';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Dashboard',
+    title: 'All users',
 };
 
-const Dashboard = () => {
+const Page = () => {
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
@@ -26,4 +26,4 @@ const Dashboard = () => {
     );
 };
 
-export default Dashboard;
+export default Page;

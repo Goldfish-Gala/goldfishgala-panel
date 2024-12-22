@@ -29,9 +29,9 @@ export const updateUserApi = async (userId: string | undefined, data: UpdateUser
     }
 };
 
-export const getUserList = async (token: string | undefined, page: number, limit: number, sort: string) => {
+export const getUserList = async (token: string | undefined, page: number, limit: number) => {
     try {
-        const response = await api.get(`/users?page=${page}&limit=${limit}&sort=${sort}`, {
+        const response = await api.get(`/users?page=${page}&limit=${limit}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
