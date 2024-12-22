@@ -1,5 +1,5 @@
 import Loading from '@/app/loading';
-import SelectedFishes from '@/components/selected-nominees';
+import SelectedFishes from '@/components/judges/selected-nominees';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React, { Suspense } from 'react';

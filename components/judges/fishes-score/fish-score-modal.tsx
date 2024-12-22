@@ -59,7 +59,7 @@ const FishScoreModal = ({ fish, open, setOpen, setDataChange }: ConfirmationModa
             reset({
                 fishscores: fishScoreData.map((item) => ({
                     fish_score_id: item.fish_score_id,
-                    fish_score: item.fish_score || 0,
+                    fish_score: item.fish_score || null,
                 })),
             });
         }

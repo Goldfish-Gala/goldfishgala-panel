@@ -1,41 +1,53 @@
 'use client';
 
 import { useInfiniteQuery, useQueryClient } from '@tanstack/react-query';
-import { useRouter, useSearchParams } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { useInView } from 'react-intersection-observer';
 import { useCookies } from 'next-client-cookies';
+import { useRouter, useSearchParams } from 'next/navigation';
+import IGEmbed from '../../components/ig-embed/embed';
+import { useEffect, useState } from 'react';
+import SpinnerWithText from '../../UI/Spinner';
 import Swal from 'sweetalert2';
-import SpinnerWithText from '../UI/Spinner';
-import ConfirmationModal from '../components/confirmation-modal';
-import IGEmbed from '../components/ig-embed/embed';
-import { getAllFishCandidateApi, selectFishNominateApi } from '@/api/nomination/api-nomination';
+import ConfirmationModal from '../../components/confirmation-modal';
+import { useDispatch, useSelector } from 'react-redux';
+import { IRootState } from '@/store';
+import { fetchUserProfile } from '@/utils/store-user';
+import { useInView } from 'react-intersection-observer';
+import { cancelFishNomineesApi, getAllSelectedFishApi } from '@/api/nomination/api-nomination';
 
-const FishCandidates = () => {
+const SelectedFishes = () => {
     const router = useRouter();
+    const dispatch = useDispatch();
     const searchParams = useSearchParams();
+    const { ref, inView } = useInView();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
+    const user = useSelector((state: IRootState) => state.auth.user);
     const queryClient = useQueryClient();
-    const { ref, inView } = useInView();
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 6));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
     const [selectedFishId, setSelectedFishId] = useState('');
     const [isLoading, setLoading] = useState(false);
 
-    const fetchAllFish = async ({ pageParam = 1 }: { pageParam?: number }): Promise<FishPaginationType> => {
-        const fishes = await getAllFishCandidateApi(pageParam, limit, sort, authCookie);
+    useEffect(() => {
+        if (!user) {
+            fetchUserProfile(authCookie, dispatch, router);
+        }
+    }, [authCookie, dispatch, router, user]);
+
+    const fetchAllFish = async ({ pageParam = 1 }: { pageParam: number }): Promise<FishPaginationType> => {
+        const fishes = await getAllSelectedFishApi(user, pageParam, limit, sort, authCookie);
         if (fishes.success) return fishes;
         throw new Error('Failed to fetch fish data');
     };
 
     const { data, fetchNextPage, isFetchingNextPage } = useInfiniteQuery({
-        queryKey: ['allFishCandidates', { limit, sort }],
+        queryKey: ['allSelectedNominees', { limit, sort }],
         queryFn: fetchAllFish,
         initialPageParam: 1,
         getNextPageParam: (lastPage) =>
             lastPage.pagination.hasNextPage ? lastPage.pagination.currentPage + 1 : undefined,
+        enabled: !!user,
         refetchOnWindowFocus: false,
         staleTime: 5 * 50 * 1000,
     });
@@ -54,10 +66,10 @@ const FishCandidates = () => {
         if (data?.pages) {
             const lastPage = data.pages[data.pages.length - 1];
             if (lastPage.data.length === 3) {
-                queryClient.invalidateQueries({ queryKey: ['allFishCandidates'] });
+                queryClient.invalidateQueries({ queryKey: ['allSelectedNominees', { limit }] });
             }
         }
-    }, [data, limit, queryClient]);
+    }, [data, limit, queryClient, sort]);
 
     useEffect(() => {
         if (inView && data?.pages[data.pages.length - 1].pagination.hasNextPage) {
@@ -80,17 +92,17 @@ const FishCandidates = () => {
         });
     };
 
-    const handleModalOpen = (fishId: string) => {
-        setSelectedFishId(fishId);
+    const handleOpenModal = (fish_id: string) => {
+        setSelectedFishId(fish_id);
         setOpenModal(true);
     };
 
-    const handleConfirmSelection = async () => {
+    const handleConfirm = async () => {
         setLoading(true);
         try {
-            const response = await selectFishNominateApi(selectedFishId, authCookie);
+            const response = await cancelFishNomineesApi(selectedFishId, authCookie);
             if (response) {
-                queryClient.setQueryData(['allFishCandidates', { limit, sort }], (oldData: any) => {
+                queryClient.setQueryData(['allSelectedNominees', { limit, sort }], (oldData: any) => {
                     if (!oldData) return oldData;
                     return {
                         ...oldData,
@@ -104,7 +116,7 @@ const FishCandidates = () => {
                 });
 
                 setTimeout(() => {
-                    queryClient.setQueryData(['allFishCandidates', { limit, sort }], (oldData: any) => {
+                    queryClient.setQueryData(['allSelectedNominees', { limit, sort }], (oldData: any) => {
                         if (!oldData) return oldData;
                         return {
                             ...oldData,
@@ -114,14 +126,15 @@ const FishCandidates = () => {
                             })),
                         };
                     });
-                    queryClient.invalidateQueries({ queryKey: ['allSelectedNominees', { limit, sort }] });
+
+                    queryClient.invalidateQueries({ queryKey: ['allFishCandidates', { limit, sort }] });
                 }, 600);
 
-                showMessage('Fish selected successfully!');
+                showMessage('Success!');
                 setOpenModal(false);
             }
         } catch {
-            showMessage('Failed to select fish.', 'error');
+            showMessage('Failed!', 'error');
         } finally {
             setLoading(false);
         }
@@ -129,12 +142,11 @@ const FishCandidates = () => {
 
     if (!data) {
         return (
-            <div className="flex min-h-[650px] min-w-[320px] items-center justify-center">
+            <div className="flex min-h-[650px] min-w-[320px] flex-col items-center justify-center ">
                 <SpinnerWithText text="Loading..." />
             </div>
         );
     }
-
     return (
         <div className="flex w-full flex-col">
             <div className="panel mb-2 flex w-[300px] items-center justify-center gap-4 px-1 py-2">
@@ -170,14 +182,13 @@ const FishCandidates = () => {
                             key={fish.fish_id}
                             fish={fish}
                             username={fish.user_name}
-                            handleModal={handleModalOpen}
+                            handleModal={handleOpenModal}
                             isLoading={isLoading}
-                            buttonText="Select as nominee"
+                            buttonText="Remove from nominees"
                         />
                     ))
                 )}
             </div>
-
             <button
                 ref={ref}
                 disabled={isFetchingNextPage || !data.pages[data.pages.length - 1].pagination.hasNextPage}
@@ -190,19 +201,18 @@ const FishCandidates = () => {
                     ? 'Loading...'
                     : 'Load More'}
             </button>
-
             <ConfirmationModal
                 open={openModal}
                 setOpen={setOpenModal}
                 title="Confirmation"
-                mainText="Are you sure you want to select this fish?"
+                mainText="Are you sure?"
                 isLoading={isLoading}
                 cancelButton="Cancel"
                 confirmButton={isLoading ? 'Submitting...' : 'Yes'}
-                handleConfirm={handleConfirmSelection}
+                handleConfirm={handleConfirm}
             />
         </div>
     );
 };
 
-export default FishCandidates;
+export default SelectedFishes;

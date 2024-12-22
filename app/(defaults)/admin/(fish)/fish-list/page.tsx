@@ -1,8 +1,8 @@
-import UserList from '@/components/admin/users/all-users';
+import FishList from '@/components/admin/fish/all-fishes';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'All users',
+    title: 'All fishes',
 };
 
 const Page = () => {
@@ -20,7 +20,7 @@ const Page = () => {
                 </li>
             </ul>
             <div className="pt-5">
-                <UserList />
+                <FishList />
             </div>
         </div>
     );

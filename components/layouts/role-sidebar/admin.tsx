@@ -84,7 +84,7 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             </div>
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link href={'/admin/profile-id'}>
                             <div className="flex items-center">
                                 <IconUsers className="shrink-0 group-hover:!text-primary" />
@@ -115,7 +115,7 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                                 </span>
                             </div>
                         </Link>
-                    </li>
+                    </li> */}
                 </ul>
             </AnimateHeight>
             <button
@@ -238,7 +238,7 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             </div>
                         </Link>
                     </li>
-                    <li>
+                    {/* <li>
                         <Link href={'/admin/fish-nominations'}>
                             <div className="flex items-center">
                                 <IconNominee className="shrink-0 group-hover:!text-primary" />
@@ -269,7 +269,7 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                                 </span>
                             </div>
                         </Link>
-                    </li>
+                    </li> */}
                     <li>
                         <Link href={'/admin/fish-scores'}>
                             <div className="flex items-center">
