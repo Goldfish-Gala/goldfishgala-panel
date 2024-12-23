@@ -220,17 +220,24 @@ const ComponentsUpdateUserProfile = () => {
                     </li>
                     <div className="mt-3 sm:col-span-2 flex gap-5"
                     >
-                        {/* <button type="button" className="btn bg-red-600 shadow-red-300 border-red-500 btn-primary">
-                            <Link href="/users/profile">
-                                Back
-                            </Link>
-                        </button>  */}
                         {isButtonVisible && (
-                        <button type="submit"
-                        className="btn btn-primary"
-                        disabled={isLoading}
-                        > {isLoading ? 'Proccessing...' : 'Save'}
-                        </button>  
+                        <>
+                            <button type="button" 
+                            className="btn bg-red-600 shadow-red-300 border-red-500 btn-primary"
+                            onClick={() => {
+                                setIsDisabled(!isDisabled); 
+                                setButtonVisible(!isButtonVisible);
+                              }}
+                            >
+                                Cancel
+                            </button> 
+                            
+                            <button type="submit"
+                            className="btn btn-primary"
+                            disabled={isLoading}
+                            > {isLoading ? 'Proccessing...' : 'Save'}
+                            </button>  
+                        </>
                         )}
                     </div>
                 </div>
