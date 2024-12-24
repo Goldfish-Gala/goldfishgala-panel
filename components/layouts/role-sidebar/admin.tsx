@@ -142,7 +142,7 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                         </Link>
                     </li>
                     <li>
-                        <Link href={'/admin/event-registration'}>
+                        <Link href={'/admin/event-properties'}>
                             <div className="flex items-center">
                                 <div className="ml-1.5">
                                     <IconRegister className="shrink-0 group-hover:!text-primary" />
