@@ -42,7 +42,7 @@ const Dashboard = () => {
         <div
             className="panel grid h-full grid-cols-1 content-between overflow-hidden before:absolute before:-right-44 before:bottom-0 before:top-0 before:m-auto before:h-[110%] before:w-[80%] before:rounded-full before:bg-black-dark-light"
             style={{
-                background: 'linear-gradient(135deg, #000000, #4B3F28, #D4AF37)',
+                background: 'linear-gradient(135deg, #F1C376, #D9B563, #FFDE4D)',
             }}
         >
             <div className="z-[7] mb-16 flex h-full w-full flex-col items-start justify-between text-white">
@@ -53,7 +53,9 @@ const Dashboard = () => {
                         <p className="text-lg font-bold md:text-xl">Selamat datang di Goldfish Gala</p>
                     </div>
                     <p className="font-bold">
-                        Goldfish Gala merupakan ajang pamer keunikan dan keindahan Ikan koki, memberikan kesempatan kepada para penghobi untuk menunjukkan taste mereka terhadap ikan Koki dan membangun sebuah komunitas yang saling mendukung dan terhubung.
+                        Goldfish Gala merupakan ajang pamer keunikan dan keindahan Ikan koki, memberikan kesempatan
+                        kepada para penghobi untuk menunjukkan taste mereka terhadap ikan Koki dan membangun sebuah
+                        komunitas yang saling mendukung dan terhubung.
                     </p>
                     <div className="bottom-8 flex items-center justify-center gap-2 md:absolute">
                         <p>Follow Kami di {''}</p>

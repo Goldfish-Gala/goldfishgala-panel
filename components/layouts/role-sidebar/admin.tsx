@@ -61,17 +61,17 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconUserTable className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/all-users'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/all-users'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('All Users')}
                                 </span>
                             </div>
                         </Link>
                     </li>
-
                 </ul>
             </AnimateHeight>
             <button
@@ -96,10 +96,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconEventList className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/all-events'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/all-events'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Event List')}
                                 </span>
@@ -111,10 +112,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconPriceTag className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/event-price'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/event-price'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Event Price')}
                                 </span>
@@ -128,10 +130,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                                     <IconRegister className="shrink-0 group-hover:!text-primary" />
                                 </div>
                                 <span
-                                    className={`${pathname === '/admin/event-registration'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } -ml-1.5 ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/event-registration'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } -ml-1.5 ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Event Registration')}
                                 </span>
@@ -145,10 +148,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                                     <IconRegister className="shrink-0 group-hover:!text-primary" />
                                 </div>
                                 <span
-                                    className={`${pathname === '/admin/event-properties'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } -ml-1.5 ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/event-properties'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } -ml-1.5 ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Event Phase, Status, & Period')}
                                 </span>
@@ -179,10 +183,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconFishList className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/fish-list'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/fish-list'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Fishes')}
                                 </span>
@@ -194,10 +199,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconScore className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/fish-scores'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/fish-scores'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Fish Scores')}
                                 </span>
@@ -209,10 +215,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconFinalScore className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/fish-final-scores'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/fish-final-scores'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Fish Final Scores')}
                                 </span>
@@ -243,10 +250,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconUserRegistration className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/user-reg'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/user-reg'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('User Registration List')}
                                 </span>
@@ -258,10 +266,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconRegStatus className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/user-reg-status'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/user-reg-status'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('User Registration Status List')}
                                 </span>
@@ -288,64 +297,36 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
             <AnimateHeight duration={300} height={currentMenu === 'champions' ? 'auto' : 0}>
                 <ul className="sub-menu text-gray-500">
                     <li>
-                        <Link href="/admin/champions-final-scores">
+                        <Link href="/admin/champion-selection">
                             <div className="flex items-center">
-                                <IconFinalScore className="shrink-0 group-hover:!text-primary" />
+                                <IconCreateCup className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/champions-final-scores'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/champion-selection'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
-                                    {T!('Final Scores')}
+                                    {T!('Champion selection')}
                                 </span>
                             </div>
                         </Link>
                     </li>
                     <li>
-                        <Link href={'/admin/champions'}>
+                        <Link href={'/admin/champions-list'}>
                             <div className="flex items-center">
                                 <IconCup className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/champions'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/champions-list'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
-                                    {T!('Champions')}
+                                    {T!('Champions List')}
                                 </span>
                             </div>
                         </Link>
-                        <li>
-                            <Link href={'/admin/create-champion'}>
-                                <div className="flex items-center">
-                                    <IconCreateCup className="shrink-0 group-hover:!text-primary" />
-                                    <span
-                                        className={`${pathname === '/admin/create-champion'
-                                            ? 'text-primary'
-                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                            } ltr:pl-3 rtl:pr-3`}
-                                    >
-                                        {T!('Create Champion')}
-                                    </span>
-                                </div>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link href={'/admin/champion-categories'}>
-                                <div className="flex items-center">
-                                    <IconCategory className="shrink-0 group-hover:!text-primary" />
-                                    <span
-                                        className={`${pathname === '/admin/champion-categories'
-                                            ? 'text-primary'
-                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                            } ltr:pl-3 rtl:pr-3`}
-                                    >
-                                        {T!('Categories')}
-                                    </span>
-                                </div>
-                            </Link>
-                        </li>
                     </li>
                 </ul>
             </AnimateHeight>
@@ -371,10 +352,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconInvoiceList className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/invoices'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/invoices'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('All Invoice List')}
                                 </span>
@@ -386,10 +368,11 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                             <div className="flex items-center">
                                 <IconPayment className="shrink-0 group-hover:!text-primary" />
                                 <span
-                                    className={`${pathname === '/admin/payments'
-                                        ? 'text-primary'
-                                        : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
-                                        } ltr:pl-3 rtl:pr-3`}
+                                    className={`${
+                                        pathname === '/admin/payments'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('All Payment List')}
                                 </span>

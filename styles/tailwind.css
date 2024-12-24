@@ -293,7 +293,7 @@
     }
 
     .btn-primary {
-        @apply border-primary bg-primary text-white shadow-primary/60 transition-transform duration-150 ease-in-out active:scale-95;
+        @apply border-primary bg-primary text-white-light shadow-primary/60 transition-transform duration-150 ease-in-out hover:bg-primary/60 active:scale-95;
     }
     .btn-outline-primary {
         @apply border-primary text-primary shadow-none hover:bg-primary hover:text-white;
