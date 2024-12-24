@@ -52,10 +52,10 @@ const OngoingEvent = () => {
         statusCode === 'green_status'
             ? '#66e89b'
             : statusCode === 'yellow_status'
-                ? '#e2a03f'
-                : statusCode === 'red_status'
-                    ? '#e7515a'
-                    : '#888ea8';
+            ? '#e2a03f'
+            : statusCode === 'red_status'
+            ? '#e7515a'
+            : '#888ea8';
     const phaseCode = data?.event_reg_phase_code;
 
     // const eventPhase =
@@ -89,12 +89,10 @@ const OngoingEvent = () => {
         }
     };
 
-    console.log(data, "isi data ongoing event");
+    console.log(data, 'isi data ongoing event');
 
     return (
-        <div
-            className="panel lg:col-span-2"
-        >
+        <div className="panel lg:col-span-2">
             {isPending ? (
                 <div className="flex min-h-[336px] w-full flex-col items-center justify-center md:min-h-[348px]">
                     <SpinnerWithText text="Memuat..." />
@@ -103,13 +101,13 @@ const OngoingEvent = () => {
                 <>
                     {data && (
                         <div className="mb-5 text-center">
-                            <h5 className="text-sm font-semibold text-white dark:text-white-light">
+                            <h5 className="text-sm font-semibold text-dark dark:text-white-light">
                                 Introducing Our Latest Event
                             </h5>
                         </div>
                     )}
                     {!data ? (
-                        <div className="flex min-h-[200px] flex-wrap justify-center items-center">
+                        <div className="flex min-h-[200px] flex-wrap items-center justify-center">
                             <p className="mx-auto mt-10 text-base font-extrabold text-white dark:text-white-light md:mt-10">
                                 Saat ini tidak ada event yang berlangsung. Follow Instagram kami untuk update terbaru.
                             </p>
@@ -117,30 +115,34 @@ const OngoingEvent = () => {
                     ) : (
                         <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
                             <div className="flex w-full flex-col items-center gap-2 font-semibold text-white xl:mt-2">
-                                <p className="text-xl font-extrabold bg-gradient-to-r from-[#F8F3AC] to-[#E0C052] text-transparent bg-clip-text md:text-2xl lg:text-3xl xl:text-4xl">
+                                <p className="bg-gradient-to-r from-[#C8A02F] to-[#A88E4B] bg-clip-text text-xl font-extrabold text-transparent dark:from-[#F8F3AC] dark:to-[#E0C052] md:text-2xl lg:text-3xl xl:text-4xl">
                                     {data?.event_name}
                                 </p>
-                                <p className="text-md bg-gradient-to-r from-[#F8F3AC] to-[#E0C052] text-transparent bg-clip-text md:text-base mb-5">
+                                <p className="text-md mb-5 bg-gradient-to-r from-[#C8A02F] to-[#A88E4B] bg-clip-text text-transparent dark:from-[#F8F3AC] dark:to-[#E0C052] md:text-base">
                                     {data?.event_desc}
                                 </p>
-                                <div className="w-[320px] rounded-lg border border-[#ebedf2] bg-white p-6 px-3 dark:border-0 dark:bg-[#1b2e4b] sm:px-6 md:w-[420px] shadow-lg hover:shadow-xl transition-shadow duration-300"
+                                <div
+                                    className="w-[320px] rounded-lg bg-white p-6 px-3 shadow-lg transition-shadow duration-300 hover:shadow-xl dark:bg-[#1b2e4b] sm:px-6 md:w-[420px]"
                                     style={{
-                                        background: 'linear-gradient(130deg, #1d1d1d, #4B3F28, #D4AF37)',
-                                    }}>
+                                        background: 'linear-gradient(130deg, #FFDE4D, #F1C376)',
+                                    }}
+                                >
                                     <div className="flex flex-col items-center gap-4">
                                         <div className="flex w-full items-center justify-between text-sm font-semibold text-white">
                                             <p>Status / Fase</p>
-                                            <div className="flex gap-2 items-center">
-                                                <div className="pt-0.5 md:pt-0 animate-heartbeat">
+                                            <div className="flex items-center gap-2">
+                                                <div className="animate-heartbeat pt-0.5 md:pt-0">
                                                     <IconCircle fill={statusColor} />
                                                 </div>
-                                                <p className="text-xs md:text-sm text-gold-400 font-bold">{data?.event_reg_phase_name}</p>
+                                                <p className="text-gold-400 text-xs font-bold md:text-sm">
+                                                    {data?.event_reg_phase_name}
+                                                </p>
                                             </div>
                                         </div>
                                         <div className="flex w-full items-center justify-between text-sm font-semibold text-white">
                                             <p>Durasi</p>
-                                            <p className="flex items-center rounded-full bg-gold-300 px-2 py-0.5 text-xs font-semibold text-dark dark:bg-dark dark:text-white-light">
-                                                <IconClock className="h-3 w-3 mr-1" />
+                                            <p className="bg-gold-300 flex items-center rounded-full bg-dark px-2 py-0.5 text-xs font-semibold text-white dark:text-white-light">
+                                                <IconClock className="mr-1 h-3 w-3" />
                                                 {dayLeft()} Hari lagi
                                             </p>
                                         </div>
@@ -151,7 +153,7 @@ const OngoingEvent = () => {
                                 <Link href={`/fish-registration/${data?.event_id}`}>
                                     <button
                                         disabled={isDisable}
-                                        className="btn btn-primary mb-5 bg-gold-500 text-white hover:bg-gold-600 active:scale-95 transition duration-300 ease-in-out"
+                                        className="btn btn-primary bg-gold-500 hover:bg-gold-600 mb-5 text-white transition duration-300 ease-in-out active:scale-95"
                                         onClick={() => setDisable(true)}
                                     >
                                         {isDisable ? 'Loading...' : 'DAFTAR SEKARANG'}
@@ -159,7 +161,7 @@ const OngoingEvent = () => {
                                 </Link>
                             ) : (
                                 <button
-                                    className="btn btn-primary mb-5 bg-gold-500 text-white-light hover:bg-gold-600 active:scale-95 transition duration-300 ease-in-out"
+                                    className="btn btn-primary bg-gold-400 hover:bg-gold-600 mb-5 text-white-light transition duration-300 ease-in-out active:scale-95"
                                     onClick={handleRegisterFalse}
                                 >
                                     DAFTAR SEKARANG

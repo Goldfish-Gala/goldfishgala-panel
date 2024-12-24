@@ -34,7 +34,7 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
     const detailEmbed = () => {
         return (
             <div className="flex flex-col items-center justify-center">
-                <div className="w-[325px] bg-white-light py-2 pl-1 pr-4 dark:bg-white-dark sm:rounded">
+                <div className="w-[325px] bg-white-light py-2 pl-1 pr-4 text-black dark:bg-white-dark sm:rounded">
                     {[
                         { label: 'Fish Name', value: fish?.fish_name },
                         {
@@ -48,7 +48,7 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
                         { label: 'User', value: username },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">
-                            <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
+                            <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 ">
                                 <p className="capitalize">{item.label}</p>
                                 <p className="-ml-4 mr-2 text-center">:</p>
                                 <p>

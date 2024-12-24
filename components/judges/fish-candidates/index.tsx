@@ -141,7 +141,7 @@ const FishCandidates = () => {
                 <div className="flex gap-2">
                     <label className="pt-1.5 font-semibold">Limit :</label>
                     <select
-                        className="rounded bg-dark-light dark:bg-white"
+                        className="rounded bg-dark-light text-black dark:bg-white"
                         value={limit}
                         onChange={(e) => setLimit(Number(e.target.value))}
                     >
@@ -153,7 +153,7 @@ const FishCandidates = () => {
                 <div className="flex gap-2">
                     <label className="pt-1.5 font-semibold">Sort by :</label>
                     <select
-                        className="rounded bg-dark-light dark:bg-white"
+                        className="rounded bg-dark-light text-black dark:bg-white"
                         value={sort}
                         onChange={(e) => setSort(e.target.value)}
                     >
