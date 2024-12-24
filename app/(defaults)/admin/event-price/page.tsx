@@ -1,9 +1,8 @@
 import EventPriceList from '@/components/admin/events/event-price';
-import UserList from '@/components/admin/users/all-users';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Dashboard',
+    title: 'Event Price',
 };
 
 const EventPrice = () => {
