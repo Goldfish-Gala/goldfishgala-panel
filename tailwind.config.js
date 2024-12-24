@@ -35,13 +35,13 @@ module.exports = {
             },
             colors: {
                 primary: {
-                    DEFAULT: '#E0C052',
-                    light: '#E0C052',
+                    DEFAULT: '#C8A02F',
+                    light: '#D9B563',
                     'dark-light': 'rgba(179,142,44,0.15)',
                 },
                 secondary: {
-                    DEFAULT: '#C5A05D',
-                    light: '#F1DEB3',
+                    DEFAULT: '#A88E4B',
+                    light: '#C4A26E',
                     'dark-light': 'rgba(197,160,93,0.15)',
                 },
                 success: {
@@ -60,9 +60,9 @@ module.exports = {
                     'dark-light': 'rgba(226,160,63,.15)',
                 },
                 info: {
-                    DEFAULT: '#E8C547',
-                    light: '#FFF4CE',
-                    'dark-light': 'rgba(232,197,71,0.15)',
+                    DEFAULT: '#D1B14A', 
+                    light: '#D9C472', 
+                    'dark-light': 'rgba(232,197,71,0.15)', 
                 },
                 dark: {
                     DEFAULT: '#3b3f5c',
