@@ -2,7 +2,7 @@ import EventPriceList from '@/components/admin/events/event-price';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Event Price',c
+    title: 'Event Price',
 };
 
 const EventPrice = () => {
