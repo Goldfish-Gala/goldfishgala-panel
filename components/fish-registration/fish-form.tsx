@@ -450,7 +450,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                 <button
                                     disabled={isLoading}
                                     type="button"
-                                    className="btn btn-gradient !mt-8 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
+                                    className="btn btn-primary !mt-8 w-fit border-0 uppercase md:w-[50%]"
                                     onClick={handleOpenModal1}
                                 >
                                     {isLoading ? 'Sedang diproses...' : 'Selanjutnya'}
@@ -502,11 +502,10 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                                             options={
                                                                 eventPrices?.map((price) => ({
                                                                     value: price.event_price_id,
-                                                                    label: `${
-                                                                        price.event_price_name
-                                                                    } (Biaya: ${formatToRupiah(
-                                                                        price.event_price_amount
-                                                                    )})`,
+                                                                    label: `${price.event_price_name
+                                                                        } (Biaya: ${formatToRupiah(
+                                                                            price.event_price_amount
+                                                                        )})`,
                                                                 })) || []
                                                             }
                                                             styles={{
@@ -578,7 +577,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                 <button
                                     disabled={isLoading}
                                     type="button"
-                                    className="btn2 btn-gradient3 !mt-2 w-fit self-center border-0 py-1.5 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[40%]"
+                                    className="btn2 btn-gradient3 !mt-2 w-fit self-center border-0 py-1.5 uppercase "
                                     onClick={handleAddFish}
                                 >
                                     Tambahkan ikan lain
@@ -588,7 +587,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                         disabled={isLoading}
                                         type="button"
                                         onClick={handleBack}
-                                        className="btn2 btn-gradient2 !mt-14 w-fit border-0 py-1.5 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
+                                        className="btn btn-primary !mt-14 w-fit border-0 py-1.5 uppercase "
                                     >
                                         <ArrowLeft />
                                         &nbsp; Kembali
@@ -596,7 +595,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                     <button
                                         disabled={isLoading}
                                         type="button"
-                                        className="btn btn-gradient !mt-14 w-fit border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] md:w-[50%]"
+                                        className="btn btn-primary !mt-14 w-fit border-0 uppercase  md:w-[50%]"
                                         onClick={handleOpenModal2}
                                     >
                                         {isLoading ? 'Sedang diproses...' : 'Daftarkan ikan'}

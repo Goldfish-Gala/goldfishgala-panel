@@ -9,8 +9,8 @@ const IconFishMenu = ({ className }: { className?: string }) => {
             viewBox="0 0 480 480"
             fill="currentColor"
         >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
                 {' '}
                 <style type="text/css"> </style>{' '}

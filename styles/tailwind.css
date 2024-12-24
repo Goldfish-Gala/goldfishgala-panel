@@ -343,7 +343,7 @@
     }
 
     .btn-gradient {
-        @apply bg-gradient-to-r from-[#EF1262] to-[#4361EE] text-white transition-transform duration-150 ease-in-out hover:from-[#4361EE] hover:to-[#EF1262] active:scale-95;
+        @apply bg-gradient-to-r from-[#D4AF37] to-[#C8A029] text-white transition-transform duration-150 ease-in-out hover:from-[#C8A029] hover:to-[#D4AF37] active:scale-95;
         &:disabled {
             @apply bg-white-dark hover:bg-white-dark active:scale-100;
         }

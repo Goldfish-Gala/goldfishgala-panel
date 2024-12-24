@@ -8,26 +8,41 @@ const rotateX = plugin(function ({ addUtilities }) {
     });
 });
 module.exports = {
-    content: ['./App.tsx', './app/**/*.{js,ts,jsx,tsx}', './pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './src/**/*.{js,ts,jsx,tsx}'],
+    content: [
+        './App.tsx',
+        './app/**/*.{js,ts,jsx,tsx}',
+        './pages/**/*.{js,ts,jsx,tsx}',
+        './components/**/*.{js,ts,jsx,tsx}',
+        './src/**/*.{js,ts,jsx,tsx}',
+    ],
     darkMode: 'class',
     theme: {
         container: {
             center: true,
         },
         extend: {
+            keyframes: {
+                heartbeat: {
+                    '0%, 100%': { transform: 'scale(1)' },
+                    '25%': { transform: 'scale(1.2)' },
+                },
+            },
+            animation: {
+                heartbeat: 'heartbeat 1.5s infinite',
+            },
             textShadow: {
                 'dark-mode': '2px 2px 8px rgba(0, 0, 0, 0.8)',
             },
             colors: {
                 primary: {
-                    DEFAULT: '#4361ee',
-                    light: '#eaf1ff',
-                    'dark-light': 'rgba(67,97,238,.15)',
+                    DEFAULT: '#E0C052',
+                    light: '#E0C052',
+                    'dark-light': 'rgba(179,142,44,0.15)',
                 },
                 secondary: {
-                    DEFAULT: '#805dca',
-                    light: '#ebe4f7',
-                    'dark-light': 'rgb(128 93 202 / 15%)',
+                    DEFAULT: '#C5A05D',
+                    light: '#F1DEB3',
+                    'dark-light': 'rgba(197,160,93,0.15)',
                 },
                 success: {
                     DEFAULT: '#00ab55',
@@ -45,9 +60,9 @@ module.exports = {
                     'dark-light': 'rgba(226,160,63,.15)',
                 },
                 info: {
-                    DEFAULT: '#2196f3',
-                    light: '#e7f7ff',
-                    'dark-light': 'rgba(33,150,243,.15)',
+                    DEFAULT: '#E8C547',
+                    light: '#FFF4CE',
+                    'dark-light': 'rgba(232,197,71,0.15)',
                 },
                 dark: {
                     DEFAULT: '#3b3f5c',
@@ -63,6 +78,9 @@ module.exports = {
                     DEFAULT: '#ffffff',
                     light: '#e0e6ed',
                     dark: '#888ea8',
+                },
+                backgroundImage: {
+                    'primary-gradient': 'linear-gradient(to right, #F8F3AC, #E0C052)',
                 },
             },
             fontFamily: {
