@@ -35,13 +35,13 @@ module.exports = {
             },
             colors: {
                 primary: {
-                    DEFAULT: '#FABC3F',
+                    DEFAULT: '#F3C623',
                     light: '#D9B563',
                     'dark-light': '#C08B5C',
                     'white-light': '#FCF596',
                 },
                 secondary: {
-                    DEFAULT: '#A88E4B',
+                    DEFAULT: '#EB8317',
                     light: '#C4A26E',
                     'dark-light': '#C07F00',
                 },
@@ -68,7 +68,7 @@ module.exports = {
                 dark: {
                     DEFAULT: '#3b3f5c',
                     light: '#eaeaec',
-                    'dark-light': 'rgba(59,63,92,.15)',
+                    'dark-light': '#343131',
                 },
                 black: {
                     DEFAULT: '#0e1726',
@@ -77,8 +77,8 @@ module.exports = {
                 },
                 white: {
                     DEFAULT: '#ffffff',
-                    light: '#e0e6ed',
-                    dark: '#888ea8',
+                    light: '#F2F9FF',
+                    dark: '#BCCCDC',
                 },
                 backgroundImage: {
                     'primary-gradient': 'linear-gradient(to right, #F8F3AC, #E0C052)',
