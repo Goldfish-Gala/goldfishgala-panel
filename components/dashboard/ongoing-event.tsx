@@ -101,7 +101,7 @@ const OngoingEvent = () => {
                 <>
                     {data && (
                         <div className="mb-5 text-center">
-                            <h5 className="text-sm font-semibold text-white dark:text-white-light">
+                            <h5 className="text-sm font-semibold text-dark dark:text-white-light">
                                 Introducing Our Latest Event
                             </h5>
                         </div>
