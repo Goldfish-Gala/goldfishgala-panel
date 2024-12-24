@@ -50,7 +50,6 @@ const UpdateEventPriceModal = ({ open, setOpen, setDataChange, eventPriceData }:
                 },
                 authCookie
             );
-            console.log("response:", response)
             if (response.success === false) {
                 await Swal.fire({
                     icon: 'error',
@@ -73,7 +72,7 @@ const UpdateEventPriceModal = ({ open, setOpen, setDataChange, eventPriceData }:
     return (
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" open={open} onClose={() => setOpen(false)}>
-                <div className="fixed inset-0 bg-black bg-opacity-60" />
+                <div className="fixed inset-0 z-20 bg-black bg-opacity-60" />
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
                     <Dialog.Panel className="bg-white rounded-lg shadow-lg w-full max-w-md">
                         <div className="flex items-center justify-between px-4 py-3 bg-gray-100">
@@ -128,7 +127,7 @@ const UpdateEventPriceModal = ({ open, setOpen, setDataChange, eventPriceData }:
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-4 py-2 text-white bg-blue-600 rounded"
+                                    className="px-4 py-2 text-white btn-primary rounded"
                                     disabled={isLoading}
                                 >
                                     {isLoading ? 'Submitting...' : 'Submit'}
