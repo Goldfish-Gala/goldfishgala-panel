@@ -94,24 +94,33 @@ interface EventReg {
     eventRegPeriod: EventRegPeriod;
 }
 
-interface EventRegPhase {
-    event_reg_phase_id: string;
+interface EventRegPhaseRegister {
     event_reg_phase_code: string;
     event_reg_phase_name: string;
     event_reg_phase_desc: string;
 }
 
-interface EventRegStatus {
-    event_reg_status_id: string;
+interface EventRegPhase extends EventRegPhaseRegister {
+    event_reg_phase_id: string;
+}
+
+interface EventRegStatusRegister {
     event_reg_status_code: string;
     event_reg_status_name: string;
     event_reg_status_desc: string;
 }
 
-interface EventRegPeriod {
+interface EventRegStatus extends EventRegStatusRegister {
+    event_reg_status_id: string;
+}
+
+interface EventRegPeriodRegister {
+    event_reg_start_date: string | undefined;
+    event_reg_end_date: string | undefined;
+}
+
+interface EventRegPeriod extends EventRegPeriodRegister {
     event_reg_period_id: string;
-    event_reg_start_date: string;
-    event_reg_end_date: string;
     event_reg_created_date: string;
 }
 

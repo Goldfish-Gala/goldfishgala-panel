@@ -147,11 +147,6 @@ const EventPriceList = () => {
     
     return (
         <>
-            <CreateEventPriceModal
-                open={openModal}
-                setOpen={setOpenModal}
-                setDataChange={setDataChange}
-            />
         <div className='flex-column gap-5'>
             <button
                     type="button"
@@ -256,6 +251,11 @@ const EventPriceList = () => {
             </div>
             </div>
         </div>
+            <CreateEventPriceModal
+                open={openModal}
+                setOpen={setOpenModal}
+                setDataChange={setDataChange}
+            />
             <UpdateEventPriceModal
                 open={openUpdateModal}
                 setOpen={setOpenUpdateModal}

@@ -31,3 +31,14 @@ export const formatedDate = (isoDate: string | undefined): string => {
 
     return `${day} ${month} ${year}`;
 };
+
+export const formatDateToString = (date: Date | null): string => {
+    if (!date) {
+        return ''
+    }
+    const day = date.getDate(); 
+    const month = date.toLocaleString('en-US', { month: 'short' }); 
+    const year = date.getFullYear(); 
+
+    return `${day} ${month} ${year}`;
+};
