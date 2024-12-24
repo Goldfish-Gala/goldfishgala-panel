@@ -9,10 +9,10 @@ const IconCreateInvoice = ({ className }: { className?: string }) => {
             xmlns="http://www.w3.org/2000/svg"
             fill="currentColor"
             stroke="currentColor"
-            stroke-width="14.336000000000002"
+            strokeWidth="14.336000000000002"
         >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
                 <path
                     d="M926.56 516.61l24.32-8.66V292.57h-73.14v166.36c-44.61 25.8-73.14 73.73-73.14 126.21 0 52.48 28.54 100.41 73.14 126.21v129.79H146.31V711.36c44.61-25.8 73.14-73.73 73.14-126.21 0-52.48-28.54-100.41-73.14-126.21v-129.8h292.57V256H73.17v251.95l24.32 8.66c29.2 10.38 48.82 37.93 48.82 68.54 0 30.61-19.62 58.16-48.82 68.54l-24.32 8.66V914.3h877.71V662.34l-24.32-8.66c-29.2-10.38-48.82-37.93-48.82-68.54 0-30.6 19.63-58.16 48.82-68.53z"

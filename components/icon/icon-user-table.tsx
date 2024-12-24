@@ -8,15 +8,15 @@ const IconUserTable = ({ className }: { className?: string }) => {
             id="Flat"
             xmlns="http://www.w3.org/2000/svg"
             stroke="currentColor"
-            stroke-width="4.352"
+            strokeWidth="4.352"
         >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
             <g
                 id="SVGRepo_tracerCarrier"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 stroke="#CCCCCC"
-                stroke-width="1.536"
+                strokeWidth="1.536"
             ></g>
             <g id="SVGRepo_iconCarrier">
                 {' '}

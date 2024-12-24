@@ -11,8 +11,8 @@ const IconFinalScore = ({ className }: { className?: string }) => {
             preserveAspectRatio="xMidYMid meet"
             fill="currentColor"
         >
-            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+            <g id="SVGRepo_bgCarrier" strokeWidth="0"></g>
+            <g id="SVGRepo_tracerCarrier" strokeLinecap="round" strokeLinejoin="round"></g>
             <g id="SVGRepo_iconCarrier">
                 <path
                     d="M10.921 3.28S4.789 18.509 2.009 41.369c-.249 2.044 4.458.215 6.082-.404c3.67-22.515 8.91-37.943 8.91-37.943c-1.53-.262-6.08.258-6.08.258"
