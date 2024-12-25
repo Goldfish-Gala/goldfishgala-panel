@@ -277,7 +277,7 @@
         }
     }
     .btn2 {
-        @apply relative flex items-center justify-center rounded-md border px-2 p-1 text-xs font-semibold outline-none transition duration-300 active:scale-90;
+        @apply relative flex items-center justify-center rounded-md border p-1 px-2 text-xs font-semibold outline-none transition duration-300 active:scale-90;
         &:disabled {
             @apply scale-100 cursor-not-allowed bg-gray-500 opacity-90 hover:bg-gray-500;
         }
@@ -293,9 +293,9 @@
     }
 
     .btn-primary {
-        @apply border-primary bg-primary text-white-light font-bold shadow-primary/60 transition-transform duration-150 ease-in-out hover:bg-primary/60 active:scale-95;
+        @apply border-white bg-primary font-bold text-white shadow-primary/60 transition-transform duration-150 ease-in-out hover:bg-primary/60 active:scale-95;
         &:disabled {
-            @apply bg-white-dark hover:bg-white-dark active:scale-100 cursor-not-allowed;
+            @apply cursor-not-allowed bg-white-dark hover:bg-white-dark active:scale-100;
         }
     }
     .btn-outline-primary {
@@ -303,10 +303,21 @@
     }
 
     .btn-secondary {
-        @apply border-secondary bg-secondary text-white shadow-secondary/60 transition-transform duration-150 ease-in-out hover:bg-secondary-light active:scale-95;
+        @apply bg-secondary text-white shadow-secondary/60 transition-transform duration-150 ease-in-out hover:bg-secondary-light active:scale-95;
         &:disabled {
-            @apply bg-white-dark hover:bg-white-dark active:scale-100 cursor-not-allowed;
+            @apply cursor-not-allowed bg-white-dark hover:bg-white-dark active:scale-100;
         }
+    }
+
+    .btn-cancel {
+        @apply border-white bg-danger-light text-white shadow-danger/60 transition-transform duration-150 ease-in-out hover:bg-danger active:scale-95;
+        &:disabled {
+            @apply cursor-not-allowed bg-white-dark hover:bg-white-dark active:scale-100;
+        }
+    }
+
+    .btn-text {
+        @apply font-bold drop-shadow-2xl;
     }
     .btn-outline-secondary {
         @apply border-secondary text-secondary shadow-none hover:bg-secondary hover:text-white;
