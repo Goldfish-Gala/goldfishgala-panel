@@ -42,22 +42,24 @@ const Dashboard = () => {
         <div
             className="panel grid h-full grid-cols-1 content-between overflow-hidden before:absolute before:-right-44 before:bottom-0 before:top-0 before:m-auto before:h-[110%] before:w-[80%] before:rounded-full before:bg-black-dark-light"
             style={{
-                background: 'linear-gradient(135deg, #F1C376, #D9B563, #FFDE4D)',
+                background: 'linear-gradient(135deg, #C08B5C, #D9B563, #FFDE4D)',
             }}
         >
             <div className="z-[7] mb-16 flex h-full w-full flex-col items-start justify-between text-white">
-                <div className="self-end">{formattedDate}</div>
+                <div className="self-end drop-shadow-lg">{formattedDate}</div>
                 <div className="flex h-full flex-col justify-between px-2 md:justify-center md:gap-8">
                     <div>
-                        <p className="font-bold sm:text-base">Halo {`${user.user_fname} ${user.user_lname}`},</p>
-                        <p className="text-lg font-bold md:text-xl">Selamat datang di Goldfish Gala</p>
+                        <p className="font-bold drop-shadow-lg sm:text-base">
+                            Halo {`${user.user_fname} ${user.user_lname}`},
+                        </p>
+                        <p className="text-lg font-bold drop-shadow-lg md:text-xl">Selamat datang di Goldfish Gala</p>
                     </div>
-                    <p className="font-bold">
+                    <p className="font-bold drop-shadow-lg">
                         Goldfish Gala merupakan ajang pamer keunikan dan keindahan Ikan koki, memberikan kesempatan
                         kepada para penghobi untuk menunjukkan taste mereka terhadap ikan Koki dan membangun sebuah
                         komunitas yang saling mendukung dan terhubung.
                     </p>
-                    <div className="bottom-8 flex items-center justify-center gap-2 md:absolute">
+                    <div className="bottom-8 flex items-center justify-center gap-2 drop-shadow-lg md:absolute">
                         <p>Follow Kami di {''}</p>
                         <a
                             href="https://www.instagram.com/goldfishgala/profilecard/?igsh=MTB4c253MnhtYndxMA=="

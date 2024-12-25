@@ -10,12 +10,15 @@ import Swal from 'sweetalert2';
 import Link from 'next/link';
 import { useState } from 'react';
 import { getAllOngoingEvents } from '@/api/event-reg/api-event';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/store';
 
 const OngoingEvent = () => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const [isDisable, setDisable] = useState(false);
+    const user = useSelector((state: IRootState) => state.auth.user);
 
     const fetchOngoingEvent = async (): Promise<OneOngoingEvent> => {
         const onGoingEvent = await getAllOngoingEvents(authCookie);
@@ -71,9 +74,19 @@ const OngoingEvent = () => {
 
     const handleRegisterFalse = async () => {
         const msg =
-            phaseCode === 'coming_soon_phase' || statusCode !== 'grey_status'
-                ? 'PENDAFTARAAN BELUM DIBUKA'
-                : 'PENDAFTARAAN SUDAH DITUTUP';
+            statusCode === 'grey_status' ||
+            phaseCode === 'nominate_phase' ||
+            phaseCode === 'scoring_phase' ||
+            phaseCode === 'announcement_phase' ||
+            phaseCode === 'content_upload_phase' ||
+            phaseCode === 'closed_and_meeting_phase'
+                ? 'PENDAFTARAAN SUDAH DITUTUP'
+                : 'PENDAFTARAAN BELUM DIBUKA';
+        showMessage(msg, 'info');
+    };
+
+    const handleRoleFalse = async () => {
+        const msg = 'Judges and Admin not allowed to take part in the competition';
         showMessage(msg, 'info');
     };
 
@@ -115,21 +128,16 @@ const OngoingEvent = () => {
                     ) : (
                         <div className="flex h-full w-full flex-col items-center gap-8 px-6 pb-4 xl:gap-10">
                             <div className="flex w-full flex-col items-center gap-2 font-semibold text-white xl:mt-2">
-                                <p className="bg-gradient-to-r from-[#C8A02F] to-[#A88E4B] bg-clip-text text-xl font-extrabold text-transparent dark:from-[#F8F3AC] dark:to-[#E0C052] md:text-2xl lg:text-3xl xl:text-4xl">
+                                <p className="bg-gradient-to-r from-[#C8A02F] to-[#E0C052] bg-clip-text text-xl font-extrabold text-transparent dark:from-[#F8F3AC] dark:to-[#E0C052] md:text-2xl lg:text-3xl xl:text-4xl">
                                     {data?.event_name}
                                 </p>
                                 <p className="text-md mb-5 bg-gradient-to-r from-[#C8A02F] to-[#A88E4B] bg-clip-text text-transparent dark:from-[#F8F3AC] dark:to-[#E0C052] md:text-base">
                                     {data?.event_desc}
                                 </p>
-                                <div
-                                    className="w-[320px] rounded-lg bg-white p-6 px-3 shadow-lg transition-shadow duration-300 hover:shadow-xl dark:bg-[#1b2e4b] sm:px-6 md:w-[420px]"
-                                    style={{
-                                        background: 'linear-gradient(130deg, #FFDE4D, #F1C376)',
-                                    }}
-                                >
+                                <div className="w-[320px] rounded-lg bg-gradient-to-r from-[#F7F7F7] to-[#F8FAFC] p-6 px-3 shadow-lg transition-shadow duration-300 hover:shadow-xl dark:from-[#31363F] dark:to-[#404258] sm:px-6 md:w-[420px]">
                                     <div className="flex flex-col items-center gap-4">
-                                        <div className="flex w-full items-center justify-between text-sm font-semibold text-white">
-                                            <p>Status / Fase</p>
+                                        <div className="flex w-full items-center justify-between text-sm font-semibold text-dark dark:text-white">
+                                            <p className="font-bold">Status / Fase</p>
                                             <div className="flex items-center gap-2">
                                                 <div className="animate-heartbeat pt-0.5 md:pt-0">
                                                     <IconCircle fill={statusColor} />
@@ -139,9 +147,9 @@ const OngoingEvent = () => {
                                                 </p>
                                             </div>
                                         </div>
-                                        <div className="flex w-full items-center justify-between text-sm font-semibold text-white">
-                                            <p>Durasi</p>
-                                            <p className="bg-gold-300 flex items-center rounded-full bg-dark px-2 py-0.5 text-xs font-semibold text-white dark:text-white-light">
+                                        <div className="flex w-full items-center justify-between text-sm font-semibold text-dark dark:text-white">
+                                            <p className="font-bold">Durasi</p>
+                                            <p className="bg-gold-300 flex items-center rounded-full bg-secondary px-2 py-0.5 text-xs font-semibold text-white dark:text-white-light">
                                                 <IconClock className="mr-1 h-3 w-3" />
                                                 {dayLeft()} Hari lagi
                                             </p>
@@ -156,15 +164,22 @@ const OngoingEvent = () => {
                                         className="btn btn-primary bg-gold-500 hover:bg-gold-600 mb-5 text-white transition duration-300 ease-in-out active:scale-95"
                                         onClick={() => setDisable(true)}
                                     >
-                                        {isDisable ? 'Loading...' : 'DAFTAR SEKARANG'}
+                                        <span className="btn-text">{isDisable ? 'Loading...' : 'DAFTAR SEKARANG'}</span>
                                     </button>
                                 </Link>
+                            ) : user?.role_id === 3 || user?.role_id === 4 ? (
+                                <button
+                                    className="btn btn-primary bg-gold-400 hover:bg-gold-600 mb-5 text-white-light transition duration-300 ease-in-out active:scale-95"
+                                    onClick={handleRoleFalse}
+                                >
+                                    <span className="btn-text">DAFTAR SEKARANG</span>
+                                </button>
                             ) : (
                                 <button
                                     className="btn btn-primary bg-gold-400 hover:bg-gold-600 mb-5 text-white-light transition duration-300 ease-in-out active:scale-95"
                                     onClick={handleRegisterFalse}
                                 >
-                                    DAFTAR SEKARANG
+                                    <span className="btn-text">DAFTAR SEKARANG</span>
                                 </button>
                             )}
                         </div>
