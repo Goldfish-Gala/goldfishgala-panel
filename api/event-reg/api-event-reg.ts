@@ -1,8 +1,60 @@
 import api from '../api-config';
 
-export const getAllEventRegs = async (cookie: string | undefined) => {
+export const getAllEventRegs = async (page: number, limit: number, sort: string, cookie: string | undefined) => {
     try {
-        const response = await api.get(`/event-regs`, {
+        const response = await api.get(`/event-regs?page=${page}&limit=${limit}&sort=${sort}`, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+export const getOneEventReg = async (event_reg_id: string, cookie: string | undefined) => {
+    try {
+        const response = await api.get(`/event-regs/${event_reg_id}`, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+export const createEventReg = async (data: EventRegRegister, cookie: string | undefined) => {
+    try {
+        const response = await api.post(`/event-regs`, data, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+export const updateEventReg = async (event_reg_id: string, data: EventRegRegister, cookie: string | undefined) => {
+    try {
+        const response = await api.patch(`/event-regs/${event_reg_id}`, data, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+export const deleteEventReg = async (event_reg_id: string, cookie: string | undefined) => {
+    try {
+        const response = await api.delete(`/event-regs/${event_reg_id}`, {
             headers: {
                 Authorization: `Bearer ${cookie}`,
             },
