@@ -10,12 +10,12 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
-import CreateEventStatusModal from './components-create-event-status';
-import { getAllEventStatuses, getOneEventStatus, deleteEventStatus } from '@/api/event-reg/api-event-reg';
-import UpdateEventStatusModal from './components-update-event-status-modal';
+import { getAllEventRegs, deleteEventReg, getOneEventReg } from '@/api/event-reg/api-event-reg';
+import { formatedDate } from '@/utils/date-format';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
+import CreateEventRegModal from './components-create-event-reg';
 
-const EventStatusList = () => {
+const EventRegistrationList = () => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
@@ -28,98 +28,48 @@ const EventStatusList = () => {
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
     const [dataChange, setDataChange] = useState(false);
-    const [dataEventStatus, setDataEventStatus] = useState<EventRegStatus>({
+    const [dataEventReg, setDataEventReg] = useState<EventReg>({
+        event_reg_id: '',
         event_reg_status_id: '',
+        event_reg_phase_id: '',
+        event_reg_period_id: '',
+        event_reg_phase_code: '',
+        event_reg_phase_name: '',
+        event_reg_phase_desc: '',
         event_reg_status_code: '',
         event_reg_status_name: '',
         event_reg_status_desc: '',
+        event_reg_start_date: '',
+        event_reg_end_date: '',
+        event_reg_created_date: '',
     });
 
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
+
     useEffect(() => {
         if (!user) {
             fetchUserProfile(authCookie, dispatch, router);
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllEventStatus = async (): Promise<EventRegStatus[]> => {
-        const getAllEventStatus = await getAllEventStatuses(authCookie);
-        if (getAllEventStatus.success) {
-            return getAllEventStatus.data;
+    const getAllEventReg = async (): Promise<EventRegAdminPaginationType> => {
+        const getAllEventReg = await getAllEventRegs(page, limit, sort, authCookie);
+        if (getAllEventReg.success) {
+            return getAllEventReg;
         }
         throw new Error('No ongoing event');
-    };
-
-    const { isPending, error, data, refetch } = useQuery({
-        queryKey: ['allEventStatus', page, limit, sort],
-        queryFn: () => getAllEventStatus(),
+   };
+   
+   const { isPending, error, data, refetch } = useQuery({
+        queryKey: ['allEventReg', page, limit, sort],
+        queryFn: () => getAllEventReg(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        placeholderData: (previousData) => previousData,
     });
 
-    const deleteEventStatuses = async (event_reg_status_id: string) => {
-        try {
-          const confirmResult = await Swal.fire({
-            title: 'Are you sure?',
-            text: 'This action cannot be undone. Do you want to delete this event reg status?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'Cancel',
-            reverseButtons: true,
-          });
-      
-          if (confirmResult.isConfirmed) {
-            const deleteOneEventStatus = await deleteEventStatus(event_reg_status_id, authCookie);
-      
-            if (deleteOneEventStatus.success) {
-              await Swal.fire({
-                icon: 'success',
-                title: 'Deleted!',
-                text: 'Event reg status deleted successfully.',
-                timer: 2000,
-                showConfirmButton: false,
-              });
-    
-              queryClient.invalidateQueries({ queryKey: ['allEventStatus'] });
-              return deleteOneEventStatus.data;
-            } else {
-              await Swal.fire({
-                icon: 'error',
-                title: 'Error!',
-                text: deleteOneEventStatus.response.data.message || 'Failed to delete event reg status.',
-              });
-            }
-          } else {
-            await Swal.fire({
-              icon: 'info',
-              title: 'Cancelled',
-              text: 'The event reg status was not deleted.',
-              timer: 1500,
-              showConfirmButton: false,
-            });
-          }
-        } catch (error: any) {
-          console.error('Error deleting event reg status:', error);
-      
-          await Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: error?.message || 'An unexpected error occurred while deleting the event reg status.',
-          });
-        }
-      };
 
-      const getEventStatus = async (event_reg_status_id: string): Promise<User[]> => {
-        const getEventStatus = await getOneEventStatus(event_reg_status_id, authCookie);
-        if (getEventStatus.success) {
-            setOpenUpdateModal(true)
-            setDataEventStatus(getEventStatus.data[0])
-        }
-        throw new Error('No User Found');
-    };
-    
-    useEffect(() => {
+   useEffect(() => {
         const params = new URLSearchParams();
         params.set('limit', limit.toString());
         params.set('sort', sort);
@@ -134,22 +84,81 @@ const EventStatusList = () => {
         }
     }, [limit, sort, router, dataChange, refetch]);
 
+    const deleteEventRegs = async (event_reg_id: string) => {
+        try {
+          const confirmResult = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone. Do you want to delete this event registration?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+          });
+      
+          if (confirmResult.isConfirmed) {
+            const deleteOneEventReg = await deleteEventReg(event_reg_id, authCookie);
+      
+            if (deleteOneEventReg.success) {
+              await Swal.fire({
+                icon: 'success',
+                title: 'Deleted!',
+                text: 'Event registration deleted successfully.',
+                timer: 2000,
+                showConfirmButton: false,
+              });
+    
+              queryClient.invalidateQueries({ queryKey: ['allEventStatus'] });
+              return deleteOneEventReg.data;
+            } else {
+              await Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: deleteOneEventReg.response.data.message || 'Failed to delete event registration.',
+              });
+            }
+          } else {
+            await Swal.fire({
+              icon: 'info',
+              title: 'Cancelled',
+              text: 'The event registration was not deleted.',
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
+        } catch (error: any) {
+          console.error('Error deleting event registration:', error);
+      
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: error?.message || 'An unexpected error occurred while deleting the event registration.',
+          });
+        }
+      };
 
+    const getEventReg = async (event_reg_id: string): Promise<User[]> => {
+        const getEventReg = await getOneEventReg(event_reg_id, authCookie);
+        if (getEventReg.success) {
+            setOpenUpdateModal(true)
+            setDataEventReg(getEventReg.data[0])
+        }
+        throw new Error('No User Found');
+    };
 
-    const PAGE_SIZES = [10, 20, 30, 50, 100];
+    const PAGE_SIZES = [5, 10, 20, 30, 40, 50];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
         direction: 'asc',
     });
-
     
     return (
         <> 
             <div className='flex-column gap-5 pb-5'>
                 <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
                     <div className='flex items-center justify-between ml-3 mr-6 mb-0'>
-                        <h6 className="mb-5 text-lg font-bold">Event Status</h6>
+                        <h6 className="mb-5 text-lg font-bold">Event Registration</h6>
                         <button
                             type="button"
                             className="btn btn-primary mb-5"
@@ -167,19 +176,19 @@ const EventStatusList = () => {
                         ) : (
                             <DataTable
                                 className="table-hover min-h-[200px] whitespace-nowrap"
-                                records={data}
+                                records={data?.data}
                                 columns={[
                                     {
-                                        accessor: 'event_reg_status_id',
+                                        accessor: 'event_reg_id',
                                         title: 'ID',
                                         sortable: true,
-                                        render: ({ event_reg_status_id }) => (
-                                            <div className="font-semibold hover:no-underline">{event_reg_status_id}</div>
+                                        render: ({ event_reg_id }) => (
+                                            <div className="font-semibold hover:no-underline">{event_reg_id}</div>
                                         ),
                                     },
                                     {
                                         accessor: 'event_reg_status_code',
-                                        title: 'Code',
+                                        title: 'Status Code',
                                         sortable: true,
                                         render: ({ event_reg_status_code }) => (
                                             <div className="flex items-center font-semibold">
@@ -188,22 +197,22 @@ const EventStatusList = () => {
                                         ),
                                     },
                                     {
-                                        accessor: 'event_reg_status_name',
-                                        title: 'Name',
+                                        accessor: 'event_reg_phase_code',
+                                        title: 'Phase Code',
                                         sortable: true,
-                                        render: ({ event_reg_status_name }) => (
+                                        render: ({ event_reg_phase_code }) => (
                                             <div className="flex items-center font-semibold">
-                                                <div>{event_reg_status_name}</div>
+                                                <div>{event_reg_phase_code}</div>
                                             </div>
                                         ),
                                     },
                                     {
-                                        accessor: 'event_reg_status_desc',
-                                        title: 'Description',
+                                        accessor: 'event reg period',
+                                        title: 'Period',
                                         sortable: true,
-                                        render: ({ event_reg_status_desc }) => (
+                                        render: ({ event_reg_start_date, event_reg_end_date}) => (
                                             <div className="flex items-center font-semibold">
-                                                <div>{ event_reg_status_desc}</div>
+                                                <div>{ `${formatedDate(event_reg_start_date)} - ${formatedDate(event_reg_end_date)}` }</div>
                                             </div>
                                         ),
                                     },
@@ -211,12 +220,12 @@ const EventStatusList = () => {
                                         accessor: 'action',
                                         title: 'Action',
                                         sortable: false,
-                                        render: ({ event_reg_status_id }) => (
+                                        render: ({ event_reg_id }) => (
                                             <div className="ml-[5%] flex w-full gap-4">
                                                 <div className="relative group">
                                                     <button
                                                     className="btn2 btn-primary p-1 w-7 h-7"
-                                                    onClick={()=>getEventStatus(event_reg_status_id)}
+                                                    onClick={()=>getEventReg(event_reg_id)}
                                                     >
                                                     <IconPencilPaper />
                                                     </button>
@@ -230,7 +239,7 @@ const EventStatusList = () => {
                                                 <div className="relative group">
                                                     <button
                                                     className="btn2 btn-gradient3 w-7 h-7"
-                                                    onClick={()=>deleteEventStatuses(event_reg_status_id)}
+                                                    onClick={()=>deleteEventRegs(event_reg_id)}
                                                     >
                                                     X
                                                     </button>
@@ -246,12 +255,15 @@ const EventStatusList = () => {
                                 ]}
                                 highlightOnHover
                                 key="invoice_code"
-                                totalRecords={data ? data.length : 0}
+                                totalRecords={data?.data ? data.pagination.totalData : 0}
                                 recordsPerPage={pageSize}
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
                                 recordsPerPageOptions={PAGE_SIZES}
-                                onRecordsPerPageChange={setPageSize}
+                                onRecordsPerPageChange={(newPageSize) => {
+                                    setPageSize(newPageSize);
+                                    setLimit(newPageSize);
+                                }}
                                 sortStatus={sortStatus}
                                 onSortStatusChange={setSortStatus}
                                 // selectedRecords={selectedRecords}
@@ -265,19 +277,19 @@ const EventStatusList = () => {
                 </div>
                 </div>
             </div>
-            <CreateEventStatusModal
+            <CreateEventRegModal
                 open={openModal}
                 setOpen={setOpenModal}
                 setDataChange={setDataChange}
             />
-            <UpdateEventStatusModal
+            {/* <UpdateEventStatusModal
                 open={openUpdateModal}
                 setOpen={setOpenUpdateModal}
                 setDataChange={setDataChange}
-                eventStatusData={dataEventStatus}
-            />
+                eventRegData={dataEventReg}
+            /> */}
         </>
     );
 };
 
-export default EventStatusList;
+export default EventRegistrationList;

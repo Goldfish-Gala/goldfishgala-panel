@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import Link from 'next/link';
+import Loading from '@/components/layouts/loading';
 import { updateUserSubmit } from '@/lib/form-actions';
 import { useActionState } from 'react';
 import { formUserCompletingDataSchema } from '@/lib/form-schemas';
@@ -14,6 +14,7 @@ import Image from 'next/image';
 import { useQuery } from '@tanstack/react-query';
 import { getUser } from '@/api/user/api-user';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
+import SpinnerWithText from '@/components/UI/Spinner';
 
 interface FormErrors {
     user_fname?: string;
@@ -129,119 +130,124 @@ const ComponentsUpdateUserProfile = () => {
                     <IconPencilPaper />
                 </button>
             </div>
-                    {data && data.length > 0 && (
-            <div className="flex flex-col sm:flex-row">
-                <div className="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
-                        <Image
-                            width={800}
-                            height={800}
-                            src={data[0].user_avatar}
-                            alt="img"
-                            className="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32"
-                        />
+            {isPending ? (
+                <div className="flex min-h-[200px] w-full flex-col items-center justify-center">
+                    <SpinnerWithText text="Memuat..." />
+                </div>
+                ) : 
+                data && data.length > 0 && (
+                <div className="flex flex-col sm:flex-row">
+                    <div className="mb-5 w-full sm:w-2/12 ltr:sm:mr-4 rtl:sm:ml-4">
+                            <Image
+                                width={800}
+                                height={800}
+                                src={data[0].user_avatar}
+                                alt="img"
+                                className="mx-auto h-20 w-20 rounded-full object-cover md:h-32 md:w-32"
+                            />
 
-                </div>
-                <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
-                    <div>
-                        <label htmlFor="fname">First Name</label>
-                        <input id="fname" 
-                        type="text" name="user_fname"
-                        placeholder={data[0].user_fname} 
-                        defaultValue={data[0].user_fname} 
-                        className="form-input disabled:opacity-50" 
-                        disabled={isDisabled}
-                        onChange={handleInputChange}/>
                     </div>
-                    {errors.user_fname && <p className="text-red-500">{errors.user_fname}</p>}
-                    <div>
-                        <label htmlFor="lname">Last Name</label>
-                        <input id="lname" 
-                        type="text" name="user_lname"
-                        placeholder={data[0].user_lname} 
-                        defaultValue={data[0].user_lname} 
-                        className="form-input disabled:opacity-50" 
-                        disabled={isDisabled}
-                        onChange={handleInputChange}/>
-                    </div>
-                    {errors.user_lname && <p className="text-red-500">{errors.user_lname}</p>}
-                    <div>
-                        <label htmlFor="address">Address</label>
-                        <input id="address" 
-                        type="text" name="user_address"
-                        placeholder={data[0].user_address} 
-                        defaultValue={data[0].user_address} 
-                        className="form-input disabled:opacity-50" 
-                        disabled={isDisabled}
-                        onChange={handleInputChange}/>
-                    </div>
-                    {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
-                    <div>
-                        <label htmlFor="phone">Phone</label>
-                        <input
-                            id="phone"
-                            type="text" name="user_phone"
-                            placeholder={data[0].user_phone}
-                            defaultValue={data[0].user_phone} 
-                            className="form-input disabled:opacity-50"
+                    <div className="grid flex-1 grid-cols-1 gap-5 sm:grid-cols-2">
+                        <div>
+                            <label htmlFor="fname">First Name</label>
+                            <input id="fname" 
+                            type="text" name="user_fname"
+                            placeholder={data[0].user_fname} 
+                            defaultValue={data[0].user_fname} 
+                            className="form-input disabled:opacity-50" 
                             disabled={isDisabled}
                             onChange={handleInputChange}/>
-                    </div>
-                    {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
-                    <div>
-                        <label htmlFor="email">Email</label>
-                        <input
-                            id="email"
-                            type="email" name="user_email"
-                            placeholder={data[0].user_email}
-                            defaultValue={data[0].user_email} 
-                            className="form-input disabled:opacity-50"
+                        </div>
+                        {errors.user_fname && <p className="text-red-500">{errors.user_fname}</p>}
+                        <div>
+                            <label htmlFor="lname">Last Name</label>
+                            <input id="lname" 
+                            type="text" name="user_lname"
+                            placeholder={data[0].user_lname} 
+                            defaultValue={data[0].user_lname} 
+                            className="form-input disabled:opacity-50" 
                             disabled={isDisabled}
                             onChange={handleInputChange}/>
-                    </div>
-                    {errors.email && <p className="text-red-500">{errors.email}</p>}
-                    <div>
-                        <label htmlFor="ig">Instagram</label>
-                        <input id="ig" 
-                        type="text" name="user_ig"
-                        placeholder={data[0].user_ig} 
-                        defaultValue={data[0].user_ig} 
-                        className="form-input disabled:opacity-50" 
-                        disabled={isDisabled}
-                        onChange={handleInputChange}/>
-                    </div>
-                    {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
-                    <li className="flex items-center gap-2">
-                        Joined on{" "}
-                        {new Intl.DateTimeFormat("en-US", {
-                            year: "numeric",
-                            month: "long",
-                            day: "numeric",
-                        }).format(new Date(data[0].user_created_date))}
-                    </li>
-                    <div className="mt-3 sm:col-span-2 flex gap-5"
-                    >
-                        {isButtonVisible && (
-                        <>
-                            <button type="button" 
-                            className="btn bg-red-600 shadow-red-300 border-red-500 btn-primary"
-                            onClick={() => {
-                                setIsDisabled(!isDisabled); 
-                                setButtonVisible(!isButtonVisible);
-                              }}
-                            >
-                                Cancel
-                            </button> 
-                            
-                            <button type="submit"
-                            className="btn btn-primary"
-                            disabled={isLoading}
-                            > {isLoading ? 'Proccessing...' : 'Save'}
-                            </button>  
-                        </>
-                        )}
+                        </div>
+                        {errors.user_lname && <p className="text-red-500">{errors.user_lname}</p>}
+                        <div>
+                            <label htmlFor="address">Address</label>
+                            <input id="address" 
+                            type="text" name="user_address"
+                            placeholder={data[0].user_address} 
+                            defaultValue={data[0].user_address} 
+                            className="form-input disabled:opacity-50" 
+                            disabled={isDisabled}
+                            onChange={handleInputChange}/>
+                        </div>
+                        {errors.user_address && <p className="text-red-500">{errors.user_address}</p>}
+                        <div>
+                            <label htmlFor="phone">Phone</label>
+                            <input
+                                id="phone"
+                                type="text" name="user_phone"
+                                placeholder={data[0].user_phone}
+                                defaultValue={data[0].user_phone} 
+                                className="form-input disabled:opacity-50"
+                                disabled={isDisabled}
+                                onChange={handleInputChange}/>
+                        </div>
+                        {errors.user_phone && <p className="text-red-500">{errors.user_phone}</p>}
+                        <div>
+                            <label htmlFor="email">Email</label>
+                            <input
+                                id="email"
+                                type="email" name="user_email"
+                                placeholder={data[0].user_email}
+                                defaultValue={data[0].user_email} 
+                                className="form-input disabled:opacity-50"
+                                disabled={isDisabled}
+                                onChange={handleInputChange}/>
+                        </div>
+                        {errors.email && <p className="text-red-500">{errors.email}</p>}
+                        <div>
+                            <label htmlFor="ig">Instagram</label>
+                            <input id="ig" 
+                            type="text" name="user_ig"
+                            placeholder={data[0].user_ig} 
+                            defaultValue={data[0].user_ig} 
+                            className="form-input disabled:opacity-50" 
+                            disabled={isDisabled}
+                            onChange={handleInputChange}/>
+                        </div>
+                        {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
+                        <li className="flex items-center gap-2">
+                            Joined on{" "}
+                            {new Intl.DateTimeFormat("en-US", {
+                                year: "numeric",
+                                month: "long",
+                                day: "numeric",
+                            }).format(new Date(data[0].user_created_date))}
+                        </li>
+                        <div className="mt-3 sm:col-span-2 flex gap-5"
+                        >
+                            {isButtonVisible && (
+                            <>
+                                <button type="button" 
+                                className="btn bg-red-600 shadow-red-300 border-red-500 btn-primary"
+                                onClick={() => {
+                                    setIsDisabled(!isDisabled); 
+                                    setButtonVisible(!isButtonVisible);
+                                }}
+                                >
+                                    Cancel
+                                </button> 
+                                
+                                <button type="submit"
+                                className="btn btn-primary"
+                                disabled={isLoading}
+                                > {isLoading ? 'Proccessing...' : 'Save'}
+                                </button>  
+                            </>
+                            )}
+                        </div>
                     </div>
                 </div>
-            </div>
             )}
         </form>
     );
