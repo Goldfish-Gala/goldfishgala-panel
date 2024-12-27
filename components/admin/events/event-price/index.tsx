@@ -14,6 +14,7 @@ import CreateEventPriceModal from './components-create-event-price-modal';
 import { formatMataUang } from '@/utils/curency-format';
 import Swal from 'sweetalert2';
 import UpdateEventPriceModal from './components-update-event-price-modal';
+import IconPencilPaper from '@/components/icon/icon-pencil-paper';
 
 const EventPriceList = () => {
     const router = useRouter();
@@ -36,7 +37,6 @@ const EventPriceList = () => {
     });
     
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
-
     useEffect(() => {
         if (!user) {
             fetchUserProfile(authCookie, dispatch, router);
@@ -213,19 +213,33 @@ const EventPriceList = () => {
                                     sortable: false,
                                     render: ({ event_price_id }) => (
                                         <div className="ml-[5%] flex w-full gap-4">
-                                                <button 
-                                                className="btn2 btn-primary"
-                                                onClick={()=>getEventPrice(event_price_id)}
+                                            <div className="relative group">
+                                                <button
+                                                className="btn2 btn-primary p-1 w-7 h-7"
+                                                onClick={() => getEventPrice(event_price_id)}
                                                 >
-                                                    Update
+                                                <IconPencilPaper />
                                                 </button>
+                                                <span
+                                                className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                >
+                                                Update
+                                                </span>
+                                            </div>
 
-                                                <button 
-                                                className="btn2 btn-gradient3"
-                                                onClick={()=>deleteEventPrices(event_price_id)}
+                                            <div className="relative group">
+                                                <button
+                                                className="btn2 btn-gradient3 w-7 h-7"
+                                                onClick={() => deleteEventPrices(event_price_id)}
                                                 >
-                                                    Remove
+                                                X
                                                 </button>
+                                                <span
+                                                className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                >
+                                                Delete
+                                                </span>
+                                            </div>
                                         </div>
                                     ),
                                 },

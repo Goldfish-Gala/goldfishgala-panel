@@ -84,14 +84,36 @@ interface EventPrice {
     event_price_amount: number;
 }
 
-interface EventReg {
-    event_reg_id: string;
-    event_reg_phase_id: string;
+interface EventRegRegister {
     event_reg_status_id: string;
+    event_reg_phase_id: string;
     event_reg_period_id: string;
-    eventRegPhase: EventRegPhase;
-    eventRegStatus: EventRegStatus;
-    eventRegPeriod: EventRegPeriod;
+  }
+
+interface EventReg extends EventRegRegister {
+    event_reg_id: string;
+    event_reg_phase_code: string;
+    event_reg_phase_name: string;
+    event_reg_phase_desc: string;
+    event_reg_status_code: string;
+    event_reg_status_name: string;
+    event_reg_status_desc: string;
+    event_reg_start_date: string;
+    event_reg_end_date: string;
+    event_reg_created_date: string;
+}
+
+interface EventRegAdminPaginationType {
+    success: boolean;
+    message: string;
+    data: EventReg[];
+    pagination: {
+        totalData: number;
+        currentPage: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
 }
 
 interface EventRegPhaseRegister {

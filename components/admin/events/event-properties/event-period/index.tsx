@@ -14,6 +14,7 @@ import { getAllEventPeriods, deleteEventPeriod, getOneEventPeriod } from '@/api/
 import { formatedDate } from '@/utils/date-format';
 import CreateEventPeriodModal from './components-create-event-period';
 import UpdateEventPeriodModal from './components-update-event-period-modal';
+import IconPencilPaper from '@/components/icon/icon-pencil-paper';
 
 const EventPeriodList = () => {
     const router = useRouter();
@@ -28,6 +29,8 @@ const EventPeriodList = () => {
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
     const [dataChange, setDataChange] = useState(false);
+    const [data, setData] = useState([]);
+    const [totalRecords, setTotalRecords] = useState(0); 
     const [dataEventPeriod, setDataEventPeriod] = useState<EventRegPeriod>({
         event_reg_period_id: '',
         event_reg_start_date: '',
@@ -36,7 +39,6 @@ const EventPeriodList = () => {
     });
 
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
-
     useEffect(() => {
         if (!user) {
             fetchUserProfile(authCookie, dispatch, router);
@@ -44,14 +46,15 @@ const EventPeriodList = () => {
     }, [authCookie, dispatch, router, user]);
 
     const getAllEventPeriod = async (): Promise<EventRegPeriod[]> => {
-        const getAllEventPeriod = await  getAllEventPeriods(authCookie);
-        if (getAllEventPeriod.success) {
-            return getAllEventPeriod.data;
+        const response = await getAllEventPeriods(authCookie); 
+        if (response.success) {
+            setData(response.data);
+            setTotalRecords(response.data.length); 
         }
         throw new Error('No ongoing event');
     };
 
-    const { isPending, error, data, refetch } = useQuery({
+    const { isPending, error, refetch } = useQuery({
         queryKey: ['allEventPeriod', page, limit, sort],
         queryFn: () => getAllEventPeriod(),
         enabled: !!authCookie,
@@ -137,13 +140,14 @@ const EventPeriodList = () => {
 
 
 
-    const PAGE_SIZES = [10, 20, 30, 50, 100];
+    const PAGE_SIZES = [5, 10, 20, 30, 50, 100];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
         direction: 'asc',
     });
 
+    const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
     
     return (
         <> 
@@ -168,7 +172,7 @@ const EventPeriodList = () => {
                         ) : (
                             <DataTable
                                 className="table-hover min-h-[200px] whitespace-nowrap"
-                                records={data}
+                                records={paginatedData}
                                 columns={[
                                     {
                                         accessor: 'event_reg_period_id',
@@ -214,26 +218,40 @@ const EventPeriodList = () => {
                                         sortable: false,
                                         render: ({ event_reg_period_id }) => (
                                             <div className="ml-[5%] flex w-full gap-4">
-                                                    <button 
-                                                    className="btn2 btn-secondary"
+                                                <div className="relative group">
+                                                    <button
+                                                    className="btn2 btn-primary p-1 w-7 h-7"
                                                     onClick={()=>getEventPeriod(event_reg_period_id)}
                                                     >
-                                                        Update
+                                                    <IconPencilPaper />
                                                     </button>
+                                                    <span
+                                                    className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    >
+                                                    Update
+                                                    </span>
+                                                </div>
 
-                                                    <button 
-                                                    className="btn2 btn-gradient3"
+                                                <div className="relative group">
+                                                    <button
+                                                    className="btn2 btn-gradient3 w-7 h-7"
                                                     onClick={()=>deleteEventPeriods(event_reg_period_id)}
                                                     >
-                                                        Remove
+                                                    X
                                                     </button>
+                                                    <span
+                                                    className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    >
+                                                    Delete
+                                                    </span>
+                                                </div>
                                             </div>
                                         ),
                                     },
                                 ]}
                                 highlightOnHover
                                 key="invoice_code"
-                                totalRecords={data ? data.length : 0}
+                                totalRecords={totalRecords ? paginatedData.length : 0}
                                 recordsPerPage={pageSize}
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
