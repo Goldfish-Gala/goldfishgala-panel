@@ -14,6 +14,7 @@ import { getAllEventRegs, deleteEventReg, getOneEventReg } from '@/api/event-reg
 import { formatedDate } from '@/utils/date-format';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
 import CreateEventRegModal from './components-create-event-reg';
+import UpdateEventRegModal from './components-update-event-reg-modal';
 
 const EventRegistrationList = () => {
     const router = useRouter();
@@ -282,12 +283,12 @@ const EventRegistrationList = () => {
                 setOpen={setOpenModal}
                 setDataChange={setDataChange}
             />
-            {/* <UpdateEventStatusModal
+            <UpdateEventRegModal
                 open={openUpdateModal}
                 setOpen={setOpenUpdateModal}
                 setDataChange={setDataChange}
                 eventRegData={dataEventReg}
-            /> */}
+            />
         </>
     );
 };
