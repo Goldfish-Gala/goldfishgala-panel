@@ -1,20 +1,22 @@
-import { createEventReg, getAllEventPeriods, getAllEventPhases, getAllEventStatuses } from '@/api/event-reg/api-event-reg';
+import { getAllEventPeriods, getAllEventPhases, getAllEventStatuses, updateEventReg } from '@/api/event-reg/api-event-reg';
 import IconX from '@/components/icon/icon-x';
 import { Transition, Dialog } from '@headlessui/react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useCookies } from 'next-client-cookies';
 import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react';
+import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
-import Select from 'react-select';
 import { formatedDate } from '@/utils/date-format';
 
-interface CreateEventRegRegModalProps {
+interface UpdateEventRegModalProps {
     open: boolean;
     setOpen: (open: boolean) => void;
     setDataChange: (change: boolean | ((prev: boolean) => boolean)) => void;
+    eventRegData: EventReg
 }
 
-const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegRegModalProps) => {
+const UpdateEventRegModal = ({ open, setOpen, setDataChange, eventRegData }: UpdateEventRegModalProps) => {
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const formRef = useRef<HTMLFormElement>(null);
@@ -22,9 +24,9 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
     const [eventStatuses, setEventStatuses] = useState<EventRegStatus[] | null>(null);
     const [eventPhases, setEventPhases] = useState<EventRegPhase[] | null>(null);
     const [eventPeriods, setEventPeriods] = useState<EventRegPeriod[] | null>(null);
+    const queryClient = useQueryClient();
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
     const [isFetching, setFetching] = useState(false);
-
     const { register, handleSubmit, reset, setValue, formState } = useForm({
         defaultValues: {
             event_reg_status_id: '',
@@ -32,7 +34,7 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
             event_reg_period_id: '',
         },
     });
-
+    
     const fetchAllEventStatuses = useCallback(async () => {
         setFetching(true);
         try {
@@ -78,11 +80,20 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
         fetchAllEventPeriods();
     }, [fetchAllEventStatuses, fetchAllEventPhases, fetchAllEventPeriods]);
 
-
+    React.useEffect(() => {
+        if (eventRegData) {
+            reset({
+                event_reg_status_id: eventRegData.event_reg_status_id || '',
+                event_reg_phase_id: eventRegData.event_reg_phase_id || '',
+                event_reg_period_id: eventRegData.event_reg_period_id || '',
+            });
+        }
+    }, [eventRegData, reset]);
     const onSubmit = async (data: { event_reg_status_id: string; event_reg_phase_id: string; event_reg_period_id: string }) => {
         setLoading(true);
         try {
-            const response = await createEventReg(
+            const response = await updateEventReg(
+                eventRegData.event_reg_id,
                 {
                     event_reg_status_id: data.event_reg_status_id,
                     event_reg_phase_id: data.event_reg_phase_id,
@@ -97,12 +108,13 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
                     text: response.data.message || 'Failed to update event registration.',
                   });
             }
-            Swal.fire('Success', 'Event Registration created successfully!', 'success');
+            Swal.fire('Success', 'Event registration updated successfully!', 'success');
             reset();
             setDataChange((prev) => !prev); 
+            queryClient.invalidateQueries({ queryKey: ['allEventReg'] });
             setOpen(false);
         } catch (error) {
-            Swal.fire('Error', 'Failed to create event Registration.', 'error');
+            Swal.fire('Error', 'Failed to update event registration.', 'error');
         } finally {
             setLoading(false);
         }
@@ -115,7 +127,7 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
                 <div className="fixed inset-0 z-50 flex items-center justify-center">
                     <Dialog.Panel className="bg-white rounded-lg shadow-lg w-full max-w-md">
                         <div className="flex items-center justify-between px-4 py-3 bg-gray-100">
-                            <h5 className="text-lg font-semibold">Create Event Reg</h5>
+                            <h5 className="text-lg font-semibold">Update Event Registration</h5>
                             <button onClick={() => setOpen(false)}>
                                 <IconX />
                             </button>
@@ -131,6 +143,11 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
                                         })) || []
                                     }
                                     placeholder="Select Status"
+                                    defaultValue={{
+                                        value: eventRegData.event_reg_status_id,
+                                        label: eventRegData.event_reg_status_code,
+                                    }}
+                                    {...register('event_reg_status_id', { required: 'Event Reg Status is required' })}
                                     onChange={(selectedOption: any) => setValue('event_reg_status_id', selectedOption?.value)}
                                 />
                                 {errors.event_reg_status_id && (
@@ -147,6 +164,11 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
                                         })) || []
                                     }
                                     placeholder="Select Phase"
+                                    defaultValue={{
+                                        value: eventRegData.event_reg_phase_id,
+                                        label: eventRegData.event_reg_phase_code,
+                                    }}
+                                    {...register('event_reg_phase_id', { required: 'Event Reg Phase is required' })}
                                     onChange={(selectedOption: any) => setValue('event_reg_phase_id', selectedOption?.value)}
                                     styles={{
                                         menu: (provided: any) => ({
@@ -175,6 +197,11 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
                                         })) || []
                                     }
                                     placeholder="Select Period"
+                                    defaultValue={{
+                                        value: eventRegData.event_reg_period_id,
+                                        label: `${formatedDate(eventRegData.event_reg_start_date)} - ${formatedDate(eventRegData.event_reg_end_date)}`,
+                                    }}
+                                    {...register('event_reg_period_id', { required: 'Event Reg Period is required' })}
                                     onChange={(selectedOption: any) => setValue('event_reg_period_id', selectedOption?.value)}
                                     styles={{
                                         menu: (provided: any) => ({
@@ -217,4 +244,4 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
     );
 };
 
-export default CreateEventRegModal;
+export default UpdateEventRegModal;
