@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import CreateEventStatusModal from './components-create-event-phase';
 import { deleteEventPhase, getAllEventPhases, getOneEventPhase } from '@/api/event-reg/api-event-reg';
 import UpdateEventPhaseModal from './components-update-event-phase-modal';
+import IconPencilPaper from '@/components/icon/icon-pencil-paper';
 
 const EventPhaseList = () => {
     const router = useRouter();
@@ -35,7 +36,6 @@ const EventPhaseList = () => {
     });
 
     const [openUpdateModal, setOpenUpdateModal] = useState(false);
-
     useEffect(() => {
         if (!user) {
             fetchUserProfile(authCookie, dispatch, router);
@@ -214,19 +214,33 @@ const EventPhaseList = () => {
                                         sortable: false,
                                         render: ({ event_reg_phase_id }) => (
                                             <div className="ml-[5%] flex w-full gap-4">
-                                                    <button 
-                                                    className="btn2 btn-secondary"
+                                                <div className="relative group">
+                                                    <button
+                                                    className="btn2 btn-primary p-1 w-7 h-7"
                                                     onClick={()=>getEventPhase(event_reg_phase_id)}
                                                     >
-                                                        Update
+                                                    <IconPencilPaper />
                                                     </button>
+                                                    <span
+                                                    className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    >
+                                                    Update
+                                                    </span>
+                                                </div>
 
-                                                    <button 
-                                                    className="btn2 btn-gradient3"
+                                                <div className="relative group">
+                                                    <button
+                                                    className="btn2 btn-gradient3 w-7 h-7"
                                                     onClick={()=>deleteEventPhases(event_reg_phase_id)}
                                                     >
-                                                        Remove
+                                                    X
                                                     </button>
+                                                    <span
+                                                    className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                                                    >
+                                                    Delete
+                                                    </span>
+                                                </div>
                                             </div>
                                         ),
                                     },
