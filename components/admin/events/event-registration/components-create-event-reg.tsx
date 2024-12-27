@@ -90,6 +90,13 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
                 },
                 authCookie
             );
+            if (response.success === false) {
+                await Swal.fire({
+                    icon: 'error',
+                    title: 'Error!',
+                    text: response.data.message || 'Failed to update event registration.',
+                  });
+            }
             Swal.fire('Success', 'Event Registration created successfully!', 'success');
             reset();
             setDataChange((prev) => !prev); 
