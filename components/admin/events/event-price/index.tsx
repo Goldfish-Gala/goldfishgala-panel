@@ -15,6 +15,7 @@ import { formatMataUang } from '@/utils/curency-format';
 import Swal from 'sweetalert2';
 import UpdateEventPriceModal from './components-update-event-price-modal';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
+import IconTrashLines from '@/components/icon/icon-trash-lines';
 
 const EventPriceList = () => {
     const router = useRouter();
@@ -148,16 +149,17 @@ const EventPriceList = () => {
     return (
         <>
         <div className='flex-column gap-5'>
-            <button
-                    type="button"
-                    className="btn btn-primary mb-5"
-                    onClick={() => setOpenModal(true)}
-                >
-                    Create New
-                </button>
-
             <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
-                
+                <div className='flex items-center justify-between ml-3 mr-6 mb-0'>
+                    <h6 className="mb-5 text-lg font-bold">Event Price</h6>
+                    <button
+                        type="button"
+                        className="btn btn-primary mb-5"
+                        onClick={() => setOpenModal(true)}
+                    >
+                        Create New
+                    </button>
+                </div>
             <div className="event-price-table">
                 <div className="datatables pagination-padding">
                     {isPending ? (
@@ -229,10 +231,10 @@ const EventPriceList = () => {
 
                                             <div className="relative group">
                                                 <button
-                                                className="btn2 btn-gradient3 w-7 h-7"
+                                                className="btn2 btn-gradient3 p-1 w-7 h-7"
                                                 onClick={() => deleteEventPrices(event_price_id)}
                                                 >
-                                                X
+                                                <IconTrashLines />
                                                 </button>
                                                 <span
                                                 className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
