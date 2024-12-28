@@ -15,6 +15,8 @@ import { formatedDate } from '@/utils/date-format';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
 import CreateEventRegModal from './components-create-event-reg';
 import UpdateEventRegModal from './components-update-event-reg-modal';
+import IconTrash from '@/components/icon/icon-trash';
+import IconTrashLines from '@/components/icon/icon-trash-lines';
 
 const EventRegistrationList = () => {
     const router = useRouter();
@@ -222,7 +224,7 @@ const EventRegistrationList = () => {
                                         title: 'Action',
                                         sortable: false,
                                         render: ({ event_reg_id }) => (
-                                            <div className="ml-[5%] flex w-full gap-4">
+                                            <div className="ml-[5%] flex w-full gap-2">
                                                 <div className="relative group">
                                                     <button
                                                     className="btn2 btn-primary p-1 w-7 h-7"
@@ -239,10 +241,10 @@ const EventRegistrationList = () => {
 
                                                 <div className="relative group">
                                                     <button
-                                                    className="btn2 btn-gradient3 w-7 h-7"
+                                                    className="btn2 btn-gradient3 p-1 w-7 h-7"
                                                     onClick={()=>deleteEventRegs(event_reg_id)}
                                                     >
-                                                    X
+                                                    <IconTrashLines />
                                                     </button>
                                                     <span
                                                     className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"

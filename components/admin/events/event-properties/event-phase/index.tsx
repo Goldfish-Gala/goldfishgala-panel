@@ -14,6 +14,7 @@ import CreateEventStatusModal from './components-create-event-phase';
 import { deleteEventPhase, getAllEventPhases, getOneEventPhase } from '@/api/event-reg/api-event-reg';
 import UpdateEventPhaseModal from './components-update-event-phase-modal';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
+import IconTrashLines from '@/components/icon/icon-trash-lines';
 
 const EventPhaseList = () => {
     const router = useRouter();
@@ -230,10 +231,10 @@ const EventPhaseList = () => {
 
                                                 <div className="relative group">
                                                     <button
-                                                    className="btn2 btn-gradient3 w-7 h-7"
+                                                    className="btn2 btn-gradient3 p-1 w-7 h-7"
                                                     onClick={()=>deleteEventPhases(event_reg_phase_id)}
                                                     >
-                                                    X
+                                                    <IconTrashLines />
                                                     </button>
                                                     <span
                                                     className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
