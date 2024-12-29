@@ -156,7 +156,7 @@ const FishList = () => {
                                     render: ({ fish_id }) => (
                                         <div className="ml-[5%] flex w-full gap-4">
                                             <Link href={`/admin/fish-detail/${fish_id}`}>
-                                                <button className="btn2 btn-gradient2">Detail</button>
+                                                <button className="btn2 btn-secondary">Detail</button>
                                             </Link>
                                         </div>
                                     ),

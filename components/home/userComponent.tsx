@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation';
 import { useDispatch } from 'react-redux';
 import { useCookies } from 'next-client-cookies';
 import { fetchUserComponent } from '@/utils/store-user';
+import { getAllOngoingEvents } from '@/api/event-reg/api-event';
+import { setEvent } from '@/store/eventSlice';
 
 const UserComponent = () => {
     const dispatch = useDispatch();
@@ -14,6 +16,12 @@ const UserComponent = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        const fetchEvent = async () => {
+            const ongoingEvent = await getAllOngoingEvents(authCookie);
+            if (ongoingEvent.success) {
+                dispatch(setEvent({ event: ongoingEvent.data.OnGoing[0].event_reg_phase_code }));
+            }
+        };
         const fetchUser = async () => {
             if (authCookie) {
                 const userProfile = await fetchUserComponent(authCookie, dispatch, router);
@@ -35,6 +43,7 @@ const UserComponent = () => {
             }
             setLoading(false);
         };
+        fetchEvent();
         fetchUser();
     }, [authCookie, dispatch, router]);
 

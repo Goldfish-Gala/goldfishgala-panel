@@ -24,6 +24,7 @@ import IconCategory from '@/components/icon/icon-category';
 import IconInvoices from '@/components/icon/icon-invoices';
 import IconInvoiceList from '@/components/icon/icon-invoice-list';
 import IconPayment from '@/components/icon/icon-payment';
+import IconAward from '@/components/icon/icon-award';
 
 interface AdminBarProps {
     currentMenu: string;
@@ -308,6 +309,38 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                                     } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('Champion selection')}
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/admin/best-award">
+                            <div className="flex items-center">
+                                <IconAward className="shrink-0 group-hover:!text-primary" />
+                                <span
+                                    className={`${
+                                        pathname === '/admin/best-award'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
+                                >
+                                    {T!('Best award')}
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                    <li>
+                        <Link href="/admin/grand-champion">
+                            <div className="flex items-center">
+                                <IconAward className="shrink-0 group-hover:!text-primary" />
+                                <span
+                                    className={`${
+                                        pathname === '/admin/grand-champion'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
+                                >
+                                    {T!('Grand champion')}
                                 </span>
                             </div>
                         </Link>

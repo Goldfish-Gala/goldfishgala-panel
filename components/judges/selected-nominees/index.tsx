@@ -13,15 +13,17 @@ import { IRootState } from '@/store';
 import { fetchUserProfile } from '@/utils/store-user';
 import { useInView } from 'react-intersection-observer';
 import { cancelFishNomineesApi, getAllSelectedFishApi } from '@/api/nomination/api-nomination';
+import { fetchOngoingEventPhase } from '@/utils/store-event';
 
 const SelectedFishes = () => {
     const router = useRouter();
     const dispatch = useDispatch();
     const searchParams = useSearchParams();
+    const user = useSelector((state: IRootState) => state.auth.user);
+    const event_reg_phase = useSelector((state: IRootState) => state.event.event_reg_phase);
     const { ref, inView } = useInView();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
-    const user = useSelector((state: IRootState) => state.auth.user);
     const queryClient = useQueryClient();
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 6));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
@@ -34,6 +36,12 @@ const SelectedFishes = () => {
             fetchUserProfile(authCookie, dispatch, router);
         }
     }, [authCookie, dispatch, router, user]);
+
+    useEffect(() => {
+        if (!event_reg_phase) {
+            fetchOngoingEventPhase(authCookie, dispatch);
+        }
+    }, [event_reg_phase, authCookie, dispatch]);
 
     const fetchAllFish = async ({ pageParam = 1 }: { pageParam: number }): Promise<FishPaginationType> => {
         const fishes = await getAllSelectedFishApi(user, pageParam, limit, sort, authCookie);
@@ -101,7 +109,7 @@ const SelectedFishes = () => {
         setLoading(true);
         try {
             const response = await cancelFishNomineesApi(selectedFishId, authCookie);
-            if (response) {
+            if (response.success) {
                 queryClient.setQueryData(['allSelectedNominees', { limit, sort }], (oldData: any) => {
                     if (!oldData) return oldData;
                     return {
@@ -130,8 +138,10 @@ const SelectedFishes = () => {
                     queryClient.invalidateQueries({ queryKey: ['allFishCandidates', { limit, sort }] });
                 }, 600);
 
-                showMessage('Success!');
+                showMessage('Success remove fish!');
                 setOpenModal(false);
+            } else {
+                showMessage('Failed!', 'error');
             }
         } catch {
             showMessage('Failed!', 'error');
@@ -185,6 +195,7 @@ const SelectedFishes = () => {
                             handleModal={handleOpenModal}
                             isLoading={isLoading}
                             buttonText="Remove from nominees"
+                            eventPhase={event_reg_phase === 'nominate_phase'}
                         />
                     ))
                 )}
