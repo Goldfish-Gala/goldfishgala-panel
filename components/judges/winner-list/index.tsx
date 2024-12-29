@@ -69,7 +69,7 @@ const WinnerList = () => {
         staleTime: 5 * 50 * 1000,
     });
 
-    if (!data || isFetching) {
+    if (!data) {
         return (
             <div className="flex min-h-[650px] min-w-[320px] items-center justify-center">
                 <SpinnerWithText text="Loading..." />

@@ -32,7 +32,7 @@ const ChampionsComp = ({ categoryId, authCookie }: ChampionProps) => {
         <div className="grid grid-cols-1">
             {data.map((item) => (
                 <div key={item.champion_category_id}>
-                    <p>{item.champion_rank}</p>
+                    <p>{item.champion_award_rank}</p>
                 </div>
             ))}
         </div>
