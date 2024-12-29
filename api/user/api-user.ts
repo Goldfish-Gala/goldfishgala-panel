@@ -45,7 +45,6 @@ export const getUserList = async (token: string | undefined, page: number, limit
 
 export const blockUserApi = async (user: User | null, value: boolean, cookie: string | undefined) => {
     const body = { ...user, user_is_active: value };
-    console.log('Request body:', body);
     try {
         const response = await api.put(`/users/admin/${user?.user_id}`, body, {
             headers: {
