@@ -15,6 +15,7 @@ import { formatedDate } from '@/utils/date-format';
 import CreateEventPeriodModal from './components-create-event-period';
 import UpdateEventPeriodModal from './components-update-event-period-modal';
 import IconPencilPaper from '@/components/icon/icon-pencil-paper';
+import IconTrashLines from '@/components/icon/icon-trash-lines';
 
 const EventPeriodList = () => {
     const router = useRouter();
@@ -234,10 +235,10 @@ const EventPeriodList = () => {
 
                                                 <div className="relative group">
                                                     <button
-                                                    className="btn2 btn-gradient3 w-7 h-7"
+                                                    className="btn2 btn-gradient3 p-1 w-7 h-7"
                                                     onClick={()=>deleteEventPeriods(event_reg_period_id)}
                                                     >
-                                                    X
+                                                    <IconTrashLines />
                                                     </button>
                                                     <span
                                                     className="absolute bottom-full left-1/2 z-10 transform -translate-x-1/2 mb-2 w-max bg-black text-white text-xs py-1 px-2 rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300"
