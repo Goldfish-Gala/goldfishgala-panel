@@ -218,10 +218,10 @@ const EventPeriodList = () => {
                                         title: 'Action',
                                         sortable: false,
                                         render: ({ event_reg_period_id }) => (
-                                            <div className="ml-[5%] flex w-full gap-4">
+                                            <div className="ml-[5%] flex w-full gap-2">
                                                 <div className="relative group">
                                                     <button
-                                                    className="btn2 btn-primary p-1 w-7 h-7"
+                                                    className="btn2 btn-secondary p-1 w-7 h-7"
                                                     onClick={()=>getEventPeriod(event_reg_period_id)}
                                                     >
                                                     <IconPencilPaper />
