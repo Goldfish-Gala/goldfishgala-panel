@@ -6,7 +6,7 @@ import FishScoreModal from './fish-score-modal';
 import { useEffect, useMemo, useState } from 'react';
 
 interface IgEmbedType {
-    fish: FishScoresType;
+    fish: any;
     setDataChange: (change: boolean | ((prev: boolean) => boolean)) => void;
 }
 
@@ -32,7 +32,7 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
     };
 
     const hasIncompleteScores = useMemo(() => {
-        return fish.fishscores?.some((item) => !item.fish_score || item.fish_score === 0) ? false : true;
+        return fish.fishscores?.some((item: any) => !item.fish_score || item.fish_score === 0) ? false : true;
     }, [fish.fishscores]);
 
     const detailEmbed = () => {
@@ -70,7 +70,7 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
                 </div>
                 <form className="mt-4 flex w-full flex-col items-center justify-between gap-6">
                     <div className="grid w-full grid-cols-2 gap-2">
-                        {fish.fishscores.map((item, index) => (
+                        {fish.fishscores.map((item: any, index: any) => (
                             <div className="flex items-center justify-between gap-2" key={index}>
                                 <label htmlFor={item.fish_score_id}>{item.champion_category_name}</label>
                                 <input

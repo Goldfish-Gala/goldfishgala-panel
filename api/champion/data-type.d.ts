@@ -14,9 +14,10 @@ interface ChampionAwardType {
 
 interface ChampionType {
     champion_id: string;
-    champion_category_id: s;
+    champion_category_id: string;
     fish_id: string;
     champion_award_id: string;
+    champion_award_rank: string;
     is_best_award: boolean;
     is_grand_champion: boolean;
     champion_created_date: string;
