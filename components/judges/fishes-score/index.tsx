@@ -116,7 +116,7 @@ const FishScore = () => {
                     </select>
                 </div>
             </div>
-            {data.pages[0].data.length < 1 || !data.pages[0].data[0].fishscores ? (
+            {data.pages[0].data.length < 1 || !(data.pages[0].data[0] as any)?.fishscores ? (
                 <div className="m-auto flex h-[200px] items-center">
                     <p>No fish available for scoring at the moment.</p>
                 </div>
@@ -124,7 +124,7 @@ const FishScore = () => {
                 <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                     {data?.pages.map((page) =>
                         (sort === 'desc' ? [...page.data].reverse() : page.data).map((fish) => (
-                            <FishCard key={fish.fish_id} fish={fish} setDataChange={setDataChange} />
+                            <FishCard key={fish.fish_score_id} fish={fish} setDataChange={setDataChange} />
                         ))
                     )}
                 </div>
