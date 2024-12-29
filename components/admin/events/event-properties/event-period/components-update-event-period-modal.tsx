@@ -144,10 +144,11 @@ const UpdateEventPeriodModal = ({ open, setOpen, setDataChange, eventPeriodData 
                                         </div>
                                     )}
                                 </div>
-                                {errors.event_price_code && (
+                                {errors.event_reg_start_date && (
                                     <p className="text-red-500 text-sm">{errors.event_reg_start_date}</p>
                                 )}
                             </div>
+                            <label className="block text-sm font-medium">Event Reg Period End Date</label>
                             <input
                                 type="text"
 
@@ -182,6 +183,9 @@ const UpdateEventPeriodModal = ({ open, setOpen, setDataChange, eventPeriodData 
                                     </div>
                                 )}
                             </div>
+                            {errors.event_reg_end_date && (
+                                    <p className="text-red-500 text-sm">{errors.event_reg_end_date}</p>
+                                )}
                             <div className="flex justify-end gap-2 mt-5">
                                 <button
                                     type="button"

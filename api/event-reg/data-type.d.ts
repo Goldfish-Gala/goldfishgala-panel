@@ -77,6 +77,34 @@ interface OngoingEvents {
     eventReg: EventReg;
 }
 
+interface EventRegister {
+    event_name: string;
+    event_desc: string;
+    event_start_date: string;
+    event_end_date: string;
+    event_price_ids: string[],
+    event_reg_id: string
+  }
+
+interface AllEvents extends EventRegister {
+    event_id: string;
+    event_is_active: boolean;
+    event_created_date: string;
+    event_reg_status_id: string;
+    event_reg_status_code: string;
+    event_reg_status_name: string;
+    event_reg_status_desc: string;
+    event_reg_phase_id: string;
+    event_reg_phase_code: string;
+    event_reg_phase_name: string;
+    event_reg_phase_desc: string;
+    event_reg_period_id: string;
+    event_reg_start_date: string;
+    event_reg_end_date: string;
+    event_reg_created_date: string;
+    event_prices: EventPrice[]
+}
+
 interface EventPrice {
     event_price_id: string;
     event_price_code: string;
