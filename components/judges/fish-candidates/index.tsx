@@ -10,13 +10,19 @@ import { getAllFishCandidateApi, selectFishNominateApi } from '@/api/nomination/
 import SpinnerWithText from '@/components/UI/Spinner';
 import IGEmbed from '@/components/components/ig-embed/embed';
 import ConfirmationModal from '@/components/components/confirmation-modal';
+import { useSelector } from 'react-redux';
+import { IRootState } from '@/store';
+import { fetchOngoingEventPhase } from '@/utils/store-event';
+import { useDispatch } from 'react-redux';
 
 const FishCandidates = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
+    const dispatch = useDispatch();
     const queryClient = useQueryClient();
+    const event_reg_phase = useSelector((state: IRootState) => state.event.event_reg_phase);
     const { ref, inView } = useInView();
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 6));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
@@ -24,6 +30,12 @@ const FishCandidates = () => {
     const [selectedFishId, setSelectedFishId] = useState('');
     const [isLoading, setLoading] = useState(false);
 
+    useEffect(() => {
+        if (!event_reg_phase) {
+            fetchOngoingEventPhase(authCookie, dispatch);
+        }
+    }, [event_reg_phase, authCookie, dispatch]);
+    console.log('event_reg_phase ', event_reg_phase);
     const fetchAllFish = async ({ pageParam = 1 }: { pageParam?: number }): Promise<FishPaginationType> => {
         const fishes = await getAllFishCandidateApi(pageParam, limit, sort, authCookie);
         if (fishes.success) return fishes;
@@ -89,7 +101,7 @@ const FishCandidates = () => {
         setLoading(true);
         try {
             const response = await selectFishNominateApi(selectedFishId, authCookie);
-            if (response) {
+            if (response.success) {
                 queryClient.setQueryData(['allFishCandidates', { limit, sort }], (oldData: any) => {
                     if (!oldData) return oldData;
                     return {
@@ -119,6 +131,8 @@ const FishCandidates = () => {
 
                 showMessage('Fish selected successfully!');
                 setOpenModal(false);
+            } else {
+                showMessage('Failed!', 'error');
             }
         } catch {
             showMessage('Failed to select fish.', 'error');
@@ -173,6 +187,7 @@ const FishCandidates = () => {
                             handleModal={handleModalOpen}
                             isLoading={isLoading}
                             buttonText="Select as nominee"
+                            eventPhase={event_reg_phase === 'nominate_phase'}
                         />
                     ))
                 )}

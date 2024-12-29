@@ -205,7 +205,7 @@ const UserList = () => {
                                     render: ({ user_id }) => (
                                         <div className="ml-[5%] flex w-full gap-4">
                                             <button
-                                                className="btn2 btn-gradient2"
+                                                className="btn2 btn-secondary"
                                                 onClick={() => handleUserDetail(user_id)}
                                             >
                                                 Detail

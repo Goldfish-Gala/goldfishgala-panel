@@ -19,8 +19,11 @@ const FishDetail = async (props: { params: Params }) => {
                 <li>
                     <span className="text-primary ">Dashboard</span>
                 </li>
+                <li className="text-primary before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                    <span>Fish</span>
+                </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2 ">
-                    <span>Detail ikan</span>
+                    <span>Fish Detail</span>
                 </li>
             </ul>
             <div className="mt-4 flex flex-wrap items-center justify-start">

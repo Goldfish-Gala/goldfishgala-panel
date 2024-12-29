@@ -8,8 +8,6 @@ import { useCookies } from 'next-client-cookies';
 import Swal from 'sweetalert2';
 import { getAllFishCandidateApi, selectFishNominateApi } from '@/api/nomination/api-nomination';
 import SpinnerWithText from '@/components/UI/Spinner';
-import IGEmbed from '@/components/components/ig-embed/embed';
-import ConfirmationModal from '@/components/components/confirmation-modal';
 import { getAllEventPrice } from '@/api/event-price/api-event-price';
 import { error } from 'console';
 import ChampionsComp from './champion-category';
