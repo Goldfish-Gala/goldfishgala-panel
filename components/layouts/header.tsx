@@ -165,15 +165,15 @@ const Header = () => {
         user?.role_id === 4
             ? 'bg-danger/20 text-danger dark:bg-danger/50'
             : user?.role_id === 3
-                ? 'bg-warning/20 text-warning dark:bg-warning/50'
-                : user?.role_id === 2
-                    ? 'bg-success/20 text-success dark:bg-success/30'
-                    : 'border border-success bg-none text-success';
+            ? 'bg-warning/20 text-warning dark:bg-warning/50'
+            : user?.role_id === 2
+            ? 'bg-success/20 text-success dark:bg-success/30'
+            : 'border border-success bg-none text-success';
 
     // const [search, setSearch] = useState(false);
 
     return (
-        <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
+        <header className={`z-[999] ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
             <div className="shadow-sm">
                 <div className="relative flex w-full items-center bg-white px-5 py-2.5 dark:bg-black">
                     <div className="horizontal-logo flex items-center justify-between lg:hidden ltr:mr-2 rtl:ml-2">
@@ -209,9 +209,10 @@ const Header = () => {
                         <div>
                             {themeConfig.theme === 'light' ? (
                                 <button
-                                    className={`${themeConfig.theme === 'light' &&
+                                    className={`${
+                                        themeConfig.theme === 'light' &&
                                         'flex items-center rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60'
-                                        }`}
+                                    }`}
                                     onClick={() => dispatch(toggleTheme('dark'))}
                                 >
                                     <IconSun />
@@ -221,9 +222,10 @@ const Header = () => {
                             )}
                             {themeConfig.theme === 'dark' && (
                                 <button
-                                    className={`${themeConfig.theme === 'dark' &&
+                                    className={`${
+                                        themeConfig.theme === 'dark' &&
                                         'flex items-center rounded-full bg-white-light/40 p-2 hover:bg-white-light/90 hover:text-primary dark:bg-dark/40 dark:hover:bg-dark/60'
-                                        }`}
+                                    }`}
                                     onClick={() => dispatch(toggleTheme('light'))}
                                 >
                                     <IconMoon />
@@ -262,10 +264,10 @@ const Header = () => {
                                                         {user?.role_id === 1
                                                             ? 'Guest'
                                                             : user?.role_id === 2
-                                                                ? 'Member'
-                                                                : user?.role_id === 3
-                                                                    ? 'Admin'
-                                                                    : 'Judges'}
+                                                            ? 'Member'
+                                                            : user?.role_id === 3
+                                                            ? 'Admin'
+                                                            : 'Judges'}
                                                     </span>
                                                 </h4>
                                             </div>

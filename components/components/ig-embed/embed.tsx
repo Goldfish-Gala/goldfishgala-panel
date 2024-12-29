@@ -1,8 +1,8 @@
 'use client';
 
-import { render } from '@headlessui/react/dist/utils/render';
 import { useEffect, useState } from 'react';
 import { InstagramEmbed } from 'react-social-media-embed';
+import Swal from 'sweetalert2';
 
 interface IgEmbedType {
     url: string;
@@ -11,13 +11,33 @@ interface IgEmbedType {
     isLoading: boolean;
     buttonText: string;
     username: string;
+    eventPhase: boolean;
 }
 
-const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: IgEmbedType) => {
+const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText, eventPhase }: IgEmbedType) => {
     const [isExiting, setIsExiting] = useState(fish.exiting || false);
 
     const handleNominate = async () => {
         handleModal(fish.fish_id);
+    };
+
+    const showMessage = (msg = '', type = 'success') => {
+        const toast: any = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: { container: 'toast' },
+        });
+        toast.fire({
+            icon: type,
+            title: msg,
+            padding: '10px 20px',
+        });
+    };
+
+    const handlePhaseFalse = async () => {
+        showMessage('Action Not Allowed: Current phase is not "Nominate Phase"', 'info');
     };
 
     useEffect(() => {
@@ -64,9 +84,15 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText }: Ig
                         </div>
                     ))}
                 </div>
-                <button className="btn2 btn-gradient3 mt-4 px-4 py-2" disabled={isLoading} onClick={handleNominate}>
-                    {buttonText}
-                </button>
+                {eventPhase ? (
+                    <button className="btn2 btn-gradient3 mt-4 px-4 py-2" disabled={isLoading} onClick={handleNominate}>
+                        {buttonText}
+                    </button>
+                ) : (
+                    <button className="btn2 btn-gradient3 mt-4 px-4 py-2" onClick={handlePhaseFalse}>
+                        {buttonText}
+                    </button>
+                )}
             </div>
         );
     };

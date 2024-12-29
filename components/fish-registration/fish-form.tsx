@@ -453,7 +453,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                     className="btn btn-primary !mt-8 w-fit border-0 uppercase md:w-[50%]"
                                     onClick={handleOpenModal1}
                                 >
-                                    {isLoading ? 'Sedang diproses...' : 'Selanjutnya'}
+                                    <p className="btn-text">{isLoading ? 'Sedang diproses...' : 'Selanjutnya'}</p>
                                 </button>
                             </div>
                             <ConfirmationModal
@@ -502,10 +502,11 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                                             options={
                                                                 eventPrices?.map((price) => ({
                                                                     value: price.event_price_id,
-                                                                    label: `${price.event_price_name
-                                                                        } (Biaya: ${formatToRupiah(
-                                                                            price.event_price_amount
-                                                                        )})`,
+                                                                    label: `${
+                                                                        price.event_price_name
+                                                                    } (Biaya: ${formatToRupiah(
+                                                                        price.event_price_amount
+                                                                    )})`,
                                                                 })) || []
                                                             }
                                                             styles={{

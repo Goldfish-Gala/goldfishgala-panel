@@ -77,7 +77,7 @@ const ConfirmationModal = ({
                                                 <button
                                                     type="button"
                                                     onClick={() => setOpen(false)}
-                                                    className="btn2 btn-gradient2 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
+                                                    className="btn2 btn-cancel border-white shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]"
                                                 >
                                                     {cancelButton}
                                                 </button>
@@ -85,11 +85,13 @@ const ConfirmationModal = ({
                                                     onClick={handleConfirm}
                                                     disabled={isLoading}
                                                     type="button"
-                                                    className={`btn2 btn-gradient3 !px-6 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] ${
+                                                    className={`btn2 btn-primary border-white !px-6 shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)] ${
                                                         isLoading ? 'hover:bg-gray-500' : ''
                                                     }`}
                                                 >
-                                                    {isLoading ? 'Memproses...' : confirmButton}
+                                                    <span className="btn-text">
+                                                        {isLoading ? 'Memproses...' : confirmButton}
+                                                    </span>
                                                 </button>
                                             </div>
                                         </div>
