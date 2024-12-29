@@ -102,8 +102,6 @@ const OngoingEvent = () => {
         }
     };
 
-    console.log(data, 'isi data ongoing event');
-
     return (
         <div className="panel lg:col-span-2">
             {isPending ? (

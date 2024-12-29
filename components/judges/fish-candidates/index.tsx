@@ -35,7 +35,6 @@ const FishCandidates = () => {
             fetchOngoingEventPhase(authCookie, dispatch);
         }
     }, [event_reg_phase, authCookie, dispatch]);
-    console.log('event_reg_phase ', event_reg_phase);
     const fetchAllFish = async ({ pageParam = 1 }: { pageParam?: number }): Promise<FishPaginationType> => {
         const fishes = await getAllFishCandidateApi(pageParam, limit, sort, authCookie);
         if (fishes.success) return fishes;
