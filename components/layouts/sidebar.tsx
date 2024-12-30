@@ -116,8 +116,9 @@ const Sidebar = () => {
     return (
         <div className={semidark ? 'dark' : ''}>
             <nav
-                className={`sidebar fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] transition-all duration-300 ${semidark ? 'text-white-dark' : ''
-                    }`}
+                className={`sidebar fixed bottom-0 top-0 z-50 h-full min-h-screen w-[260px] shadow-[5px_0_25px_0_rgba(94,92,154,0.1)] transition-all duration-300 ${
+                    semidark ? 'text-white-dark' : ''
+                }`}
             >
                 <div className="h-full bg-white dark:bg-black">
                     <div className="flex items-center justify-between px-4 py-3">
@@ -213,7 +214,7 @@ const Sidebar = () => {
                                     )}
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{T!('Setting')}</span>
+                                        <span>{T!('Account')}</span>
                                     </h2>
 
                                     <li className="menu nav-item">
@@ -228,19 +229,24 @@ const Sidebar = () => {
                                     </li>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
-                                        <span>{T!('Bantuan')}</span>
+                                        <span>{T!('Support')}</span>
                                     </h2>
-
                                     <li className="menu nav-item">
-                                        <Link
-                                            href="https://vristo.sbthemes.com"
-                                            target="_blank"
-                                            className="nav-link group"
-                                        >
+                                        <Link href="/support/faq">
                                             <div className="flex items-center">
-                                                <IconMenuDocumentation className="shrink-0 group-hover:!text-primary" />
+                                                <IconMenuDocumentation className="shrink-0" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                                                     {T!('FAQ')}
+                                                </span>
+                                            </div>
+                                        </Link>
+                                    </li>
+                                    <li className="menu nav-item">
+                                        <Link href="/support/special-thanks">
+                                            <div className="flex items-center">
+                                                <IconMenuDocumentation className="shrink-0" />
+                                                <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                                                    {T!('Special Thanks')}
                                                 </span>
                                             </div>
                                         </Link>
