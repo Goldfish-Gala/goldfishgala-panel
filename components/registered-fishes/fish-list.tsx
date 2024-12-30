@@ -50,13 +50,6 @@ const FishList = () => {
         );
     }, [data]);
 
-    const gradients = [
-        'bg-gradient-to-r from-cyan-500 to-cyan-400',
-        'bg-gradient-to-r from-violet-500 to-violet-400',
-        'bg-gradient-to-r from-blue-500 to-blue-400',
-        'bg-gradient-to-r from-fuchsia-500 to-fuchsia-400',
-    ];
-
     if (isPending) {
         return (
             <div className="flex min-h-[75vh] w-full flex-col items-center justify-center">
@@ -87,13 +80,12 @@ const FishList = () => {
             <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
                 {flattenedFishes.map((item, index) => {
                     const { fish, event_name } = item;
-                    const bgClass = gradients[index % gradients.length];
                     return (
                         <div
-                            className={`panel ${bgClass} flex h-full items-center justify-between rounded-md p-5 shadow-lg`}
+                            className={`panel flex h-full items-center justify-between rounded-md p-5 shadow-lg`}
                             key={fish.fish_id}
                         >
-                            <div className="text-white">
+                            <div className="text-dark dark:text-white">
                                 <p className="text-xl font-extrabold capitalize">{fish.fish_name}</p>
                                 <p className="mt-1 text-sm font-semibold capitalize">Event : {event_name}</p>
                             </div>
