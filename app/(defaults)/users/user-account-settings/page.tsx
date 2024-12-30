@@ -1,5 +1,5 @@
 import ComponentsUpdateUserProfile from '@/components/users/account-settings/components-update-user-profile';
-import ComponentsUsersAccountSettingsTabs from '@/components/users/account-settings/components-users-account-settings-tabs';
+import MemberCard from '@/components/users/member-card';
 import { Metadata } from 'next';
 import Link from 'next/link';
 import React from 'react';
@@ -19,7 +19,12 @@ const UserAccountSettings = () => {
                     <span>Profile</span>
                 </li>
             </ul>
-            <ComponentsUpdateUserProfile />
+            <div className="pt-5">
+                <div className="mb-5 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3">
+                    <ComponentsUpdateUserProfile />
+                    <MemberCard />
+                </div>
+            </div>
         </div>
     );
 };
