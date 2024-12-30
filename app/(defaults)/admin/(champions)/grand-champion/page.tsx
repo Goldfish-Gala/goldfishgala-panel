@@ -1,4 +1,4 @@
-import BestAwardSelection from '@/components/admin/champions/best-award';
+import GrandChampionSelection from '@/components/admin/champions/grand-champion';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -19,7 +19,9 @@ const Page = () => {
                     <span>Grand Champion Selection</span>
                 </li>
             </ul>
-            <div className="pt-5">{/* <BestAwardSelection /> */}</div>
+            <div className="pt-5">
+                <GrandChampionSelection />
+            </div>
         </div>
     );
 };
