@@ -23,7 +23,7 @@ const GrandChampionCandidate = ({ bestAward, isGrandChampionExist, setGrandChamp
     const [deleteLoading, setDeleteLoading] = useState(false);
 
     useEffect(() => {
-        if (bestAward.is_best_award) {
+        if (bestAward.is_grand_champion) {
             setGrandChampionExist(true);
         }
     }, [isGrandChampionExist]);
@@ -49,7 +49,6 @@ const GrandChampionCandidate = ({ bestAward, isGrandChampionExist, setGrandChamp
             champion_category_id: bestAward.champion_category_id,
             fish_id: bestAward.fish_id,
             champion_award_id: bestAward.champion_award_id,
-            is_best_award: false,
             is_grand_champion: false,
         };
         try {
@@ -121,7 +120,7 @@ const GrandChampionCandidate = ({ bestAward, isGrandChampionExist, setGrandChamp
                     </div>
                 </div>
             </div>
-            {bestAward.is_best_award ? (
+            {bestAward.is_grand_champion ? (
                 <button
                     disabled={deleteLoading}
                     className="btn2 btn-cancel px-5 py-2"
