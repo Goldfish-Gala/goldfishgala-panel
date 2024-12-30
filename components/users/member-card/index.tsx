@@ -9,6 +9,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import ReactCardFlip from 'react-card-flip';
 import './index.css';
+import { formatName } from '@/utils/name-format';
 
 const MemberCard = () => {
     const router = useRouter();
@@ -52,14 +53,16 @@ const MemberCard = () => {
                             </div>
                         </div>
                         <p className="absolute bottom-[44.25%] left-36 font-bold text-black">{user?.user_id}</p>
-                        <p className="absolute bottom-[34%] left-16 text-xl font-bold capitalize text-[#E0C052]">{`${user?.user_fname} ${user?.user_lname}`}</p>
-                        <p className="absolute bottom-[26%] left-16 text-xl font-bold capitalize text-[#E0C052]">
+                        <p className="absolute bottom-[34%] left-12 text-xl font-bold capitalize text-[#E0C052]">
+                            {formatName(user?.user_fname || '', user?.user_lname || '', 22)}
+                        </p>
+                        <p className="absolute bottom-[26%] left-12 text-xl font-bold capitalize text-[#E0C052]">
                             {user?.role_name}
                         </p>
-                        <p className="absolute bottom-[17.5%] left-16 text-base font-bold text-[#E0C052]">
+                        <p className="absolute bottom-[17%] left-12 text-base font-bold text-[#E0C052]">
                             {user?.user_email}
                         </p>
-                        <p className="absolute bottom-[10.5%] left-16 text-base font-bold text-[#E0C052]">
+                        <p className="absolute bottom-[10.5%] left-12 text-base font-bold text-[#E0C052]">
                             {user?.user_phone}
                         </p>
                     </div>
@@ -79,14 +82,16 @@ const MemberCard = () => {
                             </div>
                         </div>
                         <p className="absolute bottom-[44.25%] left-36 font-bold text-black">{user?.user_id}</p>
-                        <p className="absolute bottom-[34%] left-16 text-xl font-bold capitalize text-[#E0C052]">{`${user?.user_fname} ${user?.user_lname}`}</p>
-                        <p className="absolute bottom-[26%] left-16 text-xl font-bold capitalize text-[#E0C052]">
+                        <p className="absolute bottom-[34%] left-12 text-xl font-bold capitalize text-[#E0C052]">
+                            {formatName(user?.user_fname || '', user?.user_lname || '', 22)}
+                        </p>
+                        <p className="absolute bottom-[26%] left-12 text-xl font-bold capitalize text-[#E0C052]">
                             {user?.role_name}
                         </p>
-                        <p className="absolute bottom-[17.5%] left-16 text-base font-bold text-[#E0C052]">
+                        <p className="absolute bottom-[17%] left-12 text-base font-bold text-[#E0C052]">
                             {user?.user_email}
                         </p>
-                        <p className="absolute bottom-[10.5%] left-16 text-base font-bold text-[#E0C052]">
+                        <p className="absolute bottom-[10.5%] left-12 text-base font-bold text-[#E0C052]">
                             {user?.user_phone}
                         </p>
                     </div>
