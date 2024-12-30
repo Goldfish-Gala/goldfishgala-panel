@@ -47,6 +47,7 @@ import IconSelection from '../icon/icon-selection';
 import AdminSideBar from './role-sidebar/admin';
 import JudgesSideBar from './role-sidebar/judges';
 import MemberSideBar from './role-sidebar/member';
+import IconBowing from '../icon/icon-bowing';
 
 const Sidebar = () => {
     const dispatch = useDispatch();
@@ -244,7 +245,7 @@ const Sidebar = () => {
                                     <li className="menu nav-item">
                                         <Link href="/support/special-thanks">
                                             <div className="flex items-center">
-                                                <IconMenuDocumentation className="shrink-0" />
+                                                <IconBowing className="shrink-0" />
                                                 <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
                                                     {T!('Special Thanks')}
                                                 </span>
