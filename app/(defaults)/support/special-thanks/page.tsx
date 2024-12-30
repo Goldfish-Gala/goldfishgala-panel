@@ -13,7 +13,7 @@ const Page = () => {
                     <span className="text-primary ">Support</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>FAQ</span>
+                    <span>Special Thanks</span>
                 </li>
             </ul>
             <div className="grid pt-5">{/* component */}</div>
