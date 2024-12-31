@@ -1,3 +1,4 @@
+import Faq from '@/components/support/faq';
 import { Metadata } from 'next';
 import React from 'react';
 
@@ -16,7 +17,9 @@ const Page = () => {
                     <span>FAQ</span>
                 </li>
             </ul>
-            <div className="grid pt-5">{/* component */}</div>
+            <div className="grid pt-5">
+                <Faq />
+            </div>
         </div>
     );
 };
