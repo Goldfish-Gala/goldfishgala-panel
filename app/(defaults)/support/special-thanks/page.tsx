@@ -1,3 +1,4 @@
+import SpecialThanks from '@/components/support/special-thanks';
 import { Metadata } from 'next';
 import React from 'react';
 
@@ -16,7 +17,11 @@ const Page = () => {
                     <span>Special Thanks</span>
                 </li>
             </ul>
-            <div className="grid pt-5">{/* component */}</div>
+            <div className="grid">
+                <div className="flex h-full min-h-[700px] pb-10">
+                    <SpecialThanks />
+                </div>
+            </div>
         </div>
     );
 };
