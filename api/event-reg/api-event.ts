@@ -78,6 +78,20 @@ export const updateEvent = async (event_id: string, data: EventRegister, cookie:
     }
 };
 
+export const updateEventIsActive = async ( eventId: string, cookie: string | undefined) => {
+    try {
+        const response = await api.put(`/events/${eventId}`, {}, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
+
 export const deleteEvent = async ( eventId: string, cookie: string | undefined) => {
     try {
         const response = await api.delete(`/events/${eventId}`, {

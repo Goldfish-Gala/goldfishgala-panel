@@ -114,6 +114,9 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
     const onSubmit = async (data: { event_name: string; event_desc: string; event_start_date: string, event_end_date: string, event_price_ids: string[], event_reg_id: string }) => {
         setLoading(true);
         try {
+            if (!data.event_price_ids || data.event_price_ids.length === 0) {
+                data.event_price_ids = eventData.event_prices.map((price) => price.event_price_id);
+            }
             const response = await updateEvent(
                 eventData.event_id,
                 {
