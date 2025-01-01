@@ -188,32 +188,43 @@ const CreateEventModal = ({ open, setOpen, setDataChange }: CreateEventModalProp
                             </div>
                             <div className="mb-4">
                                 <label className="block text-sm font-medium">Event Registration</label>
-                                <Select
-                                    options={
-                                        eventRegs?.map((eventReg) => ({
-                                            value: eventReg.event_reg_id,
-                                            label: `${eventReg.event_reg_status_code}, ${eventReg.event_reg_phase_code}, ${formatedDate(eventReg.event_reg_start_date)} - ${formatedDate(eventReg.event_reg_end_date)}`,
-                                        })) || []
-                                    }
-                                    placeholder="Select Event Reg"
-                                    onChange={(selectedOption: any) => setValue('event_reg_id', selectedOption?.value)}
-                                    styles={{
-                                        menu: (provided: any) => ({
-                                            ...provided,
-                                            maxHeight: '200px',
-                                            overflowY: 'auto',
-                                        }),
-                                        menuList: (provided: any) => ({
-                                            ...provided,
-                                            maxHeight: '200px',
-                                            overflowY: 'auto',
-                                        }),
-                                    }}
-                                />
+                                    <Select 
+                                        options={
+                                            eventRegs?.map((eventReg) => ({
+                                              value: eventReg.event_reg_id,
+                                              label: (
+                                                <div className="text-sm">
+                                                  <div>Status: {eventReg.event_reg_status_name}</div>
+                                                  <div>Phase: {eventReg.event_reg_phase_name}</div>
+                                                  <div>
+                                                    Period: {formatedDate(eventReg.event_reg_start_date)} -{' '}
+                                                    {formatedDate(eventReg.event_reg_end_date)}
+                                                  </div>
+                                                </div>
+                                              ),
+                                            })) || []
+                                          }
+                                        placeholder="Select Event Reg"
+                                        isSearchable={false}
+                                        onChange={(selectedOption: any) => setValue('event_reg_id', selectedOption?.value)}
+                                        styles={{
+                                            menu: (provided: any) => ({
+                                                ...provided,
+                                                maxHeight: '200px',
+                                                overflowY: 'auto',
+                                                
+                                            }),
+                                            menuList: (provided: any) => ({
+                                                ...provided,
+                                                maxHeight: '200px',
+                                                overflowY: 'auto',
+                                            }),
+                                        }}
+                                    />
+                                </div>
                                 {errors.event_reg_id && (
                                     <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
                                 )}
-                            </div>
                             <div className="flex justify-end gap-2">
                                 <button
                                     type="button"

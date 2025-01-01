@@ -302,19 +302,29 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
                                     options={
                                         eventRegs?.map((eventReg) => ({
                                             value: eventReg.event_reg_id,
-                                            label: `${eventReg.event_reg_status_code}, ${eventReg.event_reg_phase_code}, ${formatedDate(eventReg.event_reg_start_date)} - ${formatedDate(eventReg.event_reg_end_date)}`,
+                                            label: (
+                                            <div className="text-sm">
+                                                <div>Status: {eventReg.event_reg_status_name}</div>
+                                                <div>Phase: {eventReg.event_reg_phase_name}</div>
+                                                <div>
+                                                Period: {formatedDate(eventReg.event_reg_start_date)} -{' '}
+                                                {formatedDate(eventReg.event_reg_end_date)}
+                                                </div>
+                                            </div>
+                                            ),
                                         })) || []
                                     }
                                     placeholder="Select Event Reg"
                                     defaultValue={
                                         eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id) && {
                                             value: eventData.event_reg_id,
-                                            label: `${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_status_code}, 
-                                                    ${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_phase_code}, 
+                                            label: `${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_status_name}, 
+                                                    ${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_phase_name}, 
                                                     ${formatedDate(eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_start_date)} - 
                                                     ${formatedDate(eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_end_date)}`
                                         }
                                     }
+                                    isSearchable={false}
                                     onChange={(selectedOption: any) => setValue('event_reg_id', selectedOption?.value)}
                                     styles={{
                                         menu: (provided: any) => ({
