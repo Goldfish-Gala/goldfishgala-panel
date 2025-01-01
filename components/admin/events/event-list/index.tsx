@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '@/components/UI/Spinner';
-import { deleteEvent, getAllEvent, getOneEvent } from '@/api/event-reg/api-event';
+import { deleteEvent, getAllEvent, getOneEvent, updateEventIsActive, } from '@/api/event-reg/api-event';
 import { formatedDate } from '@/utils/date-format';
 import IconCircle from '@/components/icon/menu/icon-circle';
 import IconTrashLines from '@/components/icon/icon-trash-lines';
@@ -150,6 +150,59 @@ const EventList = () => {
         throw new Error('No User Found');
     };
 
+    const updateIsActive = async (event_id: string) => {
+        try {
+          const confirmResult = await Swal.fire({
+            title: 'Are you sure?',
+            text: 'This action cannot be undone. Do you want to update the activity status of this event?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, update it!',
+            cancelButtonText: 'Cancel',
+            reverseButtons: true,
+          });
+      
+          if (confirmResult.isConfirmed) {
+            const updateIsActive = await updateEventIsActive(event_id, authCookie);
+      
+            if (updateIsActive.success) {
+              await Swal.fire({
+                icon: 'success',
+                title: 'Updated!',
+                text: 'Event activity status updated successfully.',
+                timer: 2000,
+                showConfirmButton: false,
+              });
+    
+              queryClient.invalidateQueries({ queryKey: ['allEvent'] });
+              return updateIsActive.data;
+            } else {
+              await Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: updateIsActive.response.data.message || 'Failed to update event activity status.',
+              });
+            }
+          } else {
+            await Swal.fire({
+              icon: 'info',
+              title: 'Cancelled',
+              text: 'The event activity status was not updated.',
+              timer: 1500,
+              showConfirmButton: false,
+            });
+          }
+        } catch (error: any) {
+          console.error('Error updating event activity status:', error);
+      
+          await Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: error?.message || 'An unexpected error occurred while updating the event activity status.',
+          });
+        }
+      };
+
     if (isPending) {
         return (
             <div className="flex min-h-[75vh] w-full flex-col items-center justify-center">
@@ -245,7 +298,7 @@ const EventList = () => {
                                     <span className='font-bold'>{`${formatedDate(event.event_start_date)} - ${formatedDate(event.event_end_date)}`}</span>
                                 </p>
                                 <p className="mt-1 text-sm capitalize">
-                                    Event Status: <span className='font-bold'>{event.event_reg_status_code}</span>
+                                    Event Status: <span className='font-bold'>{event.event_reg_status_name}</span>
                                 </p>
                                 <p className="mt-1 text-sm capitalize">
                                     Event Phase: <span className='font-bold'>{event.event_reg_phase_name}</span>
@@ -264,6 +317,13 @@ const EventList = () => {
                                     </ul>
                                 </p>
                             </div>
+                            <button
+                                type="button"
+                                className="btn btn-secondary"
+                                onClick={() => updateIsActive(event.event_id)}
+                            >
+                                Toggle Activity
+                            </button>
                         </div>
                     );
                 })}
