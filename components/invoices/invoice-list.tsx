@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
 import { expiringTime } from '@/utils/date-format';
 import { getAllPaymentRegisteredEvent } from '@/api/payment/api-payment';
+import { getInvoiceByUserId } from '@/api/invoice/api-invoice';
 
 const InvoiceList = () => {
     const router = useRouter();
@@ -33,10 +34,10 @@ const InvoiceList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllInvoicePayment = async (): Promise<UserRegDetailType[]> => {
-        const getAllUserEvent = await getAllPaymentRegisteredEvent(authCookie, user?.user_id);
-        if (getAllUserEvent.success) {
-            return [...getAllUserEvent.data.Pending, ...getAllUserEvent.data.Paid, ...getAllUserEvent.data.Failed];
+    const getAllInvoicePayment = async (): Promise<InvoiceDetail[]> => {
+        const getAllInvoice = await getInvoiceByUserId(authCookie);
+        if (getAllInvoice.success) {
+            return getAllInvoice.data;
         }
         throw new Error('No ongoing event');
     };
@@ -44,48 +45,13 @@ const InvoiceList = () => {
     const { isPending, error, data } = useQuery({
         queryKey: ['allInvoicePayment'],
         queryFn: () => getAllInvoicePayment(),
-        enabled: !!authCookie && !!user?.user_id,
+        enabled: !!authCookie,
         refetchOnWindowFocus: false,
     });
-
-    const flattenedFishes: FlattenedFishType[] = useMemo(() => {
-        if (!data) return [];
-        return data.flatMap((registration) =>
-            registration.fishes.map((fish) => ({
-                ...registration,
-                fish,
-            }))
-        );
-    }, [data]);
-
-    const [records, setRecords] = useState<FlattenedFishType[]>([]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
         direction: 'asc',
     });
-
-    useEffect(() => {
-        if (flattenedFishes) {
-            const sortedData = sortBy(flattenedFishes, 'invoice_code');
-            setRecords(sortedData.slice(0, pageSize));
-        }
-    }, [flattenedFishes, pageSize]);
-
-    useEffect(() => {
-        const from = (page - 1) * pageSize;
-        const to = from + pageSize;
-        if (flattenedFishes) {
-            setRecords(sortBy(flattenedFishes, sortStatus.columnAccessor).slice(from, to));
-        }
-    }, [page, pageSize, sortStatus, flattenedFishes]);
-
-    useEffect(() => {
-        if (flattenedFishes) {
-            const sortedData = sortBy(flattenedFishes, sortStatus.columnAccessor);
-            setRecords(sortStatus.direction === 'desc' ? sortedData.reverse() : sortedData);
-            setPage(1);
-        }
-    }, [sortStatus, flattenedFishes]);
 
     return (
         <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
@@ -98,7 +64,7 @@ const InvoiceList = () => {
                     ) : (
                         <DataTable
                             className="table-hover min-h-[200px] whitespace-nowrap"
-                            records={records}
+                            records={data}
                             columns={[
                                 {
                                     accessor: 'invoice_code',
@@ -108,26 +74,6 @@ const InvoiceList = () => {
                                         <Link href={`/invoice-preview/${invoice_code}`}>
                                             <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
                                         </Link>
-                                    ),
-                                },
-                                {
-                                    accessor: 'event_name',
-                                    title: 'Nama event',
-                                    sortable: true,
-                                    render: ({ event_name, event_id }) => (
-                                        <div className="flex items-center font-semibold">
-                                            <div>{event_name}</div>
-                                        </div>
-                                    ),
-                                },
-                                {
-                                    accessor: 'fish_name',
-                                    title: 'Nama ikan',
-                                    sortable: true,
-                                    render: ({ fish }) => (
-                                        <div className="flex items-center font-semibold">
-                                            <div>{fish.fish_name}</div>
-                                        </div>
                                     ),
                                 },
                                 {
@@ -164,7 +110,7 @@ const InvoiceList = () => {
                                 },
                                 {
                                     accessor: 'aksi',
-                                    title: '',
+                                    title: 'Action',
                                     sortable: false,
                                     textAlignment: 'left',
                                     render: ({ invoice_code, invoice_checkout_url, invoice_status }) => (
