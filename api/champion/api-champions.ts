@@ -130,9 +130,23 @@ export const getBestAwardByEventPriceApi = async (token: string | undefined, eve
     }
 };
 
-export const getGrandChampionApi = async (token: string | undefined) => {
+export const getGrandChampionCandidateApi = async (token: string | undefined) => {
     try {
         const response = await api.get(`/champions?limit=3`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const getGrandChampionApi = async (token: string | undefined) => {
+    try {
+        const response = await api.get(`/champions?is_grand_champion=true`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

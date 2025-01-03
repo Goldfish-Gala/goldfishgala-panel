@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useCookies } from 'next-client-cookies';
 import SpinnerWithText from '@/components/UI/Spinner';
-import { getGrandChampionApi } from '@/api/champion/api-champions';
 import GrandChampionCandidate from './grand-champion-candidate';
+import { getGrandChampionCandidateApi } from '@/api/champion/api-champions';
 
 const GrandChampionSelection = () => {
     const cookies = useCookies();
@@ -13,13 +13,13 @@ const GrandChampionSelection = () => {
     const [isGrandChampionExist, setGrandChampionExist] = useState(false);
 
     const fetchGrandChampion = async (): Promise<ChampionBestAwardType[]> => {
-        const grandChampion = await getGrandChampionApi(authCookie);
+        const grandChampion = await getGrandChampionCandidateApi(authCookie);
         if (grandChampion.success) return grandChampion.data;
         throw new Error('Failed to fetch event prices');
     };
 
     const { data, isPending, isSuccess } = useQuery({
-        queryKey: ['grandChampion'],
+        queryKey: ['grandChampionCandidate'],
         queryFn: fetchGrandChampion,
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
@@ -41,7 +41,7 @@ const GrandChampionSelection = () => {
                     <p className="text-danger">No data available</p>
                 </div>
             ) : (
-                <div className="panel grid grid-cols-4 gap-5">
+                <div className="panel grid w-full grid-cols-1 gap-5 overflow-x-auto sm:grid-cols-2 xl:grid-cols-3">
                     {data?.map((item) => (
                         <div key={item.champion_id}>
                             <div className="pb-6">

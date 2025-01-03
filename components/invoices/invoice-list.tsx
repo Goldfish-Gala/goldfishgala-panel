@@ -2,12 +2,12 @@
 
 import { IRootState } from '@/store';
 import { fetchUserProfile, storeUser } from '@/utils/store-user';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { sortBy } from 'lodash';
 import { DataTableSortStatus, DataTable } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import SpinnerWithText from '../UI/Spinner';
@@ -20,6 +20,12 @@ const InvoiceList = () => {
     const authCookie = cookies?.get('token');
     const dispatch = useDispatch();
     const user = useSelector((state: IRootState) => state.auth.user);
+    const queryClient = useQueryClient();
+    const searchParams = useSearchParams();
+    const [page, setPage] = useState(Number(searchParams.get('page') || 1));
+    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
+    const PAGE_SIZES = [10, 20, 30, 40];
+    const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
 
     useEffect(() => {
         if (!user) {
@@ -52,9 +58,6 @@ const InvoiceList = () => {
         );
     }, [data]);
 
-    const [page, setPage] = useState(1);
-    const PAGE_SIZES = [10, 20, 30, 50, 100];
-    const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [records, setRecords] = useState<FlattenedFishType[]>([]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
@@ -170,7 +173,7 @@ const InvoiceList = () => {
                                                 href={`/invoice-preview/${invoice_code}`}
                                                 className="flex hover:text-primary"
                                             >
-                                                <button className="btn2 btn-gradient3">Lihan detail</button>
+                                                <button className="btn2 btn-secondary">Detail</button>
                                             </Link>
                                             {invoice_status === 'pending' && (
                                                 <button
@@ -185,21 +188,15 @@ const InvoiceList = () => {
                                     ),
                                 },
                             ]}
-                            highlightOnHover
                             key="invoice_code"
                             totalRecords={data ? data.length : 0}
-                            recordsPerPage={pageSize}
+                            highlightOnHover
                             page={page}
                             onPageChange={(p) => setPage(p)}
-                            recordsPerPageOptions={PAGE_SIZES}
-                            onRecordsPerPageChange={setPageSize}
                             sortStatus={sortStatus}
                             onSortStatusChange={setSortStatus}
-                            // selectedRecords={selectedRecords}
-                            // onSelectedRecordsChange={setSelectedRecords}
-                            paginationText={({ from, to, totalRecords }) =>
-                                `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
-                            }
+                            recordsPerPage={pageSize}
+                            style={{ paddingLeft: 20, paddingRight: 20 }}
                         />
                     )}
                 </div>

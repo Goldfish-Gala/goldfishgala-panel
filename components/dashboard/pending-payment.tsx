@@ -82,7 +82,7 @@ const PendingPayment = () => {
                         </thead>
                         <tbody>
                             {flattenedFishes?.map((payment) => (
-                                <tr key={payment.user_reg_id} className="group text-white-dark">
+                                <tr key={payment.user_reg_id} className="group text-dark dark:text-white-dark">
                                     <td>{payment.event_name}</td>
                                     <td>{payment.fish.fish_name}</td>
                                     <td>{payment.invoice_code}</td>

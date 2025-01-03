@@ -42,6 +42,7 @@ const FishList = () => {
     };
 
     useEffect(() => {
+        setLimit(pageSize);
         const params = new URLSearchParams();
         params.set('limit', limit.toString());
         params.set('sort', sort);
@@ -163,20 +164,14 @@ const FishList = () => {
                                 },
                             ]}
                             highlightOnHover
-                            key="fish_id"
+                            key="user_id"
                             totalRecords={data?.data ? data.pagination.totalData : 0}
-                            recordsPerPage={pageSize}
                             page={page}
                             onPageChange={(p) => setPage(p)}
-                            recordsPerPageOptions={PAGE_SIZES}
-                            onRecordsPerPageChange={setPageSize}
                             sortStatus={sortStatus}
                             onSortStatusChange={setSortStatus}
-                            // selectedRecords={selectedRecords}
-                            // onSelectedRecordsChange={setSelectedRecords}
-                            paginationText={({ from, to, totalRecords }) =>
-                                `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
-                            }
+                            recordsPerPage={pageSize}
+                            style={{ paddingLeft: 20, paddingRight: 20 }}
                         />
                     )}
                 </div>

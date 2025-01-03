@@ -35,6 +35,19 @@ interface UserRegDetailType {
     invoice_checkout_url: string;
 }
 
+interface UserRegDetailPagination {
+    success: boolean;
+    message: string;
+    data: UserRegDetailType[];
+    pagination: {
+        totalData: number;
+        currentPage: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
+}
+
 interface EventRegisterType {
     event_id: string;
     user_id: string | undefined;
@@ -82,9 +95,9 @@ interface EventRegister {
     event_desc: string;
     event_start_date: string;
     event_end_date: string;
-    event_price_ids: string[],
-    event_reg_id: string
-  }
+    event_price_ids: string[];
+    event_reg_id: string;
+}
 
 interface AllEvents extends EventRegister {
     event_id: string;
@@ -102,7 +115,7 @@ interface AllEvents extends EventRegister {
     event_reg_start_date: string;
     event_reg_end_date: string;
     event_reg_created_date: string;
-    event_prices: EventPrice[]
+    event_prices: EventPrice[];
 }
 
 interface EventPrice {
@@ -116,7 +129,7 @@ interface EventRegRegister {
     event_reg_status_id: string;
     event_reg_phase_id: string;
     event_reg_period_id: string;
-  }
+}
 
 interface EventReg extends EventRegRegister {
     event_reg_id: string;

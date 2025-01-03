@@ -1,8 +1,8 @@
-import FishList from '@/components/admin/fish/all-fishes';
+import GrandChampionList from '@/components/admin/champions/champions list/grand-champion';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-    title: 'Champion Selection',
+    title: 'Champions List',
 };
 
 const Page = () => {
@@ -19,7 +19,11 @@ const Page = () => {
                     <span>Champions List</span>
                 </li>
             </ul>
-            <div className="pt-5">{/* <FishList /> */}</div>
+            <div className="pt-5">
+                <div className="grip gap-5">
+                    <GrandChampionList />
+                </div>
+            </div>
         </div>
     );
 };
