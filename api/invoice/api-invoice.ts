@@ -32,3 +32,17 @@ export const getInvoiceByCode = async (
         return error;
     }
 };
+
+export const getInvoiceByUserId = async (cookie: string | undefined) => {
+    const query = `/invoices/guest`;
+    try {
+        const response = await api.get(query, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
