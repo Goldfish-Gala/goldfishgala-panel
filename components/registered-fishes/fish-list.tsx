@@ -77,7 +77,7 @@ const FishList = () => {
 
     return (
         <>
-            <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
+            <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
                 {flattenedFishes.map((item, index) => {
                     const { fish, event_name } = item;
                     return (

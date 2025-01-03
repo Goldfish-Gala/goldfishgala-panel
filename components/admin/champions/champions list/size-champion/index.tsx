@@ -8,7 +8,6 @@ import Swal from 'sweetalert2';
 import SpinnerWithText from '@/components/UI/Spinner';
 import { getAllEventPrice } from '@/api/event-price/api-event-price';
 import { getAllCategoryByEventPriceApi, getAllChampions } from '@/api/champion/api-champions';
-import ChampionCandidates from './champion-candidate';
 import { Separator } from '@/components/UI/Separator';
 
 const ChampionSelectionList = () => {

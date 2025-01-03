@@ -189,10 +189,10 @@ const UserList = () => {
                                                 {role_id === 2
                                                     ? 'Member'
                                                     : role_id === 3
-                                                        ? 'Admin'
-                                                        : role_id === 4
-                                                            ? 'Judges'
-                                                            : 'Guest'}
+                                                    ? 'Admin'
+                                                    : role_id === 4
+                                                    ? 'Judges'
+                                                    : 'Guest'}
                                             </div>
                                         </div>
                                     ),
@@ -215,20 +215,14 @@ const UserList = () => {
                                 },
                             ]}
                             highlightOnHover
-                            key="user_id"
+                            key="invoice_code"
                             totalRecords={data?.data ? data.pagination.totalData : 0}
-                            recordsPerPage={pageSize}
                             page={page}
                             onPageChange={(p) => setPage(p)}
-                            recordsPerPageOptions={PAGE_SIZES}
-                            onRecordsPerPageChange={setPageSize}
                             sortStatus={sortStatus}
                             onSortStatusChange={setSortStatus}
-                            // selectedRecords={selectedRecords}
-                            // onSelectedRecordsChange={setSelectedRecords}
-                            paginationText={({ from, to, totalRecords }) =>
-                                `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
-                            }
+                            recordsPerPage={pageSize}
+                            style={{ paddingLeft: 20, paddingRight: 20 }}
                         />
                     )}
                 </div>
