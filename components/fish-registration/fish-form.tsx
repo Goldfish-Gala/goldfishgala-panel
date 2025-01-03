@@ -421,7 +421,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                         <IconInstagram />
                                     </span>
                                 </div>
-                                <p className="ml-2 mt-1 text-xs text-white">contoh : goldfishgala</p>
+                                <p className="ml-2 mt-1 text-xs text-black dark:text-white">contoh : goldfishgala</p>
                                 {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
                             </div>
                             <div>
