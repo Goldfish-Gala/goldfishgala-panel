@@ -116,7 +116,7 @@ export const getChampionAwardApi = async (token: string | undefined) => {
     }
 };
 
-export const getBestAwardByEventPriceApi = async (token: string | undefined, eventPriceId: string) => {
+export const getChampionByEventPriceApi = async (token: string | undefined, eventPriceId: string) => {
     try {
         const response = await api.get(`/champions?limit=10&event_price_id=${eventPriceId}`, {
             headers: {
@@ -147,6 +147,20 @@ export const getGrandChampionCandidateApi = async (token: string | undefined) =>
 export const getGrandChampionApi = async (token: string | undefined) => {
     try {
         const response = await api.get(`/champions?is_grand_champion=true`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const getBestAwardApi = async (token: string | undefined) => {
+    try {
+        const response = await api.get(`/champions?is_best_award=true`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

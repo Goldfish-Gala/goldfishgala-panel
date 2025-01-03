@@ -15,7 +15,6 @@ const GrandChampionList = () => {
 
     const fetchGrandChampion = async (): Promise<ChampionBestAwardType> => {
         const grandChampion = await getGrandChampionApi(authCookie);
-        console.log('data ', grandChampion);
         if (grandChampion.success) return grandChampion.data[0];
         throw new Error('Failed to fetch event prices');
     };
@@ -38,7 +37,7 @@ const GrandChampionList = () => {
 
     if (!data) {
         return (
-            <div className="panel flex min-h-[300px] w-full grid-cols-1 flex-col items-start justify-start text-dark dark:text-white-dark">
+            <div className="panel flex w-full grid-cols-1 flex-col items-start justify-start text-dark dark:text-white-dark lg:grid-cols-4">
                 <p className="text-lg font-bold text-primary">Grand Champion</p>
                 <p className="my-auto self-center text-danger">Grand champion not decided yet</p>
             </div>
@@ -46,10 +45,19 @@ const GrandChampionList = () => {
     }
 
     return (
-        <div className="panel flex w-full grid-cols-1 flex-col items-start justify-start text-dark dark:text-white-dark">
+        <div className="panel flex grid-cols-1 flex-col items-start justify-start text-dark dark:text-white-dark lg:grid-cols-4">
             <p className="text-lg font-bold text-primary">Grand Champion</p>
             <div className="my-auto mt-4 self-center">
                 <InstagramEmbed url={data?.fish_submission_link} width={328} />
+                <div className="flex w-full items-center justify-center gap-4">
+                    <label htmlFor="fishscore">Total Score</label>
+                    <input
+                        id="fishscore"
+                        readOnly
+                        value={data.total_score}
+                        className="form-input h-8 w-16 text-center"
+                    />
+                </div>
             </div>
         </div>
     );

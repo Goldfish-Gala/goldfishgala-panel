@@ -9,11 +9,23 @@ import { Spinner } from '@/components/UI/Spinner/spinner';
 
 interface IgEmbedType {
     bestAward: ChampionBestAwardType;
-    isBestAwardExist: boolean;
-    setBestAwardExist: (open: boolean) => void;
+    isBestAwardSmallExist: boolean;
+    setBestAwardSmallExist: (open: boolean) => void;
+    isBestAwardMediumExist: boolean;
+    setBestAwardMediumExist: (open: boolean) => void;
+    isBestAwardLargeExist: boolean;
+    setBestAwardLargeExist: (open: boolean) => void;
 }
 
-const BestAwardCandidates = ({ bestAward, isBestAwardExist, setBestAwardExist }: IgEmbedType) => {
+const BestAwardCandidates: React.FC<IgEmbedType> = ({
+    bestAward,
+    isBestAwardSmallExist,
+    setBestAwardSmallExist,
+    isBestAwardMediumExist,
+    setBestAwardMediumExist,
+    isBestAwardLargeExist,
+    setBestAwardLargeExist,
+}) => {
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const [isLoading, setLoading] = useState(false);
@@ -21,76 +33,106 @@ const BestAwardCandidates = ({ bestAward, isBestAwardExist, setBestAwardExist }:
 
     useEffect(() => {
         if (bestAward.is_best_award) {
-            setBestAwardExist(true);
+            switch (bestAward.event_price_code) {
+                case 'sm_fish':
+                    setBestAwardSmallExist(true);
+                    break;
+                case 'md_fish':
+                    setBestAwardMediumExist(true);
+                    break;
+                case 'lg_fish':
+                    setBestAwardLargeExist(true);
+                    break;
+            }
         }
-    }, [isBestAwardExist]);
+    }, [bestAward, setBestAwardSmallExist, setBestAwardMediumExist, setBestAwardLargeExist]);
 
-    const showMessage = (msg = '', type = 'success') => {
-        const toast: any = Swal.mixin({
+    const showMessage = (msg: string, type: 'success' | 'error' | 'info' = 'success') => {
+        Swal.fire({
             toast: true,
             position: 'top',
+            icon: type,
+            title: msg,
             showConfirmButton: false,
             timer: 3000,
             customClass: { container: 'toast' },
-        });
-        toast.fire({
-            icon: type,
-            title: msg,
-            padding: '10px 20px',
         });
     };
 
     const handleDelete = async () => {
         setDeleteLoading(true);
-        const body = {
-            champion_category_id: bestAward.champion_category_id,
-            fish_id: bestAward.fish_id,
-            champion_award_id: bestAward.champion_award_id,
-            is_best_award: false,
-        };
         try {
+            const body = {
+                champion_category_id: bestAward.champion_category_id,
+                fish_id: bestAward.fish_id,
+                champion_award_id: bestAward.champion_award_id,
+                is_best_award: false,
+            };
             const response = await updateChampionApi(authCookie, bestAward.champion_id, body);
-            if (!response.success) {
-                showMessage(`Update failed`, 'error');
-                return;
-            }
+            if (!response.success) throw new Error('Update failed');
+
             bestAward.is_best_award = false;
-            setBestAwardExist(false);
+            switch (bestAward.event_price_code) {
+                case 'sm_fish':
+                    setBestAwardSmallExist(false);
+                    break;
+                case 'md_fish':
+                    setBestAwardMediumExist(false);
+                    break;
+                case 'lg_fish':
+                    setBestAwardLargeExist(false);
+                    break;
+            }
+
             showMessage('Best award updated successfully!');
-            setDeleteLoading(false);
         } catch (error) {
             console.error(error);
-            setDeleteLoading(false);
             showMessage('An error occurred during deletion!', 'error');
+        } finally {
+            setDeleteLoading(false);
         }
     };
 
     const onSubmit = async () => {
-        if (isBestAwardExist) {
-            showMessage(`Existing Best Award must be deleted first`, 'info');
+        if (
+            (bestAward.event_price_code === 'sm_fish' && isBestAwardSmallExist) ||
+            (bestAward.event_price_code === 'md_fish' && isBestAwardMediumExist) ||
+            (bestAward.event_price_code === 'lg_fish' && isBestAwardLargeExist)
+        ) {
+            showMessage('Existing Best Award must be deleted first', 'info');
             return;
         }
+
         setLoading(true);
-        const body = {
-            champion_category_id: bestAward.champion_category_id,
-            fish_id: bestAward.fish_id,
-            champion_award_id: bestAward.champion_award_id,
-            is_best_award: true,
-        };
         try {
+            const body = {
+                champion_category_id: bestAward.champion_category_id,
+                fish_id: bestAward.fish_id,
+                champion_award_id: bestAward.champion_award_id,
+                is_best_award: true,
+            };
             const response = await updateChampionApi(authCookie, bestAward.champion_id, body);
-            if (!response.success) {
-                showMessage(`Submission failed`, 'error');
-                return;
-            }
+            if (!response.success) throw new Error('Submission failed');
+
             bestAward.is_best_award = true;
-            setBestAwardExist(true);
+            switch (bestAward.event_price_code) {
+                case 'sm_fish':
+                    setBestAwardSmallExist(true);
+                    break;
+                case 'md_fish':
+                    setBestAwardMediumExist(true);
+                    break;
+                case 'lg_fish':
+                    setBestAwardLargeExist(true);
+                    break;
+            }
+
             showMessage('All changes submitted successfully!');
-            setLoading(false);
         } catch (error) {
             console.error(error);
-            setLoading(false);
             showMessage('An error occurred during submission!', 'error');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -100,21 +142,6 @@ const BestAwardCandidates = ({ bestAward, isBestAwardExist, setBestAwardExist }:
                 <p className="text-base font-bold">{bestAward.champion_award_rank}</p>
                 <div className="min-h-[400px] w-full">
                     <InstagramEmbed url={bestAward.fish_submission_link} width={328} />
-                    {/* <div className="flex items-center gap-4">
-                            <label htmlFor="fishscore">Fish Score</label>
-                            <input
-                                id="fishscore"
-                                readOnly
-                                value={bestAward.fish_final_score}
-                                className="form-input h-8 w-16 text-center"
-                            />
-                        </div> */}
-                    <div className="mx-auto flex items-center gap-2">
-                        <div className="flex items-center gap-2 space-y-1">
-                            <label htmlFor={`champion_award_id_${bestAward.champion_id}`} className="mt-1"></label>
-                            <div className="w-44 pb-1 text-black"></div>
-                        </div>
-                    </div>
                 </div>
             </div>
             {bestAward.is_best_award ? (

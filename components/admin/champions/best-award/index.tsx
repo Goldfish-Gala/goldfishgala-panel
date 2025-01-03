@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useCookies } from 'next-client-cookies';
 import SpinnerWithText from '@/components/UI/Spinner';
 import { getAllEventPrice } from '@/api/event-price/api-event-price';
-import { getBestAwardByEventPriceApi } from '@/api/champion/api-champions';
+import { getChampionByEventPriceApi } from '@/api/champion/api-champions';
 import BestAwardCandidates from './best-award-candidate';
 
 const BestAwardSelection = () => {
@@ -14,7 +14,9 @@ const BestAwardSelection = () => {
     const searchParams = useSearchParams();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
-    const [isBestAwardExist, setBestAwardExist] = useState(false);
+    const [isBestAwardSmallExist, setBestAwardSmallExist] = useState(false);
+    const [isBestAwardMediumExist, setBestAwardMediumExist] = useState(false);
+    const [isBestAwardLargeExist, setBestAwardLargeExist] = useState(false);
     const [eventPriceId, setEventPriceId] = useState(searchParams.get('event-price-id') || '');
 
     useEffect(() => {
@@ -33,7 +35,7 @@ const BestAwardSelection = () => {
     };
 
     const fetchChampionBestAward = async (): Promise<ChampionBestAwardType[]> => {
-        const eventPrices = await getBestAwardByEventPriceApi(authCookie, eventPriceId);
+        const eventPrices = await getChampionByEventPriceApi(authCookie, eventPriceId);
         if (eventPrices.success) return eventPrices.data;
         throw new Error('Failed to fetch event prices');
     };
@@ -57,7 +59,7 @@ const BestAwardSelection = () => {
     }, [isSuccess, eventPrices, searchParams]);
 
     const { data: bestAwards, isPending: isBestAwardPending } = useQuery({
-        queryKey: ['bestAward', eventPriceId],
+        queryKey: ['bestAwardCandidate', eventPriceId],
         queryFn: fetchChampionBestAward,
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
@@ -102,8 +104,12 @@ const BestAwardSelection = () => {
                             <div className="pb-6">
                                 <BestAwardCandidates
                                     bestAward={item}
-                                    isBestAwardExist={isBestAwardExist}
-                                    setBestAwardExist={setBestAwardExist}
+                                    isBestAwardSmallExist={isBestAwardSmallExist}
+                                    isBestAwardMediumExist={isBestAwardMediumExist}
+                                    isBestAwardLargeExist={isBestAwardLargeExist}
+                                    setBestAwardSmallExist={setBestAwardSmallExist}
+                                    setBestAwardMediumExist={setBestAwardMediumExist}
+                                    setBestAwardLargeExist={setBestAwardLargeExist}
                                 />
                             </div>
                         </div>

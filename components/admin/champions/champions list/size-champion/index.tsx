@@ -7,10 +7,11 @@ import { useCookies } from 'next-client-cookies';
 import Swal from 'sweetalert2';
 import SpinnerWithText from '@/components/UI/Spinner';
 import { getAllEventPrice } from '@/api/event-price/api-event-price';
-import { getAllCategoryByEventPriceApi, getAllChampions } from '@/api/champion/api-champions';
+import { getChampionByEventPriceApi } from '@/api/champion/api-champions';
 import { Separator } from '@/components/UI/Separator';
+import ChampionCandidates from './champion-candidate';
 
-const ChampionSelectionList = () => {
+const ChampionSizeList = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const cookies = useCookies();
@@ -47,8 +48,8 @@ const ChampionSelectionList = () => {
         throw new Error('Failed to fetch event prices');
     };
 
-    const fetchChampionCategory = async (): Promise<ChampionCategoryType[]> => {
-        const eventPrices = await getAllCategoryByEventPriceApi(authCookie, eventPriceId);
+    const fetchChampionCategory = async (): Promise<ChampionBestAwardType[]> => {
+        const eventPrices = await getChampionByEventPriceApi(authCookie, eventPriceId);
         if (eventPrices.success) return eventPrices.data;
         throw new Error('Failed to fetch event prices');
     };
@@ -71,8 +72,8 @@ const ChampionSelectionList = () => {
         }
     }, [isSuccess, eventPrices, searchParams]);
 
-    const { data: championCategory, isPending: isChampCategoryPending } = useQuery({
-        queryKey: ['championCategory', eventPriceId],
+    const { data: championCategory, isPending: isChampPending } = useQuery({
+        queryKey: ['championBySize', eventPriceId],
         queryFn: fetchChampionCategory,
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
@@ -88,7 +89,7 @@ const ChampionSelectionList = () => {
     }
 
     return (
-        <div className="flex w-full flex-col">
+        <div className="mt-6 flex w-full flex-col">
             <div className="panel mb-2 flex w-[300px] items-center justify-center gap-4 px-1 py-2">
                 <div className="flex gap-2">
                     <label className="pt-1.5 font-semibold">Size Category :</label>
@@ -105,25 +106,25 @@ const ChampionSelectionList = () => {
                     </select>
                 </div>
             </div>
-            <div className="panel flex flex-col gap-5">
-                {championCategory?.map((item, index) => (
-                    <div key={item.champion_category_id}>
-                        <p className="mb-2 font-bold">{item.champion_category_name}</p>
-                        <div className="pb-6">
-                            <ChampionCandidates
-                                categoryId={item.champion_category_id}
-                                fishSize={item.event_price_name}
-                                categoryName={item.champion_category_name}
-                            />
-                        </div>
-                        {index < championCategory.length - 1 && (
-                            <Separator className="my-0 h-0.5 bg-white-dark/55 p-0" />
-                        )}
+            <div className="panel flex gap-5 overflow-x-auto">
+                {championCategory.length === 0 ? (
+                    <div className="flex min-h-[200px] w-full items-center justify-center">
+                        <p className="text-danger">Winner for current size not decided yet</p>
                     </div>
-                ))}
+                ) : (
+                    <>
+                        {championCategory?.map((item, index) => (
+                            <div key={item.champion_category_id}>
+                                <div className="pb-6">
+                                    <ChampionCandidates item={item} />
+                                </div>
+                            </div>
+                        ))}
+                    </>
+                )}
             </div>
         </div>
     );
 };
 
-export default ChampionSelectionList;
+export default ChampionSizeList;
