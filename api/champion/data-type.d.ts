@@ -101,4 +101,5 @@ interface ChampionBestAwardType {
     user_address: string;
     user_avatar: string;
     user_ig: string;
+    total_score: string;
 }

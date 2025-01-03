@@ -1,4 +1,6 @@
+import BestAwardList from '@/components/admin/champions/champions list/best-award';
 import GrandChampionList from '@/components/admin/champions/champions list/grand-champion';
+import ChampionSizeList from '@/components/admin/champions/champions list/size-champion';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
@@ -20,8 +22,10 @@ const Page = () => {
                 </li>
             </ul>
             <div className="pt-5">
-                <div className="grip gap-5">
+                <div className="mb-5 grid grid-cols-1 gap-5">
                     <GrandChampionList />
+                    <BestAwardList />
+                    <ChampionSizeList />
                 </div>
             </div>
         </div>

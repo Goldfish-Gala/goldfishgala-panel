@@ -75,7 +75,15 @@ const MemberCard = () => {
     );
 
     return (
-        <div className="panel flex min-w-[330px] flex-col items-center justify-center gap-8 px-1 py-12">
+        <div className="panel flex min-w-[330px] flex-col items-center justify-center gap-4 px-1 py-8">
+            <button
+                type="button"
+                className="btn btn-success mr-[4vw] flex gap-2 self-end px-2 py-1 sm:mr-[20vw] md:mr-[4vw] lg:mr-[0vw] xl:mr-[2vw]"
+                onClick={handleDownload}
+            >
+                <IconDownload />
+                Download
+            </button>
             <div ref={cardRef} onMouseEnter={() => setFlipped(true)} onMouseLeave={() => setFlipped(false)}>
                 <ReactCardFlip
                     isFlipped={isFlipped}
@@ -87,10 +95,6 @@ const MemberCard = () => {
                     <CardContent />
                 </ReactCardFlip>
             </div>
-            <button type="button" className="btn btn-success" onClick={handleDownload}>
-                <IconDownload />
-                Download
-            </button>
         </div>
     );
 };

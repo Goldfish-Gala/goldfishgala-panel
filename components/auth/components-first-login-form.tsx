@@ -87,6 +87,7 @@ const FirstLoginForm = () => {
 
     useEffect(() => {
         if (state?.message === 'Data berhasil diperbarui') {
+            fetchUserProfile(authCookie, dispatch, router);
             showMessage('Data updated successfully');
             setTimeout(() => {
                 router.push(user?.role_id === 4 ? '/judges/fish-candidates' : '/dashboard');

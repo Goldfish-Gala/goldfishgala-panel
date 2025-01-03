@@ -421,7 +421,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                         <IconInstagram />
                                     </span>
                                 </div>
-                                <p className="ml-2 mt-1 text-xs text-white">contoh : goldfishgala</p>
+                                <p className="ml-2 mt-1 text-xs text-black dark:text-white">contoh : goldfishgala</p>
                                 {errors.user_ig && <p className="text-red-500">{errors.user_ig}</p>}
                             </div>
                             <div>
@@ -564,12 +564,15 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                                 <span className="absolute right-3 top-1/2 -translate-y-1/2 transform text-black">
                                                     centimeter
                                                 </span>
-                                                {errors[`fish_size_${index}`] && (
-                                                    <p className="absolute left-0 top-full mt-1 text-red-400">
-                                                        {errors[`fish_size_${index}`]}
-                                                    </p>
-                                                )}
                                             </div>
+                                            <p className="ml-2 mt-1 text-xs text-black dark:text-white">
+                                                small: 4-7 cm | medium: 8-10 cm | jumbo: 11cm++
+                                            </p>
+                                            {errors[`fish_size_${index}`] && (
+                                                <p className="absolute left-0 top-full mt-1 text-red-400">
+                                                    {errors[`fish_size_${index}`]}
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 </div>

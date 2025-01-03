@@ -1,3 +1,6 @@
+import BestAwardList from '@/components/admin/champions/champions list/best-award';
+import GrandChampionList from '@/components/admin/champions/champions list/grand-champion';
+import ChampionSizeList from '@/components/admin/champions/champions list/size-champion';
 import WinnerList from '@/components/judges/winner-list';
 import { Metadata } from 'next';
 import Link from 'next/link';
@@ -20,8 +23,12 @@ const Judges = () => {
                 </li>
             </ul>
             <div className="pt-5">
-                <div className="mb-5 grid grid-cols-1 gap-5">
-                    <WinnerList />
+                <div className="pt-5">
+                    <div className="mb-5 grid grid-cols-1 gap-5">
+                        <GrandChampionList />
+                        <BestAwardList />
+                        <ChampionSizeList />
+                    </div>
                 </div>
             </div>
         </div>

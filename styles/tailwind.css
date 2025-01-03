@@ -411,7 +411,7 @@
     .form-textarea,
     .form-select,
     .form-multiselect {
-        @apply w-full rounded-md border border-white-light bg-white px-4 py-2 text-sm font-semibold text-black !outline-none focus:border-primary focus:ring-transparent dark:focus:border-primary;
+        @apply w-full rounded-md border border-white-dark bg-white px-4 py-2 text-sm font-semibold text-black !outline-none focus:border-primary focus:ring-transparent dark:focus:border-primary;
     }
 
     .form-input-lg,
@@ -787,4 +787,26 @@ img.dark-img {
 }
 .dark img.dark-img {
     @apply !block;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
 }
