@@ -105,6 +105,5 @@ export async function updateFishScoreSubmit(
     if (response.success) {
         return { message: 'Fish score submitted succesfully' };
     }
-
-    return { message: 'Fish score failed to submit' };
+    return { message: response.response.data.message };
 }

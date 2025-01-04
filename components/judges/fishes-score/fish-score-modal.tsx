@@ -134,7 +134,7 @@ const FishScoreModal = ({ fish, open, setOpen, setDataChange }: ConfirmationModa
             setTimeout(() => {
                 setLoading(false);
             }, 2000);
-        } else if (state?.message === 'Fish score failed to submit') {
+        } else if (state?.message) {
             reset({
                 fishscores: fish.fishscores,
             });

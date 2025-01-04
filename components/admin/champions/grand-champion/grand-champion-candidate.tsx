@@ -103,15 +103,25 @@ const GrandChampionCandidate = ({ bestAward, isGrandChampionExist, setGrandChamp
                 <p className="text-base font-bold">{bestAward.champion_award_rank}</p>
                 <div className="min-h-[400px] w-full">
                     <InstagramEmbed url={bestAward.fish_submission_link} width={328} />
-                    {/* <div className="flex items-center gap-4">
-                            <label htmlFor="fishscore">Fish Score</label>
+                    <div className="w-full space-y-1">
+                        <div className="flex items-center gap-4">
+                            <label htmlFor="fishName">Fish Name</label>
+                            <input id="fishName" readOnly value={bestAward.fish_name} className="form-input h-8 w-48" />
+                        </div>
+                        <div className="flex items-center gap-10">
+                            <label htmlFor="owner">Owner</label>
+                            <input id="owner" readOnly value={bestAward.user_name} className="form-input h-8 w-48" />
+                        </div>
+                        <div className="flex items-center gap-3">
+                            <label htmlFor="fishscore">Total Score</label>
                             <input
                                 id="fishscore"
                                 readOnly
-                                value={bestAward.fish_final_score}
+                                value={bestAward.total_score}
                                 className="form-input h-8 w-16 text-center"
                             />
-                        </div> */}
+                        </div>
+                    </div>
                     <div className="mx-auto flex items-center gap-2">
                         <div className="flex items-center gap-2 space-y-1">
                             <label htmlFor={`champion_award_id_${bestAward.champion_id}`} className="mt-1"></label>
@@ -130,8 +140,8 @@ const GrandChampionCandidate = ({ bestAward, isGrandChampionExist, setGrandChamp
                     {deleteLoading ? <Spinner className="h-5 text-white" /> : 'Delete'}
                 </button>
             ) : (
-                <button disabled={isLoading} onClick={onSubmit} className="btn btn-primary w-52">
-                    {isLoading ? <Spinner className="h-5 text-white" /> : 'Select as Best Award'}
+                <button disabled={isLoading} onClick={onSubmit} className="btn btn-primary w-56">
+                    {isLoading ? <Spinner className="h-5 text-white" /> : 'Select as Grand Champion'}
                 </button>
             )}
         </div>

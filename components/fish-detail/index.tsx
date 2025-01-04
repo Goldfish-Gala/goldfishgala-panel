@@ -269,7 +269,7 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                                     {fishData?.fish_submission_link && (
                                                         <button type="button" onClick={handleCopy} disabled={editMode}>
                                                             <div
-                                                                className={`border-1.5 flex gap-1 rounded-md border-white bg-dark-dark-light p-1 text-sm text-black hover:bg-dark-light active:scale-90 dark:text-white dark:hover:bg-white-dark ${
+                                                                className={`border-1.5 flex gap-1 rounded-md border-white bg-white p-1 text-sm text-black hover:bg-dark-light active:scale-90 dark:bg-dark-dark-light dark:text-white dark:hover:bg-white-dark ${
                                                                     editMode
                                                                         ? 'cursor-not-allowed active:scale-100'
                                                                         : ''
@@ -355,7 +355,11 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                         )}
                                         {fishData?.fish_submission_link && !editMode && (
                                             <>
-                                                <button onClick={handleCopy}>
+                                                <button
+                                                    onClick={() => {
+                                                        window.open(fishData.fish_submission_link!, '_blank');
+                                                    }}
+                                                >
                                                     <div className="border-1.5 flex gap-1 rounded-md border-white bg-info p-1 pr-2 text-sm text-white hover:bg-cyan-400 active:scale-90">
                                                         <IconVisit /> Kunjungi
                                                     </div>

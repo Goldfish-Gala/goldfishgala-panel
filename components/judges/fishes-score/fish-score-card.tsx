@@ -49,6 +49,7 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
                                   }`
                                 : 'N/A',
                         },
+                        { label: 'Category', value: fish.event_price_name },
                         { label: 'Owner', value: fish.fish_owner_name },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">

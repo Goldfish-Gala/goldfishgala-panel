@@ -124,7 +124,9 @@ const FishScore = () => {
                 <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
                     {data?.pages.map((page) =>
                         (sort === 'desc' ? [...page.data].reverse() : page.data).map((fish) => (
-                            <FishCard key={fish.fish_score_id} fish={fish} setDataChange={setDataChange} />
+                            <div key={fish.fish_score_id}>
+                                <FishCard key={fish.fish_score_id} fish={fish} setDataChange={setDataChange} />
+                            </div>
                         ))
                     )}
                 </div>

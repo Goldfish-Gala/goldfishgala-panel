@@ -24,7 +24,7 @@ interface CardProps {
 const ChampionCandidates = ({ item }: CardProps) => {
     return (
         <>
-            <p className="mb-4 font-semibold capitalize">{item.champion_award_rank}</p>
+            <p className="mb-4 font-semibold capitalize text-primary">{item.champion_award_rank}</p>
             <InstagramEmbed url={item?.fish_submission_link} width={328} />
             <div className="flex w-full items-center justify-center gap-4">
                 <label htmlFor="fishscore">Total Score</label>

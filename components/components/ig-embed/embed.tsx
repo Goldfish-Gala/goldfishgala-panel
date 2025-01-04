@@ -65,7 +65,8 @@ const IGEmbed = ({ url, fish, username, handleModal, isLoading, buttonText, even
                                   }`
                                 : 'N/A',
                         },
-                        { label: 'User', value: username },
+                        { label: 'Category', value: fish?.event_price_name },
+                        { label: 'Owner', value: username },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">
                             <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 ">

@@ -341,8 +341,12 @@ const FishDetailAdminComponent = ({ params }: { params: { fish_id: string } }) =
                                             </div>
                                         )}
                                         {fishData?.fish_submission_link && !editMode && (
-                                            <>
-                                                <button onClick={handleCopy}>
+                                            <div className="mt-2 flex gap-2">
+                                                <button
+                                                    onClick={() => {
+                                                        window.open(fishData.fish_submission_link!, '_blank');
+                                                    }}
+                                                >
                                                     <div className="border-1.5 flex gap-1 rounded-md border-white bg-info p-1 pr-2 text-sm text-white hover:bg-cyan-400 active:scale-90">
                                                         <IconVisit /> Kunjungi
                                                     </div>
@@ -364,7 +368,7 @@ const FishDetailAdminComponent = ({ params }: { params: { fish_id: string } }) =
                                                         </div>
                                                     </button>
                                                 )}
-                                            </>
+                                            </div>
                                         )}
                                     </div>
                                 </div>

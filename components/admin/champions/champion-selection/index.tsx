@@ -109,7 +109,7 @@ const ChampionSelectionList = () => {
             <div className="panel flex flex-col gap-5">
                 {championCategory?.map((item, index) => (
                     <div key={item.champion_category_id}>
-                        <p className="mb-2 font-bold">{item.champion_category_name}</p>
+                        <p className="mb-2 text-base font-bold text-primary">{item.champion_category_name}</p>
                         <div className="pb-6">
                             <ChampionCandidates
                                 categoryId={item.champion_category_id}
