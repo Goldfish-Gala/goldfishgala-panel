@@ -295,8 +295,8 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
                                         }),
                                     }}
                                 />
-                                {errors.event_reg_id && (
-                                    <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
+                                {errors.event_price_id && (
+                                    <p className="text-red-500 text-sm">{errors.event_price_id}</p>
                                 )}
                             </div>
                             <div className="mb-4">
