@@ -37,7 +37,7 @@ const BestAwardList = () => {
 
     if (data?.length === 0) {
         return (
-            <div className="panel flex w-full flex-col items-start justify-start text-dark dark:text-white-dark">
+            <div className="panel flex min-h-[300px] w-full flex-col items-start justify-start text-dark dark:text-white-dark">
                 <p className="text-lg font-bold text-primary">Best Award</p>
                 <p className="my-auto self-center text-danger">Best Award not decided yet</p>
             </div>
