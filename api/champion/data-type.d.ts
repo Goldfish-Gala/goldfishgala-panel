@@ -68,6 +68,7 @@ interface FinalFishType {
     fish_name: string;
     fish_size: string;
     fish_submission_link: string;
+    user_name: string;
     championcategories: FinalChampionCategory[];
 }
 

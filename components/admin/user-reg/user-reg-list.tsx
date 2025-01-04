@@ -13,8 +13,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { expiringTime } from '@/utils/date-format';
 import { getInvoiceAdminApi, getInvoiceByUserId } from '@/api/invoice/api-invoice';
 import SpinnerWithText from '@/components/UI/Spinner';
+import { getUserRegAdminApi } from '@/api/user-reg/api-user-reg';
+import Dropdown from '@/components/dropdown';
 
-const InvoiceList = () => {
+const UserRegList = () => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
@@ -32,8 +34,8 @@ const InvoiceList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllInvoicePayment = async (): Promise<InvoiceDetailPagination> => {
-        const getAllInvoice = await getInvoiceAdminApi(authCookie, page, limit);
+    const getAllInvoicePayment = async (): Promise<UserRegDetailPagination> => {
+        const getAllInvoice = await getUserRegAdminApi(authCookie, page, limit);
         if (getAllInvoice.success) {
             return getAllInvoice;
         }
@@ -41,7 +43,7 @@ const InvoiceList = () => {
     };
 
     const { isPending, error, data } = useQuery({
-        queryKey: ['adminInvoices', page, limit],
+        queryKey: ['adminUserRegs', page, limit],
         queryFn: () => getAllInvoicePayment(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
@@ -65,13 +67,13 @@ const InvoiceList = () => {
                             records={data?.data}
                             columns={[
                                 {
-                                    accessor: 'invoice_code',
-                                    title: 'No invoice',
-                                    sortable: true,
-                                    render: ({ invoice_code }) => (
-                                        <Link href={`/invoice-preview/${invoice_code}`}>
-                                            <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
-                                        </Link>
+                                    accessor: 'user_reg_id',
+                                    title: 'ID',
+                                    sortable: false,
+                                    render: ({ user_reg_id }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{user_reg_id}</div>
+                                        </div>
                                     ),
                                 },
                                 {
@@ -85,55 +87,85 @@ const InvoiceList = () => {
                                     ),
                                 },
                                 {
-                                    accessor: 'invoice_due_date',
-                                    title: 'Batas pembayaran',
-                                    sortable: true,
-                                    render: ({ invoice_due_date, invoice_code }) => (
-                                        <div className="flex items-center font-semibold">
-                                            <div>{expiringTime(invoice_due_date)}</div>
-                                        </div>
-                                    ),
-                                },
-                                {
-                                    accessor: 'invoice_status',
-                                    title: 'Status',
-                                    sortable: true,
+                                    accessor: 'event_is_active',
+                                    title: 'Event status',
+                                    sortable: false,
                                     textAlignment: 'center',
-                                    render: ({ invoice_status }) => (
+                                    render: ({ event_is_active }) => (
                                         <div className="flex w-full justify-center">
                                             <span
                                                 className={`badge ${
-                                                    invoice_status === 'paid'
-                                                        ? 'badge-outline-success'
-                                                        : invoice_status === 'pending'
-                                                        ? 'badge-outline-warning'
-                                                        : 'badge-outline-danger'
+                                                    event_is_active ? 'badge-outline-success' : 'badge-outline-danger'
                                                 } text-center`}
                                             >
-                                                {invoice_status === 'paid'
-                                                    ? 'Lunas'
-                                                    : invoice_status === 'pending'
-                                                    ? 'Belum bayar'
-                                                    : 'Kadaluarsa'}
+                                                {event_is_active ? 'Active' : 'Inactive'}
                                             </span>
                                         </div>
                                     ),
                                 },
                                 {
-                                    accessor: 'aksi',
-                                    title: 'Action',
+                                    accessor: 'user',
+                                    title: 'User',
                                     sortable: false,
-                                    textAlignment: 'center',
-                                    render: ({ invoice_code, invoice_checkout_url, invoice_status }) => (
-                                        <div className="ml-[5%] flex w-full items-center justify-center gap-2">
-                                            <Link
-                                                href={`/invoice-preview/${invoice_code}`}
-                                                className="flex self-start hover:text-primary"
-                                            >
-                                                <button className="btn2 btn-secondary">Detail</button>
-                                            </Link>
+                                    render: ({ user_fname, user_lname }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{`${user_fname} ${user_lname}`}</div>
                                         </div>
                                     ),
+                                },
+                                {
+                                    accessor: 'user_status',
+                                    title: 'User status',
+                                    sortable: false,
+                                    textAlignment: 'center',
+                                    render: ({ user_is_active }) => (
+                                        <div className="flex w-full justify-center">
+                                            <span
+                                                className={`badge ${
+                                                    user_is_active ? 'badge-outline-success' : 'badge-outline-danger'
+                                                } text-center`}
+                                            >
+                                                {user_is_active ? 'Active' : 'Inactive'}
+                                            </span>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'status',
+                                    title: 'User Reg Status',
+                                    sortable: false,
+                                    textAlignment: 'center',
+                                    render: ({ user_reg_status_code }) => (
+                                        <div className="flex w-full justify-center">
+                                            <span
+                                                className={`badge ${
+                                                    user_reg_status_code === 'paid_reg'
+                                                        ? 'badge-outline-success'
+                                                        : user_reg_status_code === 'pending_payment_reg'
+                                                        ? 'badge-outline-warning'
+                                                        : 'badge-outline-danger'
+                                                } text-center`}
+                                            >
+                                                {user_reg_status_code}
+                                            </span>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'fishes',
+                                    title: 'Fishes',
+                                    sortable: false,
+                                    textAlignment: 'center',
+                                    render: ({ fishes }) =>
+                                        fishes.length == 1 ? (
+                                            <p>{fishes[0].fish_name}</p>
+                                        ) : (
+                                            <div className="flex items-center justify-center">
+                                                {fishes.map((item) => (
+                                                    <p key={item.fish_id}>&nbsp;{`${item.fish_name},`}</p>
+                                                ))}
+                                            </div>
+                                        ),
                                 },
                             ]}
                             highlightOnHover
@@ -156,4 +188,4 @@ const InvoiceList = () => {
     );
 };
 
-export default InvoiceList;
+export default UserRegList;

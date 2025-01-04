@@ -38,3 +38,17 @@ export const getAllUserRegByStatus = async (
         return error;
     }
 };
+
+export const getPaymentsAdminApi = async (cookie: string | undefined, page: number, limit: number) => {
+    const query = `/payments?page=${page}&limit=${limit}`;
+    try {
+        const response = await api.get(query, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};

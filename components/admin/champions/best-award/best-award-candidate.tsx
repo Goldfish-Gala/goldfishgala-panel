@@ -139,9 +139,28 @@ const BestAwardCandidates: React.FC<IgEmbedType> = ({
     return (
         <div className="mb-2 flex h-[110%] w-full flex-col items-center justify-center gap-4">
             <div className="flex flex-col items-center space-y-1">
-                <p className="text-base font-bold">{bestAward.champion_award_rank}</p>
+                <p className="text-base font-bold text-primary">{bestAward.champion_award_rank}</p>
                 <div className="min-h-[400px] w-full">
                     <InstagramEmbed url={bestAward.fish_submission_link} width={328} />
+                </div>
+                <div className="w-full space-y-1">
+                    <div className="flex items-center gap-4">
+                        <label htmlFor="fishName">Fish Name</label>
+                        <input id="fishName" readOnly value={bestAward.fish_name} className="form-input h-8 w-48" />
+                    </div>
+                    <div className="flex items-center gap-10">
+                        <label htmlFor="owner">Owner</label>
+                        <input id="owner" readOnly value={bestAward.user_name} className="form-input h-8 w-48" />
+                    </div>
+                    <div className="flex items-center gap-3">
+                        <label htmlFor="fishscore">Total Score</label>
+                        <input
+                            id="fishscore"
+                            readOnly
+                            value={bestAward.total_score}
+                            className="form-input h-8 w-16 text-center"
+                        />
+                    </div>
                 </div>
             </div>
             {bestAward.is_best_award ? (

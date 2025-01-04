@@ -141,7 +141,8 @@ const SelectedFishes = () => {
                 showMessage('Success remove fish!');
                 setOpenModal(false);
             } else {
-                showMessage('Failed!', 'error');
+                showMessage(response.response.data.message, 'error');
+                setOpenModal(false);
             }
         } catch {
             showMessage('Failed!', 'error');

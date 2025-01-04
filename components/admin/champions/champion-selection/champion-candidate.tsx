@@ -251,7 +251,20 @@ const ChampionCandidates = ({ categoryId, fishSize, categoryName }: IgEmbedType)
                         <div className="flex flex-col" key={item.fish_final_score_id}>
                             <div className="w-full space-y-1">
                                 <InstagramEmbed url={item.fish_submission_link} width={328} />
-                                <div className="flex items-center gap-4">
+                                <div className="flex items-center gap-3">
+                                    <label htmlFor="fishName">Fish Name</label>
+                                    <input
+                                        id="fishName"
+                                        readOnly
+                                        value={item.fish_name}
+                                        className="form-input h-8 w-48"
+                                    />
+                                </div>
+                                <div className="flex items-center gap-9">
+                                    <label htmlFor="owner">Owner</label>
+                                    <input id="owner" readOnly value={item.user_name} className="form-input h-8 w-48" />
+                                </div>
+                                <div className="flex items-center gap-3">
                                     <label htmlFor="fishscore">Fish Score</label>
                                     <input
                                         id="fishscore"
