@@ -138,7 +138,7 @@ const EventPriceList = () => {
 
 
 
-    const PAGE_SIZES = [10, 20, 30, 50, 100];
+    const PAGE_SIZES = [10];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
@@ -247,17 +247,13 @@ const EventPriceList = () => {
                                 },
                             ]}
                             highlightOnHover
-                            key="invoice_code"
+                            key="event_price_id"
                             totalRecords={data ? data.length : 0}
                             recordsPerPage={pageSize}
                             page={page}
                             onPageChange={(p) => setPage(p)}
-                            recordsPerPageOptions={PAGE_SIZES}
-                            onRecordsPerPageChange={setPageSize}
                             sortStatus={sortStatus}
                             onSortStatusChange={setSortStatus}
-                            // selectedRecords={selectedRecords}
-                            // onSelectedRecordsChange={setSelectedRecords}
                             paginationText={({ from, to, totalRecords }) =>
                                 `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                             }

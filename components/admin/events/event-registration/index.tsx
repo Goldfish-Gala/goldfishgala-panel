@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { getAllEventRegs, deleteEventReg, getOneEventReg } from '@/api/event-reg/api-event-reg';
@@ -27,7 +27,7 @@ const EventRegistrationList = () => {
     const queryClient = useQueryClient();
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
-    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 5));
+    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
     const [dataChange, setDataChange] = useState(false);
@@ -149,7 +149,7 @@ const EventRegistrationList = () => {
         throw new Error('No User Found');
     };
 
-    const PAGE_SIZES = [5, 10, 20, 30, 40, 50];
+    const PAGE_SIZES = [10];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
@@ -257,20 +257,13 @@ const EventRegistrationList = () => {
                                     },
                                 ]}
                                 highlightOnHover
-                                key="invoice_code"
+                                key="event_reg_id"
                                 totalRecords={data?.data ? data.pagination.totalData : 0}
                                 recordsPerPage={pageSize}
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
-                                recordsPerPageOptions={PAGE_SIZES}
-                                onRecordsPerPageChange={(newPageSize) => {
-                                    setPageSize(newPageSize);
-                                    setLimit(newPageSize);
-                                }}
                                 sortStatus={sortStatus}
                                 onSortStatusChange={setSortStatus}
-                                // selectedRecords={selectedRecords}
-                                // onSelectedRecordsChange={setSelectedRecords}
                                 paginationText={({ from, to, totalRecords }) =>
                                     `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                                 }
