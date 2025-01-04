@@ -26,7 +26,7 @@ const EventPeriodList = () => {
     const queryClient = useQueryClient();
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
-    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 5));
+    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
     const [dataChange, setDataChange] = useState(false);
@@ -141,7 +141,7 @@ const EventPeriodList = () => {
 
 
 
-    const PAGE_SIZES = [5, 10, 20, 30, 50, 100];
+    const PAGE_SIZES = [10];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
@@ -251,7 +251,7 @@ const EventPeriodList = () => {
                                     },
                                 ]}
                                 highlightOnHover
-                                key="invoice_code"
+                                key="event_reg_period_id"
                                 totalRecords={totalRecords ? paginatedData.length : 0}
                                 recordsPerPage={pageSize}
                                 page={page}
