@@ -63,20 +63,20 @@ const FishScoreModal = ({ fish, open, setOpen, setDataChange }: ConfirmationModa
                 })),
             });
         }
-    }, [fishScoreData, reset]);
+    }, [fishScoreData, reset, open]);
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
         let numericValue = Number(value);
 
         if (numericValue > 100) {
-            numericValue = 100; // Automatically set to 100 if the value exceeds 100
+            numericValue = 100;
         }
 
-        setValue(name as any, numericValue); // Ensure the value is updated to 100 if necessary
+        setValue(name as any, numericValue);
         setErrors({
             ...errors,
-            [name]: undefined, // Clear any existing errors for this field
+            [name]: undefined,
         });
     };
 
@@ -202,6 +202,7 @@ const FishScoreModal = ({ fish, open, setOpen, setDataChange }: ConfirmationModa
                                                                 type="number"
                                                                 id={item.fish_score_id}
                                                                 {...register(`fishscores.${index}.fish_score`, {
+                                                                    required: 'Score is required',
                                                                     onChange: (event) => handleInputChange(event),
                                                                 })}
                                                             />
