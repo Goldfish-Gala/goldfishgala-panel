@@ -67,8 +67,7 @@ const FishList = () => {
         }
     }, [openModal]);
 
-    const PAGE_SIZES = [10, 20, 30, 40, 50];
-    const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+    const [pageSize, setPageSize] = useState(10);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
         direction: 'asc',
@@ -172,6 +171,9 @@ const FishList = () => {
                             onSortStatusChange={setSortStatus}
                             recordsPerPage={pageSize}
                             style={{ paddingLeft: 20, paddingRight: 20 }}
+                            paginationText={({ from, to, totalRecords }) =>
+                                `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
+                            }
                         />
                     )}
                 </div>

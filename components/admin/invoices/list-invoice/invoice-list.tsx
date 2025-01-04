@@ -10,10 +10,9 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import SpinnerWithText from '../UI/Spinner';
 import { expiringTime } from '@/utils/date-format';
-import { getAllPaymentRegisteredEvent } from '@/api/payment/api-payment';
-import { getInvoiceByUserId } from '@/api/invoice/api-invoice';
+import { getInvoiceAdminApi, getInvoiceByUserId } from '@/api/invoice/api-invoice';
+import SpinnerWithText from '@/components/UI/Spinner';
 
 const InvoiceList = () => {
     const router = useRouter();
@@ -24,8 +23,8 @@ const InvoiceList = () => {
     const queryClient = useQueryClient();
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
-    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
-    const [pageSize, setPageSize] = useState(10);
+    const [limit, setLimit] = useState(Number(searchParams.get('limit') || 5));
+    const [pageSize, setPageSize] = useState(5);
 
     useEffect(() => {
         if (!user) {
@@ -33,16 +32,16 @@ const InvoiceList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllInvoicePayment = async (): Promise<InvoiceDetail[]> => {
-        const getAllInvoice = await getInvoiceByUserId(authCookie);
+    const getAllInvoicePayment = async (): Promise<InvoiceDetailPagination> => {
+        const getAllInvoice = await getInvoiceAdminApi(authCookie, page, limit);
         if (getAllInvoice.success) {
-            return getAllInvoice.data;
+            return getAllInvoice;
         }
         throw new Error('No ongoing event');
     };
 
     const { isPending, error, data } = useQuery({
-        queryKey: ['allInvoicePayment'],
+        queryKey: ['adminInvoices', page, limit],
         queryFn: () => getAllInvoicePayment(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
@@ -63,7 +62,7 @@ const InvoiceList = () => {
                     ) : (
                         <DataTable
                             className="table-hover min-h-[200px] whitespace-nowrap"
-                            records={data}
+                            records={data?.data}
                             columns={[
                                 {
                                     accessor: 'invoice_code',
@@ -99,6 +98,7 @@ const InvoiceList = () => {
                                     accessor: 'invoice_status',
                                     title: 'Status',
                                     sortable: true,
+                                    textAlignment: 'center',
                                     render: ({ invoice_status }) => (
                                         <div className="flex w-full justify-center">
                                             <span
@@ -132,28 +132,19 @@ const InvoiceList = () => {
                                             >
                                                 <button className="btn2 btn-secondary">Detail</button>
                                             </Link>
-                                            {invoice_status === 'pending' && (
-                                                <button
-                                                    type="button"
-                                                    className="btn2 btn-gradient2 flex"
-                                                    onClick={() => (window.location.href = invoice_checkout_url)}
-                                                >
-                                                    Bayar Sekarang
-                                                </button>
-                                            )}
                                         </div>
                                     ),
                                 },
                             ]}
-                            key="invoice_code"
-                            totalRecords={data ? data.length : 0}
                             highlightOnHover
+                            style={{ paddingLeft: 20, paddingRight: 20 }}
+                            key="invoice_code"
+                            totalRecords={data?.data ? data.pagination.totalData : 0}
+                            recordsPerPage={pageSize}
                             page={page}
                             onPageChange={(p) => setPage(p)}
                             sortStatus={sortStatus}
                             onSortStatusChange={setSortStatus}
-                            recordsPerPage={pageSize}
-                            style={{ paddingLeft: 20, paddingRight: 20 }}
                             paginationText={({ from, to, totalRecords }) =>
                                 `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                             }
