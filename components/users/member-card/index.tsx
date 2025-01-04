@@ -34,7 +34,7 @@ const MemberCard = () => {
             try {
                 const png = await toPng(cardRef.current, { cacheBust: true });
                 const link = document.createElement('a');
-                link.download = 'member-card.png';
+                link.download = `${user?.user_fname}-member-card`;
                 link.href = png;
                 link.click();
 

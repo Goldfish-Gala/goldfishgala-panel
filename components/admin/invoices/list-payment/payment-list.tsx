@@ -13,8 +13,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { expiringTime } from '@/utils/date-format';
 import { getInvoiceAdminApi, getInvoiceByUserId } from '@/api/invoice/api-invoice';
 import SpinnerWithText from '@/components/UI/Spinner';
+import { getPaymentsAdminApi } from '@/api/payment/api-payment';
 
-const InvoiceList = () => {
+const PaymentList = () => {
     const router = useRouter();
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
@@ -32,17 +33,17 @@ const InvoiceList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllInvoicePayment = async (): Promise<InvoiceDetailPagination> => {
-        const getAllInvoice = await getInvoiceAdminApi(authCookie, page, limit);
-        if (getAllInvoice.success) {
-            return getAllInvoice;
+    const getAllPaymentAdmin = async (): Promise<PaymentDetailPagination> => {
+        const getAllPayment = await getPaymentsAdminApi(authCookie, page, limit);
+        if (getAllPayment.success) {
+            return getAllPayment;
         }
         throw new Error('No ongoing event');
     };
 
     const { isPending, error, data } = useQuery({
-        queryKey: ['adminInvoices', page, limit],
-        queryFn: () => getAllInvoicePayment(),
+        queryKey: ['adminPayments}', page, limit],
+        queryFn: () => getAllPaymentAdmin(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
     });
@@ -65,80 +66,70 @@ const InvoiceList = () => {
                             records={data?.data}
                             columns={[
                                 {
-                                    accessor: 'invoice_code',
-                                    title: 'No invoice',
-                                    sortable: true,
-                                    render: ({ invoice_code }) => (
-                                        <Link href={`/invoice-preview/${invoice_code}`}>
-                                            <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
-                                        </Link>
-                                    ),
-                                },
-                                {
-                                    accessor: 'event_name',
-                                    title: 'Nama event',
+                                    accessor: 'payment_id',
+                                    title: 'ID',
                                     sortable: false,
-                                    render: ({ event_name }) => (
+                                    render: ({ payment_id }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{event_name}</div>
+                                            <div>{payment_id}</div>
                                         </div>
                                     ),
                                 },
                                 {
-                                    accessor: 'invoice_due_date',
-                                    title: 'Batas pembayaran',
-                                    sortable: true,
-                                    render: ({ invoice_due_date, invoice_code }) => (
+                                    accessor: 'payment_method',
+                                    title: 'Payment method',
+                                    sortable: false,
+                                    render: ({ payment_method }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{expiringTime(invoice_due_date)}</div>
+                                            <div>{payment_method}</div>
                                         </div>
                                     ),
                                 },
                                 {
-                                    accessor: 'invoice_status',
+                                    accessor: 'payment_channel',
+                                    title: 'Payment channel',
+                                    sortable: false,
+                                    render: ({ payment_channel }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{payment_channel}</div>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'invoice_code',
+                                    title: 'Invoice NO',
+                                    sortable: false,
+                                    render: ({ invoice_code }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{invoice_code}</div>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'status',
                                     title: 'Status',
                                     sortable: true,
                                     textAlignment: 'center',
-                                    render: ({ invoice_status }) => (
+                                    render: ({ payment_status }) => (
                                         <div className="flex w-full justify-center">
                                             <span
                                                 className={`badge ${
-                                                    invoice_status === 'paid'
+                                                    payment_status === 'paid'
                                                         ? 'badge-outline-success'
-                                                        : invoice_status === 'pending'
+                                                        : payment_status === 'pending'
                                                         ? 'badge-outline-warning'
                                                         : 'badge-outline-danger'
                                                 } text-center`}
                                             >
-                                                {invoice_status === 'paid'
-                                                    ? 'Lunas'
-                                                    : invoice_status === 'pending'
-                                                    ? 'Belum bayar'
-                                                    : 'Kadaluarsa'}
+                                                {payment_status}
                                             </span>
-                                        </div>
-                                    ),
-                                },
-                                {
-                                    accessor: 'aksi',
-                                    title: 'Action',
-                                    sortable: false,
-                                    textAlignment: 'center',
-                                    render: ({ invoice_code, invoice_checkout_url, invoice_status }) => (
-                                        <div className="ml-[5%] flex w-full items-center justify-center gap-2">
-                                            <Link
-                                                href={`/invoice-preview/${invoice_code}`}
-                                                className="flex self-start hover:text-primary"
-                                            >
-                                                <button className="btn2 btn-secondary">Detail</button>
-                                            </Link>
                                         </div>
                                     ),
                                 },
                             ]}
                             highlightOnHover
                             style={{ paddingLeft: 20, paddingRight: 20 }}
-                            key="invoice_code"
+                            key="payment_id"
                             totalRecords={data?.data ? data.pagination.totalData : 0}
                             recordsPerPage={pageSize}
                             page={page}
@@ -156,4 +147,4 @@ const InvoiceList = () => {
     );
 };
 
-export default InvoiceList;
+export default PaymentList;

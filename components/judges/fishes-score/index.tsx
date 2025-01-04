@@ -118,7 +118,7 @@ const FishScore = () => {
             </div>
             {data.pages[0].data.length < 1 || !(data.pages[0].data[0] as any)?.fishscores ? (
                 <div className="m-auto flex h-[200px] items-center">
-                    <p>No fish available for scoring at the moment.</p>
+                    <p className="text-danger">No fish available for scoring at the moment.</p>
                 </div>
             ) : (
                 <div className="grid w-full grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">

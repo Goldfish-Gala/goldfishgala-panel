@@ -52,7 +52,7 @@ const FishCard = ({ fish, setDataChange }: IgEmbedType) => {
                         { label: 'Owner', value: fish.fish_owner_name },
                     ].map((item, index) => (
                         <div key={index} className="flex items-center justify-center pl-4">
-                            <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black dark:text-white">
+                            <div className="grid w-full grid-cols-[1fr_auto_2.5fr] gap-6 text-black">
                                 <p className="capitalize">{item.label}</p>
                                 <p className="-ml-4 mr-2 text-center">:</p>
                                 <p>

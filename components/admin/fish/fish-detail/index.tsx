@@ -268,7 +268,7 @@ const FishDetailAdminComponent = ({ params }: { params: { fish_id: string } }) =
                                                     {fishData?.fish_submission_link && (
                                                         <button type="button" onClick={handleCopy} disabled={editMode}>
                                                             <div
-                                                                className={`border-1.5 flex gap-1 rounded-md border-white bg-dark-dark-light p-1 text-sm text-black hover:bg-dark-light active:scale-90 dark:text-white dark:hover:bg-white-dark ${
+                                                                className={`border-1.5 flex gap-1 rounded-md border-white bg-white p-1 text-sm text-black hover:bg-dark-light active:scale-90 dark:bg-dark-dark-light dark:text-white dark:hover:bg-white-dark ${
                                                                     editMode
                                                                         ? 'cursor-not-allowed active:scale-100'
                                                                         : ''
@@ -282,7 +282,6 @@ const FishDetailAdminComponent = ({ params }: { params: { fish_id: string } }) =
                                                 {errors.fish_submission_link && (
                                                     <p className="ml-2 text-red-500">{errors.fish_submission_link}</p>
                                                 )}
-                                                <p className="ml-2 pt-0.5 text-xs">Pastikan Link bisa diakses publik</p>
                                             </div>
                                         </div>
                                     </form>
@@ -377,11 +376,7 @@ const FishDetailAdminComponent = ({ params }: { params: { fish_id: string } }) =
                             ) : (
                                 <div className="-mr-0.5 rounded-md">
                                     <div className="flex justify-center">
-                                        <InstagramEmbed
-                                            url={fishData?.fish_submission_link || ''}
-                                            width="100%"
-                                            captioned
-                                        />
+                                        <InstagramEmbed url={fishData?.fish_submission_link || ''} width="100%" />
                                     </div>
                                 </div>
                             )}
