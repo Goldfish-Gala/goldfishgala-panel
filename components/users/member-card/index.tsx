@@ -21,6 +21,7 @@ const MemberCard = () => {
     const [isFlipped, setFlipped] = useState(false);
     const user = useSelector((state: IRootState) => state.auth.user);
     const cardRef = useRef<HTMLDivElement>(null);
+    const [downloaded, setDownloaded] = useState(false);
 
     useEffect(() => {
         if (!user) {
@@ -36,15 +37,18 @@ const MemberCard = () => {
                 link.download = 'member-card.png';
                 link.href = png;
                 link.click();
+
+                setDownloaded(true);
+
+                setTimeout(() => {
+                    const currentUrl = window.location.href.split('?')[0];
+                    window.location.href = `${currentUrl}?t=${new Date().getTime()}`;
+                }, 500);
             } catch (error) {
                 console.error('Failed to generate image:', error);
             }
         }
     };
-
-    if (user?.role_id === 1) {
-        return null;
-    }
 
     const CardContent = () => (
         <div ref={cardRef} className="relative">
@@ -58,7 +62,7 @@ const MemberCard = () => {
             <div className="absolute left-28 top-[28%]">
                 <div className="losange">
                     <div className="los1">
-                        <img src={user?.user_avatar} alt="" width="100" />
+                        <Image src={user?.user_avatar!} alt="user avatar" width={1000} height={1000} />
                     </div>
                 </div>
             </div>
@@ -75,16 +79,18 @@ const MemberCard = () => {
     );
 
     return (
-        <div className="panel flex min-w-[330px] flex-col items-center justify-center gap-4 px-1 py-8">
-            <button
-                type="button"
-                className="btn btn-success mr-[4vw] flex gap-2 self-end px-2 py-1 sm:mr-[20vw] md:mr-[4vw] lg:mr-[0vw] xl:mr-[2vw]"
-                onClick={handleDownload}
-            >
-                <IconDownload />
-                Download
-            </button>
-            <div ref={cardRef} onMouseEnter={() => setFlipped(true)} onMouseLeave={() => setFlipped(false)}>
+        <div className="panel flex min-w-[330px] flex-col items-center justify-center gap-4 px-1 py-12">
+            {!downloaded && (
+                <button
+                    type="button"
+                    className="btn btn-success mr-[4vw] flex gap-2 self-end px-2 py-1 sm:mr-[8vw] md:mr-[0] xl:mr-[3vw]"
+                    onClick={handleDownload}
+                >
+                    <IconDownload />
+                    Download
+                </button>
+            )}
+            <div onMouseEnter={() => setFlipped(true)} onMouseLeave={() => setFlipped(false)}>
                 <ReactCardFlip
                     isFlipped={isFlipped}
                     flipDirection="horizontal"
