@@ -38,11 +38,26 @@ const CreateEventPriceModal = ({ open, setOpen, setDataChange }: CreateEventPric
                     event_price_amount: parseFloat(data.event_price_amount),
                 },
                 authCookie
-            );
-            Swal.fire('Success', 'Event price created successfully!', 'success');
-            reset();
-            setDataChange((prev) => !prev); 
-            setOpen(false);
+            ); 
+            if (response.success) {
+                await Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Event price created successfully.',
+                timer: 2000,
+                showConfirmButton: true,
+                });
+                reset();
+                setDataChange((prev) => !prev); 
+                setOpen(false);
+                return response.data;
+            } else {
+                await Swal.fire({
+                icon: 'error',
+                title: 'Error!',
+                text: response.response.data.message || 'Failed to create event price.',
+                });
+            }
         } catch (error) {
             Swal.fire('Error', 'Failed to create event price.', 'error');
         } finally {

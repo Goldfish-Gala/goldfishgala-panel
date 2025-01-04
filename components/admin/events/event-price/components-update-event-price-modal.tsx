@@ -50,18 +50,26 @@ const UpdateEventPriceModal = ({ open, setOpen, setDataChange, eventPriceData }:
                 },
                 authCookie
             );
-            if (response.success === false) {
+            if (response.success) {
+                await Swal.fire({
+                icon: 'success',
+                title: 'Success!',
+                text: 'Event price updated successfully.',
+                timer: 2000,
+                showConfirmButton: true,
+                });
+                reset();
+                setDataChange((prev) => !prev); 
+                queryClient.invalidateQueries({ queryKey: ['allEventPrices'] });
+                setOpen(false);
+                return response.data;
+            } else {
                 await Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: response.data.message || 'Failed to update event price.',
+                    text: response.response.data.message || 'Failed to update event price.',
                   });
             }
-            Swal.fire('Success', 'Event price updated successfully!', 'success');
-            reset();
-            setDataChange((prev) => !prev); 
-            queryClient.invalidateQueries({ queryKey: ['allEventPrices'] });
-            setOpen(false);
         } catch (error) {
             Swal.fire('Error', 'Failed to update event price.', 'error');
         } finally {

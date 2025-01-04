@@ -252,7 +252,7 @@ const EventPeriodList = () => {
                                 ]}
                                 highlightOnHover
                                 key="event_reg_period_id"
-                                totalRecords={totalRecords ? paginatedData.length : 0}
+                                totalRecords={totalRecords}
                                 recordsPerPage={pageSize}
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
