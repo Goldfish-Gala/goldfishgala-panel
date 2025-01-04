@@ -37,7 +37,7 @@ const GrandChampionList = () => {
 
     if (!data) {
         return (
-            <div className="panel flex w-full grid-cols-1 flex-col items-start justify-start text-dark dark:text-white-dark lg:grid-cols-4">
+            <div className="panel flex min-h-[300px] w-full grid-cols-1 flex-col items-start justify-start text-dark dark:text-white-dark lg:grid-cols-4">
                 <p className="text-lg font-bold text-primary">Grand Champion</p>
                 <p className="my-auto self-center text-danger">Grand champion not decided yet</p>
             </div>
