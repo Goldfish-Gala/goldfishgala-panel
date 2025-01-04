@@ -252,12 +252,8 @@ const EventPhaseList = () => {
                                 recordsPerPage={pageSize}
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
-                                recordsPerPageOptions={PAGE_SIZES}
-                                onRecordsPerPageChange={setPageSize}
                                 sortStatus={sortStatus}
                                 onSortStatusChange={setSortStatus}
-                                // selectedRecords={selectedRecords}
-                                // onSelectedRecordsChange={setSelectedRecords}
                                 paginationText={({ from, to, totalRecords }) =>
                                     `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                                 }
