@@ -297,6 +297,24 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
             </button>
             <AnimateHeight duration={300} height={currentMenu === 'champions' ? 'auto' : 0}>
                 <ul className="sub-menu text-gray-500">
+                <li>
+                        <Link href={'/admin/champion-category'}>
+                            <div className="flex items-center">
+                                <div className="ml-1.5">
+                                    <IconRegister className="shrink-0 group-hover:!text-primary" />
+                                </div>
+                                <span
+                                    className={`${
+                                        pathname === '/admin/champion-category'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } -ml-1.5 ltr:pl-3 rtl:pr-3`}
+                                >
+                                    {T!('Champion Category')}
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
                     <li>
                         <Link href="/admin/champion-selection">
                             <div className="flex items-center">

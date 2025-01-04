@@ -14,9 +14,79 @@ export const getAllChampions = async (token: string | undefined) => {
     }
 };
 
+export const getAllChampionCategory = async (token: string | undefined) => {
+    try {
+        const response = await api.get(`/champion-categories`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const getOneChampionCategory = async (champion_category_id: string, token: string | undefined) => {
+    try {
+        const response = await api.get(`/champion-categories?champion_category_id=${champion_category_id}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const createChampionCategory = async (data: ChampionCategoryRegisterType, token: string | undefined) => {
+    try {
+        const response = await api.post(`/champion-categories`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const updateChampionCategory = async (champion_category_id: string, data: ChampionCategoryRegisterType, token: string | undefined) => {
+    try {
+        const response = await api.put(`/champion-categories/${champion_category_id}`, data, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
 export const getAllCategoryByEventPriceApi = async (token: string | undefined, eventPriceId: string) => {
     try {
         const response = await api.get(`/champion-categories?event_price_id=${eventPriceId}`, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+};
+
+export const deleteChampionCategory = async (champion_category_id: string, token: string | undefined) => {
+    try {
+        const response = await api.delete(`/champion-categories/${champion_category_id}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

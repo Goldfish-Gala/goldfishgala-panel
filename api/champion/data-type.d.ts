@@ -1,9 +1,12 @@
-interface ChampionCategoryType {
-    champion_category_id: string;
+interface ChampionCategoryRegisterType {
     champion_category_name: string;
-    champion_category_created_date: string;
     event_price_id: string;
+}
+
+interface ChampionCategoryType extends ChampionCategoryRegisterType {
+    champion_category_id: string;
     event_price_name: string;
+    champion_category_created_date: string;
 }
 
 interface ChampionAwardType {
