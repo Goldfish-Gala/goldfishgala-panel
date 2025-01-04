@@ -67,10 +67,16 @@ const FishScoreModal = ({ fish, open, setOpen, setDataChange }: ConfirmationModa
 
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = event.target;
-        setValue(name as any, value);
+        let numericValue = Number(value);
+
+        if (numericValue > 100) {
+            numericValue = 100; // Automatically set to 100 if the value exceeds 100
+        }
+
+        setValue(name as any, numericValue); // Ensure the value is updated to 100 if necessary
         setErrors({
             ...errors,
-            [name]: undefined,
+            [name]: undefined, // Clear any existing errors for this field
         });
     };
 
