@@ -7,7 +7,7 @@ import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { DataTable, DataTableSortStatus } from 'mantine-datatable';
 import { useCookies } from 'next-client-cookies';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { useEffect, useMemo, useState } from 'react';
+import { SetStateAction, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Swal from 'sweetalert2';
 import { getAllEventRegs, deleteEventReg, getOneEventReg } from '@/api/event-reg/api-event-reg';
@@ -262,15 +262,8 @@ const EventRegistrationList = () => {
                                 recordsPerPage={pageSize}
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
-                                recordsPerPageOptions={PAGE_SIZES}
-                                onRecordsPerPageChange={(newPageSize) => {
-                                    setPageSize(newPageSize);
-                                    setLimit(newPageSize);
-                                }}
                                 sortStatus={sortStatus}
                                 onSortStatusChange={setSortStatus}
-                                // selectedRecords={selectedRecords}
-                                // onSelectedRecordsChange={setSelectedRecords}
                                 paginationText={({ from, to, totalRecords }) =>
                                     `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                                 }
