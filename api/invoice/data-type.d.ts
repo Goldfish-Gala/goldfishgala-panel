@@ -9,5 +9,20 @@ interface InvoiceDetail {
     invoice_created_date: string;
     invoice_checkout_url: string;
     event_id: string;
+    event_name: string;
+    event_desc: string;
     fish_details: ItemDetail[];
+}
+
+interface InvoiceDetailPagination {
+    success: boolean;
+    message: string;
+    data: InvoiceDetail[];
+    pagination: {
+        totalData: number;
+        currentPage: number;
+        totalPages: number;
+        hasNextPage: boolean;
+        hasPrevPage: boolean;
+    };
 }

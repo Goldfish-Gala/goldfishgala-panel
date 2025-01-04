@@ -26,8 +26,7 @@ const UserList = () => {
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
-    const PAGE_SIZES = [10, 20, 30, 40];
-    const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
+    const [pageSize, setPageSize] = useState(10);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'role',
         direction: 'asc',
@@ -223,13 +222,13 @@ const UserList = () => {
                             onSortStatusChange={setSortStatus}
                             recordsPerPage={pageSize}
                             style={{ paddingLeft: 20, paddingRight: 20 }}
+                            paginationText={({ from, to, totalRecords }) =>
+                                `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
+                            }
                             // recordsPerPageOptions={PAGE_SIZES}
                             // onRecordsPerPageChange={setPageSize}
                             // selectedRecords={selectedRecords}
                             // onSelectedRecordsChange={setSelectedRecords}
-                            // paginationText={({ from, to, totalRecords }) =>
-                            //     `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
-                            // }
                         />
                     )}
                 </div>
