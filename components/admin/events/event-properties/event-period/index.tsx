@@ -46,11 +46,11 @@ const EventPeriodList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllEventPeriod = async (): Promise<{ data: EventRegPeriod[], total: number }> => {
+    const getAllEventPeriod = async (): Promise<EventRegPeriod[] > => {
         const response = await getAllEventPeriods(sort, authCookie); 
         if (response.success) {
             setTotalRecords(response.data.length); 
-            return { data: response.data, total: response.total };
+            return response.data ;
         }
         throw new Error('No ongoing event');
     };
@@ -147,7 +147,7 @@ const EventPeriodList = () => {
         direction: 'desc',
     });
 
-    const paginatedData = data ? data.data.slice((page - 1) * pageSize, page * pageSize) : [];
+    const paginatedData = data ? data.slice((page - 1) * pageSize, page * pageSize) : [];
 
     return (
         <> 
