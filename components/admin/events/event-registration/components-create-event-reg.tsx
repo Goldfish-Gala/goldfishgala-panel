@@ -7,6 +7,7 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 import { formatedDate } from '@/utils/date-format';
+import { useSearchParams } from 'next/navigation';
 
 interface CreateEventRegRegModalProps {
     open: boolean;
@@ -16,6 +17,7 @@ interface CreateEventRegRegModalProps {
 
 const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegRegModalProps) => {
     const cookies = useCookies();
+    const searchParams = useSearchParams();
     const authCookie = cookies.get('token');
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setLoading] = useState(false);
@@ -23,6 +25,7 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
     const [eventPhases, setEventPhases] = useState<EventRegPhase[] | null>(null);
     const [eventPeriods, setEventPeriods] = useState<EventRegPeriod[] | null>(null);
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [isFetching, setFetching] = useState(false);
 
     const { register, handleSubmit, reset, setValue, formState } = useForm({
@@ -62,7 +65,7 @@ const CreateEventRegModal = ({ open, setOpen, setDataChange }: CreateEventRegReg
     const fetchAllEventPeriods = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getAllEventPeriods(authCookie);
+            const response = await getAllEventPeriods(sort, authCookie);
             if (response.success) {
                 setEventPeriods(response.data);
                 setFetching(false);
