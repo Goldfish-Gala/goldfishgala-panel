@@ -173,7 +173,7 @@ const EventStatusList = () => {
                                     {
                                         accessor: 'event_reg_status_id',
                                         title: 'ID',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_status_id }) => (
                                             <div className="font-semibold hover:no-underline">{event_reg_status_id}</div>
                                         ),
@@ -181,7 +181,7 @@ const EventStatusList = () => {
                                     {
                                         accessor: 'event_reg_status_code',
                                         title: 'Code',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_status_code }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{event_reg_status_code}</div>
@@ -191,7 +191,7 @@ const EventStatusList = () => {
                                     {
                                         accessor: 'event_reg_status_name',
                                         title: 'Name',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_status_name }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{event_reg_status_name}</div>
@@ -201,7 +201,7 @@ const EventStatusList = () => {
                                     {
                                         accessor: 'event_reg_status_desc',
                                         title: 'Description',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_status_desc }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{ event_reg_status_desc}</div>
