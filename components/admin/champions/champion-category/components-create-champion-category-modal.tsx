@@ -8,6 +8,7 @@ import React, { Fragment, useCallback, useEffect, useRef, useState } from 'react
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
+import { useSearchParams } from 'next/navigation';
 
 interface CreateChampionCategoryModalProps {
     open: boolean;
@@ -17,13 +18,15 @@ interface CreateChampionCategoryModalProps {
 
 const CreateChampionCategoryModal = ({ open, setOpen, setDataChange }: CreateChampionCategoryModalProps) => {
     const cookies = useCookies();
+    const searchParams = useSearchParams();
     const authCookie = cookies.get('token');
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
     const [isFetching, setFetching] = useState(false);
     const [eventPrices, setEventPrices] = useState<EventPriceType[] | null>(null);
-
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
+    
     const { register, handleSubmit, reset, setValue, formState } = useForm({
         defaultValues: {
             champion_category_name: '',
@@ -34,7 +37,7 @@ const CreateChampionCategoryModal = ({ open, setOpen, setDataChange }: CreateCha
     const fetchAllEventPrices = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getAllEventPrice(authCookie);
+            const response = await getAllEventPrice(sort, authCookie);
             if (response.success) {
                 setEventPrices(response.data);
                 setFetching(false);

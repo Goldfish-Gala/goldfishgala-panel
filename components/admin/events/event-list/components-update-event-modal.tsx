@@ -13,6 +13,7 @@ import Swal from 'sweetalert2';
 import { formatDateToString, formatedDate } from '@/utils/date-format';
 import IconCalendar from '@/components/icon/icon-calendar';
 import DatePicker from 'react-datepicker';
+import { useSearchParams } from 'next/navigation';
 
 interface UpdateEventModalProps {
     open: boolean;
@@ -27,6 +28,7 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setLoading] = useState(false);
     const queryClient = useQueryClient();
+    const searchParams = useSearchParams();
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
     const [isFetching, setFetching] = useState(false);
     const [eventRegs, setEventRegs] = useState<EventReg[] | null>(null);
@@ -35,6 +37,7 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
     const [endDate, setEndDate] = useState<Date | null>(new Date())
     const [startDateOpen, setStartDateOpen] = useState(false)
     const [endDateOpen, setEndDateOpen] = useState(false)
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const { register, handleSubmit, reset, setValue, formState } = useForm({
         defaultValues: {
             event_name: '',
@@ -77,7 +80,7 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
     const fetchAllEventPrices = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getAllEventPrice(authCookie);
+            const response = await getAllEventPrice(sort, authCookie);
             if (response.success) {
                 setEventPrices(response.data);
                 setFetching(false);

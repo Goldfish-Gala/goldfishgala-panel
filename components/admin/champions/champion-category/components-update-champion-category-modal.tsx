@@ -9,6 +9,7 @@ import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import Select from 'react-select';
 import { formatMataUang } from '@/utils/curency-format';
+import { useSearchParams } from 'next/navigation';
 
 interface UpdateChampionCategoryModalProps {
     open: boolean;
@@ -19,6 +20,7 @@ interface UpdateChampionCategoryModalProps {
 
 const UpdateChampionCategoryModal = ({ open, setOpen, setDataChange, championCategoryData }: UpdateChampionCategoryModalProps) => {
     const cookies = useCookies();
+    const searchParams = useSearchParams();
     const authCookie = cookies.get('token');
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setLoading] = useState(false);
@@ -26,6 +28,7 @@ const UpdateChampionCategoryModal = ({ open, setOpen, setDataChange, championCat
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
     const [isFetching, setFetching] = useState(false);
     const [eventPrices, setEventPrices] = useState<EventPriceType[] | null>(null);
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const { register, handleSubmit, reset, setValue, formState } = useForm({
         defaultValues: {
             champion_category_name: '',
@@ -45,7 +48,7 @@ const UpdateChampionCategoryModal = ({ open, setOpen, setDataChange, championCat
     const fetchAllEventPrices = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getAllEventPrice(authCookie);
+            const response = await getAllEventPrice(sort, authCookie);
             if (response.success) {
                 setEventPrices(response.data);
                 setFetching(false);
