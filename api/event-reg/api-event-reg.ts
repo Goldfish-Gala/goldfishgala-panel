@@ -203,9 +203,9 @@ export const deleteEventPhase = async (event_reg_phase_id: string, cookie: strin
     }
 };
 
-export const getAllEventPeriods = async (cookie: string | undefined) => {
+export const getAllEventPeriods = async (sort: string, cookie: string | undefined) => {
     try {
-        const response = await api.get(`/event-reg-periods`, {
+        const response = await api.get(`/event-reg-periods?sort=${sort}`, {
             headers: {
                 Authorization: `Bearer ${cookie}`,
             },
