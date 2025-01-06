@@ -8,6 +8,7 @@ import Select from 'react-select';
 import { useForm } from 'react-hook-form';
 import Swal from 'sweetalert2';
 import { formatedDate } from '@/utils/date-format';
+import { useSearchParams } from 'next/navigation';
 
 interface UpdateEventRegModalProps {
     open: boolean;
@@ -18,14 +19,16 @@ interface UpdateEventRegModalProps {
 
 const UpdateEventRegModal = ({ open, setOpen, setDataChange, eventRegData }: UpdateEventRegModalProps) => {
     const cookies = useCookies();
+    const queryClient = useQueryClient();
+    const searchParams = useSearchParams();
     const authCookie = cookies.get('token');
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setLoading] = useState(false);
     const [eventStatuses, setEventStatuses] = useState<EventRegStatus[] | null>(null);
     const [eventPhases, setEventPhases] = useState<EventRegPhase[] | null>(null);
     const [eventPeriods, setEventPeriods] = useState<EventRegPeriod[] | null>(null);
-    const queryClient = useQueryClient();
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [isFetching, setFetching] = useState(false);
     const { register, handleSubmit, reset, setValue, formState } = useForm({
         defaultValues: {
@@ -64,7 +67,7 @@ const UpdateEventRegModal = ({ open, setOpen, setDataChange, eventRegData }: Upd
     const fetchAllEventPeriods = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getAllEventPeriods(authCookie);
+            const response = await getAllEventPeriods(sort, authCookie);
             if (response.success) {
                 setEventPeriods(response.data);
                 setFetching(false);
