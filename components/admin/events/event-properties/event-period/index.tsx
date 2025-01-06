@@ -47,7 +47,7 @@ const EventPeriodList = () => {
     }, [authCookie, dispatch, router, user]);
 
     const getAllEventPeriod = async (): Promise<EventRegPeriod[]> => {
-        const response = await getAllEventPeriods(authCookie); 
+        const response = await getAllEventPeriods(sort, authCookie); 
         if (response.success) {
             setData(response.data);
             setTotalRecords(response.data.length); 
@@ -144,7 +144,7 @@ const EventPeriodList = () => {
     const PAGE_SIZES = [10];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-        columnAccessor: 'status',
+        columnAccessor: 'event_reg_start_date',
         direction: 'asc',
     });
 
@@ -178,7 +178,7 @@ const EventPeriodList = () => {
                                     {
                                         accessor: 'event_reg_period_id',
                                         title: 'ID',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_period_id }) => (
                                             <div className="font-semibold hover:no-underline">{event_reg_period_id}</div>
                                         ),
@@ -196,7 +196,7 @@ const EventPeriodList = () => {
                                     {
                                         accessor: 'event_reg_end_date',
                                         title: 'End Date',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_end_date }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{formatedDate(event_reg_end_date)}</div>
@@ -206,7 +206,7 @@ const EventPeriodList = () => {
                                     {
                                         accessor: 'event_reg_created_date',
                                         title: 'Created Date',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_created_date }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{formatedDate(event_reg_created_date)}</div>
@@ -257,7 +257,10 @@ const EventPeriodList = () => {
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
                                 sortStatus={sortStatus}
-                                onSortStatusChange={setSortStatus}
+                                onSortStatusChange={(newSortStatus) => {
+                                    setSortStatus(newSortStatus);
+                                    setSort(newSortStatus.direction);
+                                }}
                                 paginationText={({ from, to, totalRecords }) =>
                                     `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                                 }
