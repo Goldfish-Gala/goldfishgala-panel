@@ -1,8 +1,8 @@
 import api from '../api-config';
 
-export const getAllEventPrice = async (token: string | undefined) => {
+export const getAllEventPrice = async (sort: string, token: string | undefined) => {
     try {
-        const response = await api.get(`/event-prices`, {
+        const response = await api.get(`/event-prices?sort=${sort}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },
