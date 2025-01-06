@@ -17,7 +17,8 @@ const ChampionSizeList = () => {
     const cookies = useCookies();
     const authCookie = cookies?.get('token');
     const [eventPriceId, setEventPriceId] = useState(searchParams.get('event-price-id') || '');
-
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
+    
     useEffect(() => {
         const params = new URLSearchParams();
         params.set('event-price-id', eventPriceId);
@@ -43,7 +44,7 @@ const ChampionSizeList = () => {
     };
 
     const fetchSizeCategory = async (): Promise<EventPriceType[]> => {
-        const eventPrices = await getAllEventPrice(authCookie);
+        const eventPrices = await getAllEventPrice(sort, authCookie);
         if (eventPrices.success) return eventPrices.data;
         throw new Error('Failed to fetch event prices');
     };

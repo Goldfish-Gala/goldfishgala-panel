@@ -17,6 +17,7 @@ const BestAwardSelection = () => {
     const [isBestAwardSmallExist, setBestAwardSmallExist] = useState(false);
     const [isBestAwardMediumExist, setBestAwardMediumExist] = useState(false);
     const [isBestAwardLargeExist, setBestAwardLargeExist] = useState(false);
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [eventPriceId, setEventPriceId] = useState(searchParams.get('event-price-id') || '');
 
     useEffect(() => {
@@ -29,7 +30,7 @@ const BestAwardSelection = () => {
     }, [eventPriceId, router]);
 
     const fetchSizeCategory = async (): Promise<EventPriceType[]> => {
-        const eventPrices = await getAllEventPrice(authCookie);
+        const eventPrices = await getAllEventPrice(sort, authCookie);
         if (eventPrices.success) return eventPrices.data;
         throw new Error('Failed to fetch event prices');
     };

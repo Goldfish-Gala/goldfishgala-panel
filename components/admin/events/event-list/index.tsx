@@ -221,14 +221,31 @@ const EventList = () => {
 
     if (data.length === 0) {
         return (
-            <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
-                <div className="flex min-h-[50vh] min-w-[50vh] h-full items-center justify-center rounded-md shadow-lg ml-25">
-                    <div className="text-primary text-center">
-                        <p className="text-xl font-extrabold capitalize">No data</p>
-                        <p className="mt-1 text-sm font-semibold capitalize">Belum ada event</p>
+            <>
+                <div className="flex flex-row justify-between items-center mb-5 px-3">
+                    <h6 className="text-lg font-bold">Events</h6>
+                    <button
+                        type="button"
+                        className="btn btn-primary"
+                        onClick={() => setOpenModal(true)}
+                    >
+                        Create New
+                    </button>
+                </div>
+                <div className="mb-5 grid grid-cols-1 gap-8 sm:grid-cols-2 xl:grid-cols-4">
+                    <div className="flex min-h-[50vh] min-w-[50vh] h-full items-center justify-center rounded-md shadow-lg ml-25">
+                        <div className="text-primary text-center">
+                            <p className="text-xl font-extrabold capitalize">No data</p>
+                            <p className="mt-1 text-sm font-semibold capitalize">Belum ada event</p>
+                        </div>
                     </div>
                 </div>
-            </div>
+                <CreateEventModal
+                    open={openModal}
+                    setOpen={setOpenModal}
+                    setDataChange={setDataChange}
+                />
+            </>
         );
     }
 

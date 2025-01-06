@@ -10,6 +10,7 @@ import Select from 'react-select';
 import { getAllEventRegs } from '@/api/event-reg/api-event-reg';
 import { formatedDate } from '@/utils/date-format';
 import { formatMataUang } from '@/utils/curency-format';
+import { useSearchParams } from 'next/navigation';
 
 interface CreateEventModalProps {
     open: boolean;
@@ -19,6 +20,7 @@ interface CreateEventModalProps {
 
 const CreateEventModal = ({ open, setOpen, setDataChange }: CreateEventModalProps) => {
     const cookies = useCookies();
+    const searchParams = useSearchParams();
     const authCookie = cookies.get('token');
     const formRef = useRef<HTMLFormElement>(null);
     const [isLoading, setLoading] = useState(false);
@@ -26,6 +28,7 @@ const CreateEventModal = ({ open, setOpen, setDataChange }: CreateEventModalProp
     const [isFetching, setFetching] = useState(false);
     const [eventRegs, setEventRegs] = useState<EventReg[] | null>(null);
     const [eventPrices, setEventPrices] = useState<EventPriceType[] | null>(null);
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
 
     const { register, handleSubmit, reset, setValue, formState } = useForm({
         defaultValues: {
@@ -54,7 +57,7 @@ const CreateEventModal = ({ open, setOpen, setDataChange }: CreateEventModalProp
     const fetchAllEventPrices = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getAllEventPrice(authCookie);
+            const response = await getAllEventPrice(sort, authCookie);
             if (response.success) {
                 setEventPrices(response.data);
                 setFetching(false);

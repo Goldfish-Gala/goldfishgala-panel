@@ -17,9 +17,11 @@ import { getAllChampions } from '@/api/champion/api-champions';
 const WinnerList = () => {
     const router = useRouter();
     const cookies = useCookies();
+    const searchParams = useSearchParams();
     const authCookie = cookies?.get('token');
     const [isChampion, setChampion] = useState(true);
     const [isFetching, setFetching] = useState(false);
+    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
 
     const fetchChampions = useCallback(async () => {
         setFetching(true);
@@ -56,7 +58,7 @@ const WinnerList = () => {
     };
 
     const fetchAllWinners = async (): Promise<EventPriceType[]> => {
-        const eventPrices = await getAllEventPrice(authCookie);
+        const eventPrices = await getAllEventPrice(sort, authCookie);
         if (eventPrices.success) return eventPrices.data;
         throw new Error('Failed to fetch event prices');
     };
