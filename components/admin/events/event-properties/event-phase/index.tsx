@@ -174,7 +174,7 @@ const EventPhaseList = () => {
                                     {
                                         accessor: 'event_reg_phase_id',
                                         title: 'ID',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_phase_id }) => (
                                             <div className="font-semibold hover:no-underline">{event_reg_phase_id}</div>
                                         ),
@@ -182,7 +182,7 @@ const EventPhaseList = () => {
                                     {
                                         accessor: 'event_reg_phase_code',
                                         title: 'Code',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_phase_code }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{event_reg_phase_code}</div>
@@ -192,7 +192,7 @@ const EventPhaseList = () => {
                                     {
                                         accessor: 'event_reg_phase_name',
                                         title: 'Name',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_phase_name }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{event_reg_phase_name}</div>
@@ -202,7 +202,7 @@ const EventPhaseList = () => {
                                     {
                                         accessor: 'event_reg_phase_desc',
                                         title: 'Description',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_phase_desc }) => (
                                             <div className="flex items-center font-semibold">
                                                 <div>{ event_reg_phase_desc}</div>

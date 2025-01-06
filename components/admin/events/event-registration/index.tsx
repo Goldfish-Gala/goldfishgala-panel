@@ -28,7 +28,7 @@ const EventRegistrationList = () => {
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
-    const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
+    const [sort, setSort] = useState(searchParams.get('sort') || 'desc');
     const [openModal, setOpenModal] = useState(false);
     const [dataChange, setDataChange] = useState(false);
     const [dataEventReg, setDataEventReg] = useState<EventReg>({
@@ -111,7 +111,7 @@ const EventRegistrationList = () => {
                 showConfirmButton: false,
               });
     
-              queryClient.invalidateQueries({ queryKey: ['allEventStatus'] });
+              queryClient.invalidateQueries({ queryKey: ['allEventReg'] });
               return deleteOneEventReg.data;
             } else {
               await Swal.fire({
@@ -152,8 +152,8 @@ const EventRegistrationList = () => {
     const PAGE_SIZES = [10];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
-        columnAccessor: 'status',
-        direction: 'asc',
+        columnAccessor: 'event_reg_start_date',
+        direction: 'desc',
     });
     
     return (
@@ -184,33 +184,33 @@ const EventRegistrationList = () => {
                                     {
                                         accessor: 'event_reg_id',
                                         title: 'ID',
-                                        sortable: true,
+                                        sortable: false,
                                         render: ({ event_reg_id }) => (
                                             <div className="font-semibold hover:no-underline">{event_reg_id}</div>
                                         ),
                                     },
                                     {
-                                        accessor: 'event_reg_status_code',
-                                        title: 'Status Code',
-                                        sortable: true,
-                                        render: ({ event_reg_status_code }) => (
+                                        accessor: 'event_reg_status_name',
+                                        title: 'Status Name',
+                                        sortable: false,
+                                        render: ({ event_reg_status_name }) => (
                                             <div className="flex items-center font-semibold">
-                                                <div>{event_reg_status_code}</div>
+                                                <div>{event_reg_status_name}</div>
                                             </div>
                                         ),
                                     },
                                     {
-                                        accessor: 'event_reg_phase_code',
-                                        title: 'Phase Code',
-                                        sortable: true,
-                                        render: ({ event_reg_phase_code }) => (
+                                        accessor: 'event_reg_phase_name',
+                                        title: 'Phase Name',
+                                        sortable: false,
+                                        render: ({ event_reg_phase_name }) => (
                                             <div className="flex items-center font-semibold">
-                                                <div>{event_reg_phase_code}</div>
+                                                <div>{event_reg_phase_name}</div>
                                             </div>
                                         ),
                                     },
                                     {
-                                        accessor: 'event reg period',
+                                        accessor: 'event_reg_start_date',
                                         title: 'Period',
                                         sortable: true,
                                         render: ({ event_reg_start_date, event_reg_end_date}) => (
@@ -263,7 +263,10 @@ const EventRegistrationList = () => {
                                 page={page}
                                 onPageChange={(p) => setPage(p)}
                                 sortStatus={sortStatus}
-                                onSortStatusChange={setSortStatus}
+                                onSortStatusChange={(newSortStatus) => {
+                                    setSortStatus(newSortStatus);
+                                    setSort(newSortStatus.direction);
+                                }}
                                 paginationText={({ from, to, totalRecords }) =>
                                     `\u00A0\u00A0\u00A0Showing ${from} to ${to} of ${totalRecords} entries`
                                 }
