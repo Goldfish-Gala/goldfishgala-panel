@@ -30,7 +30,7 @@ const EventPeriodList = () => {
     const [sort, setSort] = useState(searchParams.get('sort') || 'asc');
     const [openModal, setOpenModal] = useState(false);
     const [dataChange, setDataChange] = useState(false);
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
     const [totalRecords, setTotalRecords] = useState(0); 
     const [dataEventPeriod, setDataEventPeriod] = useState<EventRegPeriod>({
         event_reg_period_id: '',
@@ -46,20 +46,21 @@ const EventPeriodList = () => {
         }
     }, [authCookie, dispatch, router, user]);
 
-    const getAllEventPeriod = async (): Promise<EventRegPeriod[]> => {
+    const getAllEventPeriod = async (): Promise<{ data: EventRegPeriod[], total: number }> => {
         const response = await getAllEventPeriods(sort, authCookie); 
         if (response.success) {
-            setData(response.data);
             setTotalRecords(response.data.length); 
+            return { data: response.data, total: response.total };
         }
         throw new Error('No ongoing event');
     };
 
-    const { isPending, error, refetch } = useQuery({
+    const { isPending, data, error, refetch } = useQuery({
         queryKey: ['allEventPeriod', page, limit, sort],
         queryFn: () => getAllEventPeriod(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        placeholderData: (previousData) => previousData,
     });
 
     const deleteEventPeriods = async (event_reg_period_id: string) => {
@@ -139,17 +140,15 @@ const EventPeriodList = () => {
         }
     }, [limit, sort, router, dataChange, refetch]);
 
-
-
     const PAGE_SIZES = [10];
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'event_reg_start_date',
-        direction: 'asc',
+        direction: 'desc',
     });
 
-    const paginatedData = data.slice((page - 1) * pageSize, page * pageSize);
-    
+    const paginatedData = data ? data.data.slice((page - 1) * pageSize, page * pageSize) : [];
+
     return (
         <> 
             <div className='flex-column gap-5 pb-5'>
