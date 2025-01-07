@@ -79,16 +79,14 @@ const AuthFailed = () => {
                                     Contact admin to restore your account
                                 </p>
                                 <button
-                                    className="btn2 btn-primary mt-2 flex w-fit gap-2 rounded-md border border-dark bg-none p-2 px-3 text-center dark:border-white"
+                                    className="btn2 btn-primary mt-2 flex w-fit gap-2 rounded-md bg-none p-2 px-3 text-center"
                                     onClick={() => {
                                         window.open('https://wa.me/6281298772351', '_blank');
                                     }}
                                     aria-label="Contact GoldfishGala Admin on WhatsApp"
                                 >
                                     <WhatsappColor />
-                                    <p className="text-base text-dark drop-shadow-lg dark:text-white">
-                                        GoldfishGala Admin
-                                    </p>
+                                    <p className="text-base font-extrabold text-dark">GoldfishGala Admin</p>
                                 </button>
                             </div>
                         </div>
