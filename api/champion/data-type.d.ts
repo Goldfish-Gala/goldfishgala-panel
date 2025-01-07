@@ -107,3 +107,61 @@ interface ChampionBestAwardType {
     user_ig: string;
     total_score: string;
 }
+
+interface FishScoreType {
+    user_id: string;
+    fish_score: number;
+    user_fname: string;
+    user_lname: string;
+    fish_score_id: string;
+    fish_score_updated_at: string;
+}
+
+interface FinalChampionCategory {
+    fishScores: FishScoreType[];
+    event_price_id: string;
+    event_price_name: string;
+    event_price_amount: number;
+    champion_category_id: string;
+    champion_category_name: string;
+}
+interface FinalFishType {
+    fish_final_score_id: string;
+    fish_id: string;
+    champion_category_id: string;
+    fish_final_score: number;
+    fish_final_score_created_date: string;
+    fish_name: string;
+    fish_size: string;
+    fish_submission_link: string;
+    championcategories: FinalChampionCategory[];
+}
+
+interface FishScoreType {
+    user_id: string;
+    fish_score: number;
+    user_fname: string;
+    user_lname: string;
+    fish_score_id: string;
+    fish_score_updated_at: string;
+}
+
+interface FinalChampionCategory {
+    fishScores: FishScoreType[];
+    event_price_id: string;
+    event_price_name: string;
+    event_price_amount: number;
+    champion_category_id: string;
+    champion_category_name: string;
+}
+interface FinalFishType {
+    fish_final_score_id: string;
+    fish_id: string;
+    champion_category_id: string;
+    fish_final_score: number;
+    fish_final_score_created_date: string;
+    fish_name: string;
+    fish_size: string;
+    fish_submission_link: string;
+    championcategories: FinalChampionCategory[];
+}

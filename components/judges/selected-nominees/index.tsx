@@ -185,22 +185,28 @@ const SelectedFishes = () => {
                     </select>
                 </div>
             </div>
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
-                {data?.pages.map((page) =>
-                    (sort === 'desc' ? [...page.data].reverse() : page.data).map((fish) => (
-                        <IGEmbed
-                            url={fish.fish_submission_link}
-                            key={fish.fish_id}
-                            fish={fish}
-                            username={fish.user_name}
-                            handleModal={handleOpenModal}
-                            isLoading={isLoading}
-                            buttonText="Remove from nominees"
-                            eventPhase={event_reg_phase === 'nominate_phase'}
-                        />
-                    ))
-                )}
-            </div>
+            {data.pages[0].data.length < 1 ? (
+                <div className="panel flex h-[50vh] w-full items-center justify-center">
+                    <p className="text-danger">No fish selected yet.</p>
+                </div>
+            ) : (
+                <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+                    {data?.pages.map((page) =>
+                        (sort === 'desc' ? [...page.data].reverse() : page.data).map((fish) => (
+                            <IGEmbed
+                                url={fish.fish_submission_link}
+                                key={fish.fish_id}
+                                fish={fish}
+                                username={fish.user_name}
+                                handleModal={handleOpenModal}
+                                isLoading={isLoading}
+                                buttonText="Remove from nominees"
+                                eventPhase={event_reg_phase === 'nominate_phase'}
+                            />
+                        ))
+                    )}
+                </div>
+            )}
             <button
                 ref={ref}
                 disabled={isFetchingNextPage || !data.pages[data.pages.length - 1].pagination.hasNextPage}

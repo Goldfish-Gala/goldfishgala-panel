@@ -2,6 +2,7 @@ interface InvoiceDetail {
     invoice_id: string;
     user_reg_id: string;
     user_id: string;
+    user_name: string;
     invoice_code: string;
     invoice_status: string;
     invoice_amount: number;

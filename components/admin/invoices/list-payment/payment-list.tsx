@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { expiringTime } from '@/utils/date-format';
+import { expiringTime, formatedDate } from '@/utils/date-format';
 import { getInvoiceAdminApi, getInvoiceByUserId } from '@/api/invoice/api-invoice';
 import SpinnerWithText from '@/components/UI/Spinner';
 import { getPaymentsAdminApi } from '@/api/payment/api-payment';
@@ -46,6 +46,7 @@ const PaymentList = () => {
         queryFn: () => getAllPaymentAdmin(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 50 * 1000,
     });
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
@@ -66,13 +67,13 @@ const PaymentList = () => {
                             records={data?.data}
                             columns={[
                                 {
-                                    accessor: 'payment_id',
-                                    title: 'ID',
+                                    accessor: 'invoice_code',
+                                    title: 'No invoice',
                                     sortable: false,
-                                    render: ({ payment_id }) => (
-                                        <div className="flex items-center font-semibold">
-                                            <div>{payment_id}</div>
-                                        </div>
+                                    render: ({ invoice_code }) => (
+                                        <Link href={`/invoice-preview/${invoice_code}`}>
+                                            <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
+                                        </Link>
                                     ),
                                 },
                                 {
@@ -96,12 +97,12 @@ const PaymentList = () => {
                                     ),
                                 },
                                 {
-                                    accessor: 'invoice_code',
-                                    title: 'Invoice NO',
+                                    accessor: 'payment_amount',
+                                    title: 'Payment amount',
                                     sortable: false,
-                                    render: ({ invoice_code }) => (
+                                    render: ({ payment_amount }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{invoice_code}</div>
+                                            <div>{payment_amount}</div>
                                         </div>
                                     ),
                                 },
@@ -123,6 +124,16 @@ const PaymentList = () => {
                                             >
                                                 {payment_status}
                                             </span>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'payment_paid_at',
+                                    title: 'Payment paid at',
+                                    sortable: false,
+                                    render: ({ payment_paid_at }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{formatedDate(payment_paid_at)}</div>
                                         </div>
                                     ),
                                 },

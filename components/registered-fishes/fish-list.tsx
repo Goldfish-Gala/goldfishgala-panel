@@ -68,8 +68,7 @@ const FishList = () => {
 
     if (data.length === 0) {
         return (
-            <div className="flex min-h-[75vh] w-full flex-col items-center justify-center text-red-500">
-                <p>No data</p>
+            <div className="panel flex min-h-[75vh] w-full flex-col items-center justify-center text-red-500">
                 <p>Belum ada ikan yang terdaftar</p>
             </div>
         );
