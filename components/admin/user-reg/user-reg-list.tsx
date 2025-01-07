@@ -47,6 +47,7 @@ const UserRegList = () => {
         queryFn: () => getAllInvoicePayment(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 50 * 1000,
     });
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',

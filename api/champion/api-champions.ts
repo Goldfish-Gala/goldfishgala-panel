@@ -56,7 +56,11 @@ export const createChampionCategory = async (data: ChampionCategoryRegisterType,
     }
 };
 
-export const updateChampionCategory = async (champion_category_id: string, data: ChampionCategoryRegisterType, token: string | undefined) => {
+export const updateChampionCategory = async (
+    champion_category_id: string,
+    data: ChampionCategoryRegisterType,
+    token: string | undefined
+) => {
     try {
         const response = await api.put(`/champion-categories/${champion_category_id}`, data, {
             headers: {

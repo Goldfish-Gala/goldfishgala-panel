@@ -566,7 +566,7 @@ const FishRegistrationForm = ({ params }: { params: { event_id: string } }) => {
                                                 </span>
                                             </div>
                                             <p className="ml-2 mt-1 text-xs text-black dark:text-white">
-                                                small: 4-7 cm | medium: 8-10 cm | jumbo: 11cm++
+                                                small: 9-12 cm | medium: 12-15 cm | jumbo: 16cm++
                                             </p>
                                             {errors[`fish_size_${index}`] && (
                                                 <p className="absolute left-0 top-full mt-1 text-red-400">

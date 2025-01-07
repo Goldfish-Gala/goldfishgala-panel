@@ -297,7 +297,7 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
             </button>
             <AnimateHeight duration={300} height={currentMenu === 'champions' ? 'auto' : 0}>
                 <ul className="sub-menu text-gray-500">
-                <li>
+                    <li>
                         <Link href={'/admin/champion-category'}>
                             <div className="flex items-center">
                                 <div className="ml-1.5">

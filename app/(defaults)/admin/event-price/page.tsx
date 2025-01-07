@@ -12,7 +12,7 @@ const EventPrice = () => {
                 <li>
                     <span className="text-primary ">Admin</span>
                 </li>
-                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+                <li className="text-primary before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
                     <span>Events</span>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">

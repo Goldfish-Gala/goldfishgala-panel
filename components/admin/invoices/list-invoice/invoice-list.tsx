@@ -10,7 +10,7 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { expiringTime } from '@/utils/date-format';
+import { expiringTime, formatedDate } from '@/utils/date-format';
 import { getInvoiceAdminApi, getInvoiceByUserId } from '@/api/invoice/api-invoice';
 import SpinnerWithText from '@/components/UI/Spinner';
 
@@ -45,6 +45,7 @@ const InvoiceList = () => {
         queryFn: () => getAllInvoicePayment(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 50 * 1000,
     });
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'status',
@@ -65,13 +66,13 @@ const InvoiceList = () => {
                             records={data?.data}
                             columns={[
                                 {
-                                    accessor: 'invoice_code',
-                                    title: 'No invoice',
-                                    sortable: true,
-                                    render: ({ invoice_code }) => (
-                                        <Link href={`/invoice-preview/${invoice_code}`}>
-                                            <div className="font-semibold text-primary underline hover:no-underline">{`#${invoice_code}`}</div>
-                                        </Link>
+                                    accessor: 'user_name',
+                                    title: 'Full name',
+                                    sortable: false,
+                                    render: ({ user_name }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{user_name}</div>
+                                        </div>
                                     ),
                                 },
                                 {
@@ -85,19 +86,19 @@ const InvoiceList = () => {
                                     ),
                                 },
                                 {
-                                    accessor: 'invoice_due_date',
-                                    title: 'Batas pembayaran',
-                                    sortable: true,
-                                    render: ({ invoice_due_date, invoice_code }) => (
+                                    accessor: 'invoice_created_date',
+                                    title: 'Created at',
+                                    sortable: false,
+                                    render: ({ invoice_created_date }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{expiringTime(invoice_due_date)}</div>
+                                            <div>{formatedDate(invoice_created_date)}</div>
                                         </div>
                                     ),
                                 },
                                 {
                                     accessor: 'invoice_status',
                                     title: 'Status',
-                                    sortable: true,
+                                    sortable: false,
                                     textAlignment: 'center',
                                     render: ({ invoice_status }) => (
                                         <div className="flex w-full justify-center">
@@ -116,6 +117,26 @@ const InvoiceList = () => {
                                                     ? 'Belum bayar'
                                                     : 'Kadaluarsa'}
                                             </span>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'invoice_amount',
+                                    title: 'Amount',
+                                    sortable: false,
+                                    render: ({ invoice_amount }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{invoice_amount}</div>
+                                        </div>
+                                    ),
+                                },
+                                {
+                                    accessor: 'fish_details',
+                                    title: 'Total fish',
+                                    sortable: false,
+                                    render: ({ fish_details }) => (
+                                        <div className="flex items-center font-semibold">
+                                            <div>{fish_details.length}</div>
                                         </div>
                                     ),
                                 },

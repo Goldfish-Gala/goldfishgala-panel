@@ -58,6 +58,7 @@ const FishList = () => {
         queryFn: () => getAllUserList(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
+        staleTime: 5 * 50 * 1000,
         placeholderData: (previousData) => previousData,
     });
 
