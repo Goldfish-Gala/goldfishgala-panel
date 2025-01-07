@@ -75,7 +75,7 @@ const AuthFailed = () => {
                                 </p>
                             </div>
                             <div className="flex flex-col items-center justify-center">
-                                <p className="mt-6 text-center text-dark dark:text-white">
+                                <p className="text-center text-dark dark:text-white">
                                     Contact admin to restore your account
                                 </p>
                                 <button
