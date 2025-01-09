@@ -140,8 +140,6 @@ const FishCandidates = () => {
         }
     };
 
-    console.log('data', data);
-
     if (!data) {
         return (
             <div className="flex min-h-[650px] min-w-[320px] items-center justify-center">
