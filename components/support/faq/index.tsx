@@ -69,7 +69,7 @@ const Faq = () => {
                             <AccordionItem value="item-9">
                                 <AccordionTrigger>Kapan dan di mana Goldfish Gala akan diselenggarakan?</AccordionTrigger>
                                 <AccordionContent>
-                                Goldfish Gala akan diadakan secara online pada tanggal 28 Januari. Acara ini akan diselenggarakan melalui platform website dan Instagram Goldfish Gala, memberikan kemudahan bagi peserta dan pengunjung untuk bergabung dari mana saja.
+                                Goldfish Gala akan diadakan secara online pada tanggal yang akan diumumkan melalui sosial media official Goldfish Gala. Acara ini akan diselenggarakan melalui platform website dan Instagram Goldfish Gala, memberikan kemudahan bagi peserta dan pengunjung untuk bergabung dari mana saja. 
                                 </AccordionContent>
                             </AccordionItem>
                         </Accordion>
