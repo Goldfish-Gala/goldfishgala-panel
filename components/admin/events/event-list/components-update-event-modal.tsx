@@ -154,7 +154,7 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
         <Transition appear show={open} as={Fragment}>
             <Dialog as="div" open={open} onClose={() => setOpen(false)}>
                 <div className="fixed inset-0 z-20 bg-black bg-opacity-60" />
-                <div className="fixed inset-0 z-50 flex items-center justify-center">
+                <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto">
                     <Dialog.Panel className="bg-white rounded-lg shadow-lg w-full max-w-md">
                         <div className="flex items-center justify-between px-4 py-3 bg-gray-100">
                             <h5 className="text-lg font-semibold">Update Event</h5>
@@ -183,6 +183,90 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
                                 />
                                 {errors.event_desc && (
                                     <p className="text-red-500 text-sm">{errors.event_desc}</p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium">Event Registration</label>
+                                <Select
+                                    options={
+                                        eventRegs?.map((eventReg) => ({
+                                            value: eventReg.event_reg_id,
+                                            label: (
+                                            <div className="text-sm">
+                                                <div>Status: {eventReg.event_reg_status_name}</div>
+                                                <div>Phase: {eventReg.event_reg_phase_name}</div>
+                                                <div>
+                                                Period: {formatedDate(eventReg.event_reg_start_date)} -{' '}
+                                                {formatedDate(eventReg.event_reg_end_date)}
+                                                </div>
+                                            </div>
+                                            ),
+                                        })) || []
+                                    }
+                                    placeholder="Select Event Reg"
+                                    defaultValue={
+                                        eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id) && {
+                                            value: eventData.event_reg_id,
+                                            label: `${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_status_name}, 
+                                                    ${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_phase_name}, 
+                                                    ${formatedDate(eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_start_date)} - 
+                                                    ${formatedDate(eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_end_date)}`
+                                        }
+                                    }
+                                    isSearchable={false}
+                                    onChange={(selectedOption: any) => setValue('event_reg_id', selectedOption?.value)}
+                                    styles={{
+                                        menu: (provided: any) => ({
+                                            ...provided,
+                                            maxHeight: '200px',
+                                            overflowY: 'auto',
+                                        }),
+                                        menuList: (provided: any) => ({
+                                            ...provided,
+                                            maxHeight: '200px',
+                                            overflowY: 'auto',
+                                        }),
+                                    }}
+                                />
+                                {errors.event_reg_id && (
+                                    <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium">Event Prices</label>
+                                <Select
+                                    options={
+                                        eventPrices?.map((eventPrice) => ({
+                                        value: eventPrice.event_price_id,
+                                        label: `${eventPrice.event_price_name}: ${formatMataUang(eventPrice.event_price_amount)}`,
+                                        })) || []
+                                    }
+                                    placeholder="Select Event Prices"
+                                    defaultValue={ 
+                                        eventData?.event_prices?.map((eventPrice) => ({
+                                        value: eventPrice.event_price_id,
+                                        label: `${eventPrice.event_price_name}: ${formatMataUang(eventPrice.event_price_amount)}`
+                                        })) || [] 
+                                    }
+                                    isMulti={true}
+                                    onChange={(selectedOption: any) => {
+                                        setValue('event_price_ids', selectedOption.map((option: any) => option.value));
+                                    }}
+                                    styles={{
+                                        menu: (provided: any) => ({
+                                        ...provided,
+                                        maxHeight: '200px',
+                                        overflowY: 'auto',
+                                        }),
+                                        menuList: (provided: any) => ({
+                                        ...provided,
+                                        maxHeight: '200px',
+                                        overflowY: 'auto',
+                                        }),
+                                    }}
+                                />
+                                {errors.event_price_id && (
+                                    <p className="text-red-500 text-sm">{errors.event_price_id}</p>
                                 )}
                             </div>
                             <div className="mb-4">
@@ -264,90 +348,6 @@ const UpdateEventModal = ({ open, setOpen, setDataChange, eventData }: UpdateEve
                                 {errors.event_end_date && (
                                         <p className="text-red-500 text-sm">{errors.event_end_date}</p>
                                     )}
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium">Event Prices</label>
-                                <Select
-                                    options={
-                                        eventPrices?.map((eventPrice) => ({
-                                        value: eventPrice.event_price_id,
-                                        label: `${eventPrice.event_price_name}: ${formatMataUang(eventPrice.event_price_amount)}`,
-                                        })) || []
-                                    }
-                                    placeholder="Select Event Prices"
-                                    defaultValue={ 
-                                        eventData?.event_prices?.map((eventPrice) => ({
-                                        value: eventPrice.event_price_id,
-                                        label: `${eventPrice.event_price_name}: ${formatMataUang(eventPrice.event_price_amount)}`
-                                        })) || [] 
-                                    }
-                                    isMulti={true}
-                                    onChange={(selectedOption: any) => {
-                                        setValue('event_price_ids', selectedOption.map((option: any) => option.value));
-                                    }}
-                                    styles={{
-                                        menu: (provided: any) => ({
-                                        ...provided,
-                                        maxHeight: '200px',
-                                        overflowY: 'auto',
-                                        }),
-                                        menuList: (provided: any) => ({
-                                        ...provided,
-                                        maxHeight: '200px',
-                                        overflowY: 'auto',
-                                        }),
-                                    }}
-                                />
-                                {errors.event_price_id && (
-                                    <p className="text-red-500 text-sm">{errors.event_price_id}</p>
-                                )}
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium">Event Registration</label>
-                                <Select
-                                    options={
-                                        eventRegs?.map((eventReg) => ({
-                                            value: eventReg.event_reg_id,
-                                            label: (
-                                            <div className="text-sm">
-                                                <div>Status: {eventReg.event_reg_status_name}</div>
-                                                <div>Phase: {eventReg.event_reg_phase_name}</div>
-                                                <div>
-                                                Period: {formatedDate(eventReg.event_reg_start_date)} -{' '}
-                                                {formatedDate(eventReg.event_reg_end_date)}
-                                                </div>
-                                            </div>
-                                            ),
-                                        })) || []
-                                    }
-                                    placeholder="Select Event Reg"
-                                    defaultValue={
-                                        eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id) && {
-                                            value: eventData.event_reg_id,
-                                            label: `${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_status_name}, 
-                                                    ${eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_phase_name}, 
-                                                    ${formatedDate(eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_start_date)} - 
-                                                    ${formatedDate(eventRegs?.find((eventReg) => eventReg.event_reg_id === eventData.event_reg_id)?.event_reg_end_date)}`
-                                        }
-                                    }
-                                    isSearchable={false}
-                                    onChange={(selectedOption: any) => setValue('event_reg_id', selectedOption?.value)}
-                                    styles={{
-                                        menu: (provided: any) => ({
-                                            ...provided,
-                                            maxHeight: '200px',
-                                            overflowY: 'auto',
-                                        }),
-                                        menuList: (provided: any) => ({
-                                            ...provided,
-                                            maxHeight: '200px',
-                                            overflowY: 'auto',
-                                        }),
-                                    }}
-                                />
-                                {errors.event_reg_id && (
-                                    <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
-                                )}
                             </div>
                             <div className="flex justify-end gap-2">
                                 <button

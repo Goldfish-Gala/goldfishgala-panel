@@ -136,60 +136,6 @@ const CreateEventModal = ({ open, setOpen, setDataChange }: CreateEventModalProp
                                 )}
                             </div>
                             <div className="mb-4">
-                                <label className="block text-sm font-medium">Event Start Date</label>
-                                <input
-                                    type="date"
-                                    {...register('event_start_date', { required: 'Start date is required' })}
-                                    className="w-full px-3 py-2 border rounded"
-                                />
-                                {errors.event_start_date && (
-                                    <p className="text-red-500 text-sm">{errors.event_start_date}</p>
-                                )}
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium">Event End Date</label>
-                                <input
-                                    type="date"
-                                    {...register('event_end_date', { required: 'End date is required' })}
-                                    className="w-full px-3 py-2 border rounded"
-                                />
-                                {errors.event_end_date && (
-                                    <p className="text-red-500 text-sm">{errors.event_end_date}</p>
-                                )}
-                            </div>
-                            <div className="mb-4">
-                                <label className="block text-sm font-medium">Event Prices</label>
-                                <Select
-                                    options={
-                                        eventPrices?.map((eventPrice) => ({
-                                        value: eventPrice.event_price_id,
-                                        label: `${eventPrice.event_price_name}: ${formatMataUang(eventPrice.event_price_amount)}`,
-                                        })) || []
-                                    }
-                                    placeholder="Select Event Prices"
-                                    isMulti={true}
-                                    onChange={(selectedOption: any) => {
-                                        setValue('event_price_ids', selectedOption.map((option: any) => option.value));
-                                    }}
-                                    styles={{
-                                        menu: (provided: any) => ({
-                                        ...provided,
-                                        maxHeight: '200px',
-                                        overflowY: 'auto',
-                                        }),
-                                        menuList: (provided: any) => ({
-                                        ...provided,
-                                        maxHeight: '200px',
-                                        overflowY: 'auto',
-                                        }),
-                                    }}
-                                    />
-
-                                {errors.event_reg_id && (
-                                    <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
-                                )}
-                            </div>
-                            <div className="mb-4">
                                 <label className="block text-sm font-medium">Event Registration</label>
                                     <Select 
                                         options={
@@ -228,6 +174,60 @@ const CreateEventModal = ({ open, setOpen, setDataChange }: CreateEventModalProp
                                 {errors.event_reg_id && (
                                     <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
                                 )}
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium">Event Prices</label>
+                                <Select
+                                    options={
+                                        eventPrices?.map((eventPrice) => ({
+                                        value: eventPrice.event_price_id,
+                                        label: `${eventPrice.event_price_name}: ${formatMataUang(eventPrice.event_price_amount)}`,
+                                        })) || []
+                                    }
+                                    placeholder="Select Event Prices"
+                                    isMulti={true}
+                                    onChange={(selectedOption: any) => {
+                                        setValue('event_price_ids', selectedOption.map((option: any) => option.value));
+                                    }}
+                                    styles={{
+                                        menu: (provided: any) => ({
+                                        ...provided,
+                                        maxHeight: '200px',
+                                        overflowY: 'auto',
+                                        }),
+                                        menuList: (provided: any) => ({
+                                        ...provided,
+                                        maxHeight: '200px',
+                                        overflowY: 'auto',
+                                        }),
+                                    }}
+                                    />
+
+                                {errors.event_reg_id && (
+                                    <p className="text-red-500 text-sm">{errors.event_reg_id}</p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium">Event Start Date</label>
+                                <input
+                                    type="date"
+                                    {...register('event_start_date', { required: 'Start date is required' })}
+                                    className="w-full px-3 py-2 border rounded"
+                                />
+                                {errors.event_start_date && (
+                                    <p className="text-red-500 text-sm">{errors.event_start_date}</p>
+                                )}
+                            </div>
+                            <div className="mb-4">
+                                <label className="block text-sm font-medium">Event End Date</label>
+                                <input
+                                    type="date"
+                                    {...register('event_end_date', { required: 'End date is required' })}
+                                    className="w-full px-3 py-2 border rounded"
+                                />
+                                {errors.event_end_date && (
+                                    <p className="text-red-500 text-sm">{errors.event_end_date}</p>
+                                )}
+                            </div>
                             <div className="flex justify-end gap-2">
                                 <button
                                     type="button"
