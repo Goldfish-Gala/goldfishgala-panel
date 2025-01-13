@@ -23,6 +23,9 @@ const OngoingEvent = () => {
     const fetchOngoingEvent = async (): Promise<OneOngoingEvent> => {
         const onGoingEvent = await getAllOngoingEvents(authCookie);
         if (onGoingEvent.success) {
+            if (onGoingEvent.data.OnGoing.length === 0) {
+                return onGoingEvent.data.ComingSoon[0];
+            }
             return onGoingEvent.data.OnGoing[0];
         }
         throw new Error('No ongoing event');
@@ -60,7 +63,6 @@ const OngoingEvent = () => {
             ? '#e7515a'
             : '#888ea8';
     const phaseCode = data?.event_reg_phase_code;
-
     // const eventPhase =
     //     phaseCode === 'open_phase'
     //         ? 'PENDAFTARAN DIBUKA'
@@ -74,12 +76,14 @@ const OngoingEvent = () => {
 
     const handleRegisterFalse = async () => {
         const msg =
-            statusCode === 'grey_status' ||
-            phaseCode === 'nominate_phase' ||
-            phaseCode === 'scoring_phase' ||
-            phaseCode === 'announcement_phase' ||
-            phaseCode === 'content_upload_phase' ||
-            phaseCode === 'closed_and_meeting_phase'
+            phaseCode === 'coming_soon_phase'
+                ? 'PENDAFTARAAN BELUM DIBUKA'
+                : statusCode === 'grey_status' ||
+                  phaseCode === 'nominate_phase' ||
+                  phaseCode === 'scoring_phase' ||
+                  phaseCode === 'announcement_phase' ||
+                  phaseCode === 'content_upload_phase' ||
+                  phaseCode === 'closed_and_meeting_phase'
                 ? 'PENDAFTARAAN SUDAH DITUTUP'
                 : 'PENDAFTARAAN BELUM DIBUKA';
         showMessage(msg, 'info');
@@ -119,7 +123,7 @@ const OngoingEvent = () => {
                     )}
                     {!data ? (
                         <div className="flex min-h-[200px] flex-wrap items-center justify-center">
-                            <p className="mx-auto mt-10 text-base font-extrabold text-white dark:text-white-light md:mt-10">
+                            <p className="mx-auto mt-10 text-base font-extrabold text-dark dark:text-white-light md:mt-10">
                                 Saat ini tidak ada event yang berlangsung. Follow Instagram kami untuk update terbaru.
                             </p>
                         </div>

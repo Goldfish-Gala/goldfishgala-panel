@@ -31,7 +31,7 @@ const MemberSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                     <div className="flex items-center">
                         <IconFishMenu className="shrink-0 group-hover:!text-primary" />
                         <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
-                            {T!('Ikan terdaftar')}
+                            {T!('Ikan Terdaftar')}
                         </span>
                     </div>
                 </Link>
