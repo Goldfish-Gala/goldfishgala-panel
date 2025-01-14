@@ -78,6 +78,8 @@ const MemberCard = () => {
         </div>
     );
 
+    if (user?.role_id === 1) return null;
+
     return (
         <div className="panel flex min-w-[330px] flex-col items-center justify-center gap-4 px-1 py-12">
             {!downloaded && (
