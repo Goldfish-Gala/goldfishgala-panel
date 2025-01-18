@@ -29,6 +29,28 @@ export const updateUserApi = async (userId: string | undefined, data: UpdateUser
     }
 };
 
+export const updateAdminUserApi = async (
+    userId: string | undefined,
+    roleId: number | null,
+    cookie: string | undefined
+) => {
+    try {
+        const response = await api.put(
+            `/users/admin/${userId}`,
+            { role_id: roleId },
+            {
+                headers: {
+                    Authorization: `Bearer ${cookie}`,
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};
+
 export const getUserList = async (token: string | undefined, page: number, limit: number) => {
     try {
         const response = await api.get(`/users?page=${page}&limit=${limit}`, {
