@@ -25,6 +25,8 @@ import IconInvoices from '@/components/icon/icon-invoices';
 import IconInvoiceList from '@/components/icon/icon-invoice-list';
 import IconPayment from '@/components/icon/icon-payment';
 import IconAward from '@/components/icon/icon-award';
+import IconCommunity from '@/components/icon/icon-cummunity';
+import IconCommunityList from '@/components/icon/icon-cummunity-list';
 
 interface AdminBarProps {
     currentMenu: string;
@@ -426,6 +428,41 @@ const AdminSideBar = ({ currentMenu, toggleMenu, T }: AdminBarProps) => {
                                     } ltr:pl-3 rtl:pr-3`}
                                 >
                                     {T!('All Payment List')}
+                                </span>
+                            </div>
+                        </Link>
+                    </li>
+                </ul>
+            </AnimateHeight>
+            <button
+                type="button"
+                className={`${currentMenu === 'community' ? 'active' : ''} nav-link group w-full`}
+                onClick={() => toggleMenu('community')}
+            >
+                <div className="flex items-center">
+                    <IconCommunity className="shrink-0 group-hover:!text-primary" />
+                    <span className="text-black dark:text-[#506690] dark:group-hover:text-white-dark ltr:pl-3 rtl:pr-3">
+                        {T!('Community')}
+                    </span>
+                </div>
+                <div className={currentMenu !== 'community' ? '-rotate-90 rtl:rotate-90' : ''}>
+                    <IconCaretDown />
+                </div>
+            </button>
+            <AnimateHeight duration={300} height={currentMenu === 'community' ? 'auto' : 0}>
+                <ul className="sub-menu text-gray-500">
+                    <li>
+                        <Link href={'/admin/community-list'}>
+                            <div className="flex items-center">
+                                <IconCommunityList className="shrink-0 group-hover:!text-primary" />
+                                <span
+                                    className={`${
+                                        pathname === '/admin/community-list'
+                                            ? 'text-primary'
+                                            : 'text-black dark:text-[#506690] dark:group-hover:text-white-dark'
+                                    } ltr:pl-3 rtl:pr-3`}
+                                >
+                                    {T!('Community List')}
                                 </span>
                             </div>
                         </Link>
