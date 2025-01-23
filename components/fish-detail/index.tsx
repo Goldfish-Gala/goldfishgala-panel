@@ -19,11 +19,17 @@ import ConfirmationModal from '../components/confirmation-modal';
 import { formLinkSubmitSchema } from '@/lib/form-schemas';
 import SpinnerWithText from '../UI/Spinner';
 import { getOneEventDetail } from '@/api/event-reg/api-event';
+import { getCummunityByEventId } from '@/api/community/api-community';
+import { set } from 'lodash';
+import WhatsappColor from '../icon/icon-WA';
+import IconTelegram from '../icon/icon-telegram';
+import IconWhatsapp from '../icon/icon-whatsapp';
 
 const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
     const [fishData, setFishData] = useState<FishDetailType | null>(null);
     const [submitPhase, setSubmitPhase] = useState('');
     const [isFetching, setFetching] = useState(false);
+    const [group, setGroup] = useState<CommunityType | null>(null);
     const cookies = useCookies();
     const authCookie = cookies.get('token');
     const [open, setOpen] = useState(false);
@@ -43,7 +49,6 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
         setValue,
     } = form;
     const [state, formAction] = useActionState(updateFishUrlSubmit.bind(null, params.fish_id), null);
-
     const FetchFishDetail = useCallback(async () => {
         setFetching(true);
         try {
@@ -53,6 +58,10 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                 setFishData(fishDetail.data[0]);
                 if (eventPhase.data[0].event_reg_phase_code) {
                     setSubmitPhase(eventPhase.data[0].event_reg_phase_code);
+                    const getGroupCommunity = await getCummunityByEventId(authCookie, fishDetail.data[0].event_id);
+                    if (getGroupCommunity) {
+                        setGroup(getGroupCommunity.data);
+                    }
                     setFetching(false);
                 }
             }
@@ -307,7 +316,7 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                                         disabled={isLoading}
                                                         onClick={handleSubmitPhaseFalse}
                                                     >
-                                                        <div className=" border-1.5 flex w-fit gap-1 text-nowrap rounded-md border-white bg-success px-2 py-1 text-sm text-white hover:bg-green-400 active:scale-90">
+                                                        <div className=" border-1.5 flex w-fit gap-1 text-nowrap rounded-md border-white bg-secondary px-2 py-1 text-sm text-white hover:bg-secondary/60 active:scale-90">
                                                             <IconOpenBook /> Masukan Link
                                                         </div>
                                                     </button>
@@ -317,7 +326,7 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                                         disabled={isLoading}
                                                         onClick={() => handleEdit(true)}
                                                     >
-                                                        <div className=" border-1.5 flex w-fit gap-1 text-nowrap rounded-md border-white bg-success px-2 py-1 text-sm text-white hover:bg-green-400 active:scale-90">
+                                                        <div className=" border-1.5 flex w-fit gap-1 text-nowrap rounded-md border-white bg-secondary px-2 py-1 text-sm text-white hover:bg-secondary/60 active:scale-90">
                                                             <IconOpenBook /> Masukan Link
                                                         </div>
                                                     </button>
@@ -386,6 +395,22 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                     </div>
                                 </div>
                             </div>
+                            {group && (
+                                <button
+                                    className={`btn2 btn-primary mx-auto flex w-fit gap-2 !px-3 !py-1.5 hover:bg-opacity-85 ${
+                                        group.group_platform === 'whatsapp' ? 'bg-success' : 'bg-blue-500'
+                                    }`}
+                                    onClick={() => {
+                                        const link = group.group_link_invitation.startsWith('http')
+                                            ? group.group_link_invitation
+                                            : `https://${group.group_link_invitation}`;
+                                        window.open(link, '_blank');
+                                    }}
+                                >
+                                    {group.group_platform === 'whatsapp' ? <IconWhatsapp /> : <IconTelegram />}
+                                    Join Community
+                                </button>
+                            )}
                             {!isValidInstagramUrl(fishData?.fish_submission_link) || !fishData?.fish_submission_link ? (
                                 <div className="mb-2 flex h-full min-h-[400px] w-full items-center justify-center rounded border border-white-light dark:border-white-dark">
                                     <p>Link Instagram invalid / privacy not public</p>
