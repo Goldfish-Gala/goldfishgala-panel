@@ -158,6 +158,7 @@ interface FishJudgesType {
     event_reg_id: string;
     event_is_active: boolean;
     user_name: string;
+    owner_name: string;
     exiting?: boolean;
 }
 
