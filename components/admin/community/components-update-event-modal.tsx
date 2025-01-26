@@ -138,7 +138,8 @@ const UpdateEventModal = ({ open, setOpen, item, setDataChange }: UpdateEventMod
                             <div id="zoomIn_up_modal" className="fixed inset-0 z-[999] overflow-y-auto bg-[black]/60">
                                 <div className="flex min-h-screen items-center justify-center px-4">
                                     <Dialog.Panel className="panel animate__animated animate__zoomInUp my-8 w-full max-w-lg overflow-hidden rounded-lg border-0 p-0 pb-6 text-black dark:text-white-dark">
-                                        <div className="flex items-center justify-end p-2">
+                                        <div className="flex items-center justify-between px-4 py-3">
+                                            <h5 className="text-lg font-semibold">Update Group</h5>
                                             <button
                                                 onClick={() => setOpen(false)}
                                                 type="button"
@@ -232,7 +233,7 @@ const UpdateEventModal = ({ open, setOpen, item, setDataChange }: UpdateEventMod
                                                         {...register('group_link_invitation', {
                                                             required: 'Invitation link is required',
                                                         })}
-                                                        className="w-full rounded border px-3 py-2"
+                                                        className="w-full rounded border px-3 py-2 text-dark"
                                                     />
                                                 </div>
                                                 <div className="flex justify-end gap-2">
