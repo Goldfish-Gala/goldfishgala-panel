@@ -26,6 +26,7 @@ const UserList = () => {
     const searchParams = useSearchParams();
     const [page, setPage] = useState(Number(searchParams.get('page') || 1));
     const [limit, setLimit] = useState(Number(searchParams.get('limit') || 10));
+    const [roleName, setRoleName] = useState(searchParams.get('role-name') || 'all');
     const [pageSize, setPageSize] = useState(10);
     const [sortStatus, setSortStatus] = useState<DataTableSortStatus>({
         columnAccessor: 'role',
@@ -39,25 +40,26 @@ const UserList = () => {
     }, [authCookie, dispatch, router, user]);
 
     const getAllUserList = async (): Promise<AllUsersType> => {
-        const getAllUsers = await getUserList(authCookie, page, limit);
+        const getAllUsers = await getUserList(authCookie, page, limit, roleName);
         if (getAllUsers.success) {
             return getAllUsers;
         }
-        throw new Error('No ongoing event');
+        throw new Error('No users data');
     };
 
     useEffect(() => {
         const params = new URLSearchParams();
         params.set('limit', limit.toString());
         params.set('page', page.toString());
+        params.set('role-name', roleName);
         const newUrl = `${window.location.pathname}?${params.toString()}`;
         if (window.location.href !== newUrl) {
             window.history.replaceState(null, '', newUrl);
         }
-    }, [limit, router]);
+    }, [limit, router, roleName]);
 
     const { isPending, error, data } = useQuery({
-        queryKey: ['allUsers', page, limit, pageSize],
+        queryKey: ['allUsers', page, limit, pageSize, roleName],
         queryFn: () => getAllUserList(),
         enabled: !!authCookie,
         refetchOnWindowFocus: false,
@@ -112,13 +114,29 @@ const UserList = () => {
     return (
         <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
             <div className="invoice-table">
-                <div className="pl-4">
-                    <input
-                        placeholder="Search user by name..."
-                        value={filterValue}
-                        onChange={handleFilterChange}
-                        className="mb-4 max-w-sm rounded border p-2"
-                    />
+                <div className="panel mb-2 flex w-[320px] items-center justify-center gap-4 px-1 py-2">
+                    <div className="">
+                        <input
+                            placeholder="Search user by name..."
+                            value={filterValue}
+                            onChange={handleFilterChange}
+                            className="mb-4 max-w-36 rounded border p-2"
+                        />
+                    </div>
+                    <div className="-mt-4 flex justify-center gap-2">
+                        <label className="pt-1.5 font-semibold">Sort by :</label>
+                        <select
+                            className="rounded bg-dark-light text-black dark:bg-white"
+                            value={roleName}
+                            onChange={(e) => setRoleName(e.target.value)}
+                        >
+                            <option value="all">All</option>
+                            <option value="admin">Admin</option>
+                            <option value="judge">Judges</option>
+                            <option value="member">Member</option>
+                            <option value="guest">Guest</option>
+                        </select>
+                    </div>
                 </div>
                 <div className="datatables pagination-padding">
                     {isPending ? (
