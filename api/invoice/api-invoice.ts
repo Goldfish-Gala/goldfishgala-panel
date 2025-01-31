@@ -33,6 +33,20 @@ export const getInvoiceByCode = async (
     }
 };
 
+export const getAdminInvoiceByCode = async (cookie: string | undefined, invoiceCode: string) => {
+    const query = `/invoices/admin?invoice_code=${invoiceCode}`;
+    try {
+        const response = await api.get(query, {
+            headers: {
+                Authorization: `Bearer ${cookie}`,
+            },
+        });
+        return response.data;
+    } catch (error) {
+        return error;
+    }
+};
+
 export const getInvoiceByUserId = async (cookie: string | undefined) => {
     const query = `/invoices/guest`;
     try {

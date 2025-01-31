@@ -10,7 +10,7 @@ import { useCookies } from 'next-client-cookies';
 import { IRootState } from '@/store';
 import { formatToRupiah } from '@/utils/curency-format';
 import { expiringTime, formatedDate } from '@/utils/date-format';
-import { getInvoiceByCode } from '@/api/invoice/api-invoice';
+import { getAdminInvoiceByCode, getInvoiceByCode } from '@/api/invoice/api-invoice';
 import SpinnerWithText from '@/components/UI/Spinner';
 import BackButton from '@/components/components/back-button';
 
@@ -25,7 +25,7 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
     const fetchInvoice = useCallback(async () => {
         setFetching(true);
         try {
-            const response = await getInvoiceByCode(authCookie, params.invoice_id, user?.user_id);
+            const response = await getAdminInvoiceByCode(authCookie, params.invoice_id);
             if (response.success) {
                 setInvoice(response.data[0]);
                 setItemsDetail(response.data[0].fish_details);
@@ -34,7 +34,7 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
         } catch (error) {
             setFetching(false);
         }
-    }, [authCookie, params.invoice_id, user?.user_id]);
+    }, [authCookie, params.invoice_id]);
 
     useEffect(() => {
         if (!invoice) {
@@ -75,7 +75,7 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
             pdf.text('Nama tertagih', margin, margin + 38);
             pdf.text(':', margin + 50, margin + 38);
             pdf.setFontSize(12);
-            pdf.text(user?.user_fname + ' ' + user?.user_lname || '', margin + 55, margin + 38);
+            pdf.text(invoice?.user_name!, margin + 55, margin + 38);
             pdf.setFontSize(12);
             pdf.text('Tagihan untuk', margin, margin + 46);
             pdf.text(':', margin + 50, margin + 46);
@@ -212,9 +212,7 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
                                             <div className="text-white-dark">Nama Tertagih</div>
                                             <div className="text-center">:&nbsp;</div>
-                                            <div>
-                                                {user?.user_fname}&nbsp;{user?.user_lname}
-                                            </div>
+                                            <div>{invoice?.user_name}</div>
                                         </div>
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
                                             <div className="text-white-dark">Tanggal Invoice</div>
