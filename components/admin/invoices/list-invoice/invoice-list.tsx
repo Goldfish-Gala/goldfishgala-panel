@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { expiringTime, formatedDate } from '@/utils/date-format';
 import { getInvoiceAdminApi, getInvoiceByUserId } from '@/api/invoice/api-invoice';
 import SpinnerWithText from '@/components/UI/Spinner';
+import { formatMataUang } from '@/utils/curency-format';
 
 const InvoiceList = () => {
     const router = useRouter();
@@ -126,7 +127,7 @@ const InvoiceList = () => {
                                     sortable: false,
                                     render: ({ invoice_amount }) => (
                                         <div className="flex items-center font-semibold">
-                                            <div>{invoice_amount}</div>
+                                            <div>{formatMataUang(invoice_amount)}</div>
                                         </div>
                                     ),
                                 },
@@ -148,7 +149,7 @@ const InvoiceList = () => {
                                     render: ({ invoice_code, invoice_checkout_url, invoice_status }) => (
                                         <div className="ml-[5%] flex w-full items-center justify-center gap-2">
                                             <Link
-                                                href={`/invoice-preview/${invoice_code}`}
+                                                href={`/admin/invoice-preview/${invoice_code}`}
                                                 className="flex self-start hover:text-primary"
                                             >
                                                 <button className="btn2 btn-secondary">Detail</button>
