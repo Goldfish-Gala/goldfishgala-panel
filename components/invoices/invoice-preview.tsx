@@ -205,29 +205,29 @@ const InvoicePreview = ({ params }: { params: { invoice_id: string } }) => {
                                 <div className="flex flex-col justify-between gap-6 sm:flex-row lg:w-2/3">
                                     <div className="grid gap-y-2">
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-                                            <div className="text-white-dark">No Invoice</div>
+                                            <div className="text-dark">No Invoice</div>
                                             <div className="text-center">:&nbsp;</div>
                                             <div>{invoice?.invoice_code}</div>
                                         </div>
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-                                            <div className="text-white-dark">Nama Tertagih</div>
+                                            <div className="text-dark">Nama Tertagih</div>
                                             <div className="text-center">:&nbsp;</div>
                                             <div>
                                                 {user?.user_fname}&nbsp;{user?.user_lname}
                                             </div>
                                         </div>
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-                                            <div className="text-white-dark">Tanggal Invoice</div>
+                                            <div className="text-dark">Tanggal Invoice</div>
                                             <div className="text-center">:&nbsp;</div>
                                             <div>{formatedDate(invoice?.invoice_created_date)}</div>
                                         </div>
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-                                            <div className="text-white-dark">Batas Pembayaran</div>
+                                            <div className="text-dark">Batas Pembayaran</div>
                                             <div className="text-center">:&nbsp;</div>
                                             <div>{expiringTime(invoice?.invoice_due_date)}</div>
                                         </div>
                                         <div className="grid grid-cols-[1fr_auto_1fr] items-center">
-                                            <div className="text-white-dark">Status Invoice</div>
+                                            <div className="text-dark">Status Invoice</div>
                                             <div className="text-center">:&nbsp;</div>
                                             <div>
                                                 {invoice?.invoice_status === 'paid'
