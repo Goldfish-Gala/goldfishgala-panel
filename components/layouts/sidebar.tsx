@@ -156,9 +156,7 @@ const Sidebar = () => {
                     </div>
                     <PerfectScrollbar className="relative h-[calc(100vh-80px)]">
                         <ul className="relative space-y-0.5 p-4 py-0 font-semibold">
-                            {!user || !T ? (
-                                <></>
-                            ) : (
+                            {user && T && (
                                 <li className="menu nav-item">
                                     {user?.role_id === 4 ? (
                                         <>
@@ -167,7 +165,7 @@ const Sidebar = () => {
                                                 <IconMinus className="hidden h-5 w-4 flex-none" />
                                                 <span>{T!('Dashboard')}</span>
                                             </h2>
-                                            <li className="menu nav-item">
+                                            <div className="menu nav-item">
                                                 <Link href={'/dashboard'}>
                                                     <div className="flex items-center">
                                                         <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
@@ -176,7 +174,7 @@ const Sidebar = () => {
                                                         </span>
                                                     </div>
                                                 </Link>
-                                            </li>
+                                            </div>
                                         </>
                                     ) : user.role_id === 3 ? (
                                         <>
@@ -186,7 +184,7 @@ const Sidebar = () => {
                                                 <IconMinus className="hidden h-5 w-4 flex-none" />
                                                 <span>{T!('Dashboard')}</span>
                                             </h2>
-                                            <li className="menu nav-item">
+                                            <div className="menu nav-item">
                                                 <Link href={'/dashboard'}>
                                                     <div className="flex items-center">
                                                         <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
@@ -195,12 +193,12 @@ const Sidebar = () => {
                                                         </span>
                                                     </div>
                                                 </Link>
-                                            </li>
+                                            </div>
                                             <MemberSideBar currentMenu={currentMenu} toggleMenu={toggleMenu} T={T} />
                                         </>
                                     ) : (
                                         <>
-                                            <li className="menu nav-item">
+                                            <div className="menu nav-item">
                                                 <Link href={'/dashboard'}>
                                                     <div className="flex items-center">
                                                         <IconMenuDashboard className="shrink-0 group-hover:!text-primary" />
@@ -209,7 +207,7 @@ const Sidebar = () => {
                                                         </span>
                                                     </div>
                                                 </Link>
-                                            </li>
+                                            </div>
                                             <MemberSideBar currentMenu={currentMenu} toggleMenu={toggleMenu} T={T} />
                                         </>
                                     )}
@@ -218,7 +216,7 @@ const Sidebar = () => {
                                         <span>{T!('Account')}</span>
                                     </h2>
 
-                                    <li className="menu nav-item">
+                                    <div className="menu nav-item">
                                         <Link href="/users/user-account-settings">
                                             <div className="flex items-center">
                                                 <IconMenuUsers className="shrink-0 group-hover:!text-primary" />
@@ -227,12 +225,12 @@ const Sidebar = () => {
                                                 </span>
                                             </div>
                                         </Link>
-                                    </li>
+                                    </div>
                                     <h2 className="-mx-4 mb-1 flex items-center bg-white-light/30 px-7 py-3 font-extrabold uppercase dark:bg-dark dark:bg-opacity-[0.08]">
                                         <IconMinus className="hidden h-5 w-4 flex-none" />
                                         <span>{T!('Support')}</span>
                                     </h2>
-                                    <li className="menu nav-item">
+                                    <div className="menu nav-item">
                                         <Link href="/support/faq">
                                             <div className="flex items-center">
                                                 <IconMenuDocumentation className="shrink-0" />
@@ -241,8 +239,8 @@ const Sidebar = () => {
                                                 </span>
                                             </div>
                                         </Link>
-                                    </li>
-                                    <li className="menu nav-item">
+                                    </div>
+                                    <div className="menu nav-item">
                                         <Link href="/support/special-thanks">
                                             <div className="flex items-center">
                                                 <IconBowing className="shrink-0" />
@@ -251,7 +249,7 @@ const Sidebar = () => {
                                                 </span>
                                             </div>
                                         </Link>
-                                    </li>
+                                    </div>
                                 </li>
                             )}
                         </ul>

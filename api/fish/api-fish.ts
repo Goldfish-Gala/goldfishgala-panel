@@ -75,6 +75,24 @@ export const updateFishUrlApi = async (fishId: string, body: FishUrlType, cookie
     }
 };
 
+export const updateFishNameApi = async (fishId: string, fish_name: string, cookie: string | undefined) => {
+    try {
+        const response = await api.put(
+            `/fishes/${fishId}`,
+            { fish_name: fish_name },
+            {
+                headers: {
+                    Authorization: `Bearer ${cookie}`,
+                },
+            }
+        );
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        return error;
+    }
+};
+
 export const getFishListAdminApi = async (cookie: string | undefined, page: number, limit: number, sort: string) => {
     try {
         const response = await api.get(`/fishes/all?page=${page}&limit=${limit}&sort=${sort}`, {

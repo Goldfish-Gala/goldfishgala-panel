@@ -1,6 +1,6 @@
 'use client';
 
-import { getFishDetailApi } from '@/api/fish/api-fish';
+import { getFishDetailApi, updateFishNameApi, updateFishUrlApi } from '@/api/fish/api-fish';
 import { formatToRupiah } from '@/utils/curency-format';
 import { formatedDate } from '@/utils/date-format';
 import { useCookies } from 'next-client-cookies';
@@ -24,6 +24,9 @@ import { set } from 'lodash';
 import WhatsappColor from '../icon/icon-WA';
 import IconTelegram from '../icon/icon-telegram';
 import IconWhatsapp from '../icon/icon-whatsapp';
+import { Spinner } from '../UI/Spinner/spinner';
+import IconChecks from '../icon/icon-checks';
+import IconX from '../icon/icon-x';
 
 const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
     const [fishData, setFishData] = useState<FishDetailType | null>(null);
@@ -35,6 +38,7 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
     const [open, setOpen] = useState(false);
     const formRef = useRef<HTMLFormElement>(null);
     const [editMode, setEditMode] = useState(false);
+    const [editNameMode, setEditNameMode] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [errors, setErrors] = useState<{ [key: string]: string | undefined }>({});
     const form = useForm({
@@ -42,6 +46,38 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
             fish_submission_link: fishData?.fish_submission_link,
         },
     });
+    const fishNameForm = useForm({
+        defaultValues: {
+            fish_name: fishData?.fish_name || '',
+        },
+    });
+
+    const {
+        register: registerFishName,
+        handleSubmit: handleSubmitFishName,
+        reset: resetFishName,
+        formState: { isDirty: isDirtyFishName },
+    } = fishNameForm;
+
+    const onSubmitFishName = async (data: { fish_name: string }) => {
+        setLoading(true);
+        try {
+            const response = await updateFishNameApi(params.fish_id, data.fish_name, authCookie);
+            if (response.success) {
+                showMessage('Berhasil memperbarui nama ikan', 'success');
+                resetFishName();
+                setEditNameMode(false);
+                resetFishName({
+                    fish_name: response.data[0].fish_name,
+                });
+            }
+        } catch (error: any) {
+            showMessage(error.message, 'error');
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const {
         formState: { isDirty },
         register,
@@ -73,6 +109,9 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
     useEffect(() => {
         reset({
             fish_submission_link: fishData?.fish_submission_link,
+        });
+        resetFishName({
+            fish_name: fishData?.fish_name || '',
         });
         FetchFishDetail();
     }, [FetchFishDetail, fishData?.fish_submission_link, reset]);
@@ -218,8 +257,86 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                         <>
                             <div className="rounded-md">
                                 <div className="flex flex-col gap-1">
+                                    <form
+                                        onSubmit={handleSubmitFishName(onSubmitFishName)}
+                                        className="flex h-full w-full items-center justify-center pl-4"
+                                    >
+                                        <div className="mx-auto grid w-[320px] grid-cols-[2fr_auto_2fr] gap-6 sm:w-[400px]">
+                                            <label className="text-nowrap text-sm font-medium" htmlFor="fish_name">
+                                                Nama Ikan
+                                            </label>
+                                            <div className="flex w-full gap-2">
+                                                <input
+                                                    id="fish_name"
+                                                    className="form-input -mt-0.5 h-6 rounded-md bg-white-light ps-2 capitalize text-dark dark:bg-white"
+                                                    {...registerFishName('fish_name', {
+                                                        onChange: (event) => {
+                                                            handleInputChange(event);
+                                                        },
+                                                    })}
+                                                    readOnly={!editNameMode}
+                                                    disabled={!editNameMode}
+                                                />
+                                                {!editNameMode ? (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setEditNameMode(true)}
+                                                        className="group relative"
+                                                    >
+                                                        <div
+                                                            className="-mt-1 flex rounded-md border-white bg-white p-1 text-sm
+                                                            text-black hover:bg-dark-light active:scale-90 dark:bg-white dark:text-black dark:hover:bg-white-dark"
+                                                        >
+                                                            <IconEdit />
+                                                        </div>
+                                                        <span className="absolute bottom-full left-1/2 z-10 mb-2 w-max -translate-x-1/2 transform rounded bg-black px-2 py-1 text-xs text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                                            Ubah
+                                                        </span>
+                                                    </button>
+                                                ) : (
+                                                    <div className="flex gap-2">
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => setEditNameMode(false)}
+                                                            className="group relative"
+                                                        >
+                                                            <div className="btn2 -mt-1 flex items-center justify-center gap-1 text-nowrap rounded-md border-none bg-danger p-0.5 text-sm text-white hover:bg-red-400 active:scale-90">
+                                                                <IconX />
+                                                            </div>
+                                                            <span className="absolute bottom-full left-1/2 z-10 mb-2 w-max -translate-x-1/2 transform rounded bg-black px-2 py-1 text-xs text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                                                Batal
+                                                            </span>
+                                                        </button>
+                                                        <button
+                                                            type="submit"
+                                                            disabled={!isDirtyFishName || isLoading}
+                                                            className="group relative"
+                                                        >
+                                                            <div
+                                                                className={`btn-gradient2 -mt-1 flex items-center justify-center gap-1 text-nowrap rounded-md border-none p-0.5 text-sm text-white ${
+                                                                    !isDirtyFishName || isLoading
+                                                                        ? 'cursor-not-allowed bg-gray-500 hover:bg-gray-500 active:scale-100'
+                                                                        : ''
+                                                                }`}
+                                                            >
+                                                                {isLoading ? (
+                                                                    <div className="flex h-6 w-6 justify-center">
+                                                                        <Spinner className="w-4" />
+                                                                    </div>
+                                                                ) : (
+                                                                    <IconChecks />
+                                                                )}
+                                                            </div>
+                                                            <span className="absolute bottom-full left-1/2 z-10 mb-2 w-max -translate-x-1/2 transform rounded bg-black px-2 py-1 text-xs text-white opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+                                                                Simpan
+                                                            </span>
+                                                        </button>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </form>
                                     {[
-                                        { label: 'Nama Ikan', value: fishData?.fish_name },
                                         { label: 'Ukuran Ikan', value: `${fishData?.fish_size} cm` },
                                         { label: 'Kategori Ikan', value: fishData?.event_price_name },
                                         { label: 'Nama Event', value: fishData?.event_name },
@@ -236,7 +353,7 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                             key={index}
                                             className="flex h-full w-full items-center justify-center pl-4"
                                         >
-                                            <div className="grid w-[320px] grid-cols-[3fr_auto_2fr] gap-6">
+                                            <div className="grid w-[320px] grid-cols-[3fr_auto_2fr] gap-6 sm:w-[400px]">
                                                 <p className="capitalize">{item.label}</p>
                                                 <p className="-ml-4 mr-2 text-center">:</p>
                                                 <p className="capitalize">
