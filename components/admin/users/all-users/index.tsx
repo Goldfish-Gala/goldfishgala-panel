@@ -34,6 +34,10 @@ const UserList = () => {
     });
 
     useEffect(() => {
+        setPage(1);
+    }, [roleName]);
+
+    useEffect(() => {
         if (!user) {
             fetchUserProfile(authCookie, dispatch, router);
         }
@@ -114,7 +118,7 @@ const UserList = () => {
     return (
         <div className="panel border-white-light px-0 dark:border-[#1b2e4b]">
             <div className="invoice-table">
-                <div className="panel mb-2 flex w-[320px] items-center justify-center gap-4 px-1 py-2">
+                <div className="mb-2 flex w-[320px] items-center justify-center gap-4 px-1 py-2">
                     <div className="">
                         <input
                             placeholder="Search user by name..."
