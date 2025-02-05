@@ -51,9 +51,10 @@ export const updateAdminUserApi = async (
     }
 };
 
-export const getUserList = async (token: string | undefined, page: number, limit: number) => {
+export const getUserList = async (token: string | undefined, page: number, limit: number, role?: string) => {
+    const query = role !== 'all' ? `?page=${page}&limit=${limit}&role_name=${role}` : `?page=${page}&limit=${limit}`;
     try {
-        const response = await api.get(`/users?page=${page}&limit=${limit}`, {
+        const response = await api.get(`/users${query}`, {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

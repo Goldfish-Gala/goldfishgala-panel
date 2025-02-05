@@ -28,7 +28,8 @@ interface FishType {
 }
 
 interface FishUrlType {
-    fish_submission_link: string;
+    fish_name?: string;
+    fish_submission_link?: string;
 }
 
 interface FishRegisterType {
@@ -158,6 +159,7 @@ interface FishJudgesType {
     event_reg_id: string;
     event_is_active: boolean;
     user_name: string;
+    owner_name: string;
     exiting?: boolean;
 }
 

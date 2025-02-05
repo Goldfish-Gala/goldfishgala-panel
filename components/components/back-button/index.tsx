@@ -3,7 +3,7 @@
 import IconArrowBackward from '@/components/icon/icon-arrow-backward';
 import { useRouter } from 'next/navigation';
 
-const BackButton = () => {
+const BackButton = ({ text }: { text?: string }) => {
     const router = useRouter();
     const handleBack = () => {
         router.back();
@@ -12,7 +12,7 @@ const BackButton = () => {
         <div>
             <button onClick={handleBack} className="btn2 btn-gradient2 items-center gap-1 border-none px-3 py-1">
                 <IconArrowBackward className="-mt-0.5" />
-                Kembali
+                {text ? text : 'Kembali'}
             </button>
         </div>
     );
