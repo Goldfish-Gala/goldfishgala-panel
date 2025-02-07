@@ -39,11 +39,6 @@ const MemberCard = () => {
                 link.click();
 
                 setDownloaded(true);
-
-                setTimeout(() => {
-                    const currentUrl = window.location.href.split('?')[0];
-                    window.location.href = `${currentUrl}?t=${new Date().getTime()}`;
-                }, 500);
             } catch (error) {
                 console.error('Failed to generate image:', error);
             }
