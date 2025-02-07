@@ -342,7 +342,7 @@ const FishDetailComponent = ({ params }: { params: { fish_id: string } }) => {
                                         { label: 'Nama Event', value: fishData?.event_name },
                                         {
                                             label: 'Biaya Pendaftaran',
-                                            value: formatToRupiah(fishData?.invoices[0].invoice_amount),
+                                            value: formatToRupiah(fishData?.event_price_amount),
                                         },
                                         {
                                             label: 'Tanggal Terdaftar',
